@@ -10,14 +10,14 @@ pre: " <b> 1.1. </b> "
 
 ### Week 1 Objectives
 
-Week one was mostly about clearing the ground: open an AWS account and put guardrails in place before touching anything that costs money. Concretely that meant an IAM user `upscale-dev` with MFA and a minimal policy, AWS Budgets for spend alerts, and CloudTrail for the audit trail. In parallel, spin up two GitHub repos (`upscale-BE` for FastAPI and `upscale-FE` for TanStack Start + React 19) and push the initial commits. MVP scope was locked in the same week: Real-ESRGAN x4 for AI mode, LANCZOS for Standard, with the S3 bucket for input/output pushed to week 2.
+Week one was mostly about clearing the ground: open an AWS account and put guardrails in place before touching anything that costs money. Concretely that meant an IAM user `upscale-deployer` with `AdministratorAccess` and MFA, region locked to `ap-southeast-1` (Singapore), AWS Budgets for spend alerts, and CloudTrail for the audit trail. In parallel, spin up two GitHub repos (`upscale-BE` for FastAPI and `upscale-FE` for TanStack Start + React 19) and push the initial commits. MVP scope was locked in the same week: Real-ESRGAN x4 for AI mode, LANCZOS for Standard, with the S3 bucket for input/output pushed to week 2.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
 | 1 | Sign up for AWS Free Tier, enable **AWS Budgets** with a $10/month alert, turn on **CloudTrail** for `ap-southeast-1`. | 17/04/2026 | 17/04/2026 | [AWS Free Tier](https://aws.amazon.com/free/) |
-| 2 | Create **IAM** user `upscale-dev` + group `Developers`, attach `AmazonS3FullAccess` (dev-only) and `IAMReadOnlyAccess`; enable MFA. | 18/04/2026 | 18/04/2026 | [IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) |
+| 2 | Create **IAM** user `upscale-deployer` with `AdministratorAccess`, enable console access + MFA, save the account sign-in URL. | 18/04/2026 | 18/04/2026 | [IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) |
 | 3 | Create GitHub repos `upscale-BE`, `upscale-FE`, push initial commit. | 19/04/2026 | 19/04/2026 | [upscale-BE](https://github.com/vuong20031591-hub/upscale-BE), [upscale-FE](https://github.com/vuong20031591-hub/upscale-FE) |
 | 4 | Lock BE stack: Python 3.11 + FastAPI + PyTorch, GPU CUDA FP16, files pushed to **S3** via **boto3**. | 20/04/2026 | 20/04/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
 | 5 | Lock FE stack: **TanStack Start** (React 19 + Vite 8) + TS + Tailwind v4 + shadcn/ui (Radix) + react-hook-form + zod + OIDC (Cognito via `react-oidc-context`); hosted on **S3 + CloudFront** (SPA build). | 21/04/2026 | 21/04/2026 | [TanStack Start](https://tanstack.com/start) |
@@ -26,11 +26,11 @@ Week one was mostly about clearing the ground: open an AWS account and put guard
 
 ### Week 1 Achievements
 
-Both GitHub repos got their initial commits on 17/04/2026. The AWS account is ready to use, the IAM user has MFA, and the Budgets alert already fired once (a test transfer) just to confirm it works. BE settled on a layered layout (`core/`, `models/`, `services/`, `routers/`) and FE uses TanStack Start's file-based routing.
+Both GitHub repos got their initial commits on 17/04/2026. The AWS account is ready to use, `upscale-deployer` has MFA, region is pinned to `ap-southeast-1`, and the Budgets alert already fired once (a test transfer) just to confirm it works. BE settled on a layered layout (`core/`, `models/`, `services/`, `routers/`) and FE uses TanStack Start's file-based routing.
 
 ### Challenges & Lessons
 
-IAM policy is the easy place to get wrong when you're new — the first reflex is to grant broadly so nothing blocks you, and then paying that back later is painful. I stuck to the AWS IAM Best Practices doc, started with the smallest managed policy that unblocks work, and noted week 7 as the point to tighten into custom policies. What I took away: Budgets and CloudTrail should be on from day one, not later. The cost is essentially zero, and in return you sleep better and have evidence when you need to look something up.
+The deployer user gets `AdministratorAccess` on purpose — during a workshop-style build the friction of chasing missing permissions is worse than the risk on a sandbox account, and it comes back off at week 7 when I split roles per service. The rule I stuck to is never sign in as root after day one, always through the IAM sign-in URL with MFA. What I took away: Budgets and CloudTrail should be on from day one, not later. The cost is essentially zero, and in return you sleep better and have evidence when you need to look something up.
 
 ### Next Week Plan
 
