@@ -1,37 +1,33 @@
 ---
-title: "Week 10 Worklog"
+title: "Worklog Tuần 10"
 date: 2024-01-01
 weight: 10
 chapter: false
 pre: " <b> 1.10. </b> "
 ---
 
-## WEEK 10 WORKLOG
+## WORKLOG TUẦN 10
 
-### Week 10 Objectives
+### Trọng tâm
 
-Chương 5.8 Observability. Đẩy log từ ECS sang CloudWatch, dựng dashboard nhỏ và thêm một alarm để biết khi API có vấn đề.
+Cognito cho đăng nhập user và một góc CloudWatch thực sự báo được khi có vấn đề.
 
-### Tasks to be carried out this week
+### Việc tôi làm
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Tạo CloudWatch log group `/ecs/upscale-api` và `/ecs/upscale-postgres`. | 21/06/2026 | 21/06/2026 | [CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/) |
-| 2 | Xác nhận ECS task đang stream stdout vào log group. | 22/06/2026 | 22/06/2026 | - |
-| 3 | Dựng dashboard CloudWatch 4 widget: request count, tỉ lệ 5xx, CPU, GPU util. | 23/06/2026 | 23/06/2026 | - |
-| 4 | Tạo một alarm khi tỉ lệ 5xx > 5% trong 5 phút. | 24/06/2026 | 24/06/2026 | - |
-| 5 | Đấu alarm về email qua SNS. | 25/06/2026 | 25/06/2026 | [SNS](https://docs.aws.amazon.com/sns/latest/dg/) |
-| 6 | Cố tình phá app (kill task) để xem alarm có kêu thật không. | 26/06/2026 | 26/06/2026 | - |
-| 7 | Đóng `UPS-12` trên Linear, kéo `UPS-13` (deploy frontend). | 27/06/2026 | 27/06/2026 | - |
+- Chia việc thành `UPS-15` (Cognito user pool + Google OAuth) và `UPS-16` (observability).
+- Chủ trì buổi thiết kế luồng auth: Cognito user pool, hosted UI, Google làm identity provider, ID token đổi lấy session cookie ở FastAPI.
+- Review PR Cognito, siết danh sách callback OAuth chỉ còn prod và local dev.
+- Review PR dashboard CloudWatch, cắt bớt nửa số widget vì không ai nhìn.
+- Tự làm: viết tài liệu luồng auth cho nhóm, và chọn alarm để paging (ALB 5xx > 1% trong 5 phút, DLQ SQS khác rỗng, GPU util > 90% kéo dài, ECS service unhealthy).
 
-### Week 10 Achievements
+### Kết quả
 
-Tôi có thể theo dõi API trong một tab. Alarm chạy đúng: kill task là có email. Tuần đầu tiên dự án cảm giác vận hành được, không chỉ dựng xong.
+User đăng nhập được bằng Google, API xác thực token, dashboard chỉ hiện bốn số thực sự cần nhìn.
 
-### Challenges & Lessons
+### Khó khăn
 
-Ban đầu log không lên do task role thiếu `logs:CreateLogStream`. Lỗi ẩn trong "Stopped reason" của task. Bài học: xem event của task trước khi mở code ra debug.
+CORS Cognito hosted UI ngốn vài tiếng. Viết một ghi chú ngắn "quy tắc callback URL" vào runbook.
 
-### Next Week Plan
+### Kế hoạch tuần sau
 
-Chương 5.9 Deployment: build frontend, upload lên S3, invalidate CloudFront. Theo dõi ở `UPS-13`.
+Đóng chương 5.9. Diễn tập deploy end-to-end và demo.

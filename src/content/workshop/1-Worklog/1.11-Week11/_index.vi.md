@@ -1,37 +1,33 @@
 ---
-title: "Week 11 Worklog"
+title: "Worklog Tuần 11"
 date: 2024-01-01
 weight: 11
 chapter: false
 pre: " <b> 1.11. </b> "
 ---
 
-## WEEK 11 WORKLOG
+## WORKLOG TUẦN 11
 
-### Week 11 Objectives
+### Trọng tâm
 
-Chương 5.9 Deployment. Build frontend, upload lên bucket S3 static, invalidate CloudFront để người dùng thật sự thấy bản mới.
+Diễn tập deploy và test end-to-end. Tuần này lo chứng minh cả hệ thống chạy, không thêm tính năng.
 
-### Tasks to be carried out this week
+### Việc tôi làm
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Chạy `npm run build` ở local, kiểm tra thư mục `dist/`. | 28/06/2026 | 28/06/2026 | - |
-| 2 | Upload `dist/` lên `upscale-static-*` qua S3 console. | 29/06/2026 | 29/06/2026 | - |
-| 3 | Tạo CloudFront invalidation cho `/*` và chờ. | 30/06/2026 | 30/06/2026 | - |
-| 4 | Mở site, upload ảnh thật, thấy bản upscaled trả về. | 01/07/2026 | 01/07/2026 | - |
-| 5 | Chia sẻ URL trong Slack cho team dùng thử. Ghi lại feedback ngày đầu. | 02/07/2026 | 02/07/2026 | - |
-| 6 | Viết ghi chú "how to deploy" ngắn trên Linear ticket để sau khỏi quên các bước. | 03/07/2026 | 03/07/2026 | - |
-| 7 | Đóng `UPS-13` trên Linear, mở `UPS-14` (cleanup + retro). | 04/07/2026 | 04/07/2026 | - |
+- Biến `UPS-17` thành ticket diễn tập với checklist cả nhóm cùng tick.
+- Chạy deploy từ đầu vào một tài khoản trắng theo runbook, sửa lại những chỗ sai hoặc thiếu.
+- Chủ trì buổi triage bug sau lần chạy end-to-end đầu, ưu tiên các fix bắt buộc phải xong trước demo.
+- Review mọi PR chạm vào đường deploy trong tuần, chặn mọi thứ không liên quan đến diễn tập.
+- Tự làm: viết script smoke test (upload → job → poll → download), kịch bản demo, và ghi chú rollback.
 
-### Week 11 Achievements
+### Kết quả
 
-Frontend đã live. Người dùng upload ảnh và vài giây sau nhận bản nét hơn. Mười tuần trước tôi không hình dung được, tuần này là tuần "hái quả".
+Deploy trọn stack từ tài khoản trắng trong một lượt, smoke test qua, demo diễn tập hai lần. Board xanh.
 
-### Challenges & Lessons
+### Khó khăn
 
-Lần đầu tôi quên invalidate CloudFront, mất 20 phút cứ nghĩ deploy bị hỏng. Bài học: với CloudFront, "file đã ở S3" không phải là "cả thế giới thấy được".
+Thứ tự thao tác. Mount target EFS phải có trước khi ECS service khởi động, không thì task crash-loop. Runbook giờ ghi rõ.
 
-### Next Week Plan
+### Kế hoạch tuần sau
 
-Tuần cuối: chương 5.10 Cleanup, viết retro, đóng nốt các Linear ticket còn lại.
+Chương 5.10. Cleanup, báo cáo cuối, bàn giao.
