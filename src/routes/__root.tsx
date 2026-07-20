@@ -6,7 +6,6 @@ import {
   useRouter,
   HeadContent,
   Scripts,
-  redirect,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -74,15 +73,6 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  beforeLoad: ({ location }) => {
-    if (location.pathname === "/") {
-      throw redirect({
-        to: "/workshop/$",
-        params: { _splat: "" },
-        search: { lang: "en" },
-      });
-    }
-  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
