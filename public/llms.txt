@@ -1,0 +1,14 @@
+# Internship Report — Nguyen Tien Vuong
+
+> Internship report for the First Cloud AI Journey (FCAJ) program at Amazon Web Services Vietnam, covering worklogs, proposal, translated blogs, event participation, an Upscale AI workshop on AWS, and a self-evaluation.
+
+## Pages
+
+- [Internship Report](/): Overview and student information.
+- [Worklog](/1-worklog): Weekly progress log across the FCAJ program.
+- [Proposal](/2-proposal): Upscale AI project proposal, architecture, and cost analysis.
+- [Blogs](/3-blogsposted): Translated technical blogs on AWS architectures.
+- [Events Participated](/4-eventparticipated): AWS events attended during the program.
+- [Workshop](/5-workshop): Step-by-step workshop deploying Upscale AI on AWS (ALB, ECS on EC2, EFS, Redis).
+- [Self-evaluation](/6-self-evaluation): Reflection on the internship outcomes.
+- [Feedback](/7-feedback): Program feedback and suggestions.
