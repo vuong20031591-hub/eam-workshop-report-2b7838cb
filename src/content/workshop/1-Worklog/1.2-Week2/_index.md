@@ -8,30 +8,26 @@ pre: " <b> 1.2. </b> "
 
 ## WEEK 2 WORKLOG
 
-### Week 2 Objectives
+### Focus
 
-Workshop chapter 5.2 Prerequisites. This week is about turning my account from "root only" into something safe to work in daily: an IAM admin user with MFA, a locked region, and a clean starting point before any real resource gets created.
+Prerequisites and IAM. Getting the account baseline right early so no one has to touch root again.
 
-### Tasks to be carried out this week
+### What I did
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Read chapter 5.2 twice before touching anything. | 26/04/2026 | 26/04/2026 | - |
-| 2 | Created IAM user `upscale-deployer` with `AdministratorAccess` for the build phase. | 27/04/2026 | 27/04/2026 | [IAM Users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html) |
-| 3 | Enabled MFA for `upscale-deployer` and stored the recovery codes offline. | 28/04/2026 | 28/04/2026 | - |
-| 4 | Logged out of root and signed back in as `upscale-deployer`. Locked the region to `ap-southeast-1` (Singapore). | 29/04/2026 | 29/04/2026 | - |
-| 5 | Installed AWS CLI on my laptop and ran `aws sts get-caller-identity` to confirm the profile works. | 30/04/2026 | 30/04/2026 | [AWS CLI](https://docs.aws.amazon.com/cli/) |
-| 6 | Moved `UPS-2` to Done on Linear, opened `UPS-3` (VPC setup) for next week. | 01/05/2026 | 01/05/2026 | - |
-| 7 | Read chapter 5.3 Infrastructure to preview what I have to build next week. | 02/05/2026 | 02/05/2026 | - |
+- Ran the sprint kickoff and split `UPS-3` (account baseline) and `UPS-4` (IAM roles) into small tickets sized for a single day.
+- Chaired a short design session for the IAM model: admin group, developer group, `upscale-deployer` service user for CI, plus dedicated task roles for ECS.
+- Reviewed the account checklist against chapter 5.2 and rejected two proposals that put long-lived keys on developer machines.
+- Reviewed the first batch of IAM PRs, sent two back for tighter scoping.
+- Hands-on: wrote the IAM ADR (root MFA, no root access keys, least-privilege groups) and the deployer policy template.
 
-### Week 2 Achievements
+### Result
 
-Root is now locked away. Daily work happens on `upscale-deployer` with MFA. Region is fixed so I do not accidentally create things in `us-east-1` and get confused later. CLI is wired in.
+Baseline done: root locked, MFA enforced, groups in place, `upscale-deployer` provisioned with a minimal policy. ADR merged so the reasoning is on record.
 
-### Challenges & Lessons
+### Friction
 
-I forgot MFA on the first try and got locked out for a few minutes. Lesson: always set MFA in the same session you create the user, and write the recovery code somewhere real (not a sticky note).
+One member kept reaching for `AdministratorAccess`. Had to explain twice why we do not do that, then wrote it into the ADR so I do not explain a third time.
 
-### Next Week Plan
+### Next week
 
-Chapter 5.3 Infrastructure: build the VPC, subnets and internet gateway. Track progress on `UPS-3`.
+Chapter 5.3 VPC. I will own the network topology decision.
