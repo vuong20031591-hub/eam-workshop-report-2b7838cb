@@ -99,6 +99,7 @@ function preprocessShortcodes(md: string): string {
 function rewriteAssetUrl(url: string): string {
   if (!url) return url;
   if (/^(https?:)?\/\//.test(url)) return url;
+  if (url.startsWith("/workshop-static/")) return url;
   if (url.startsWith("/images/")) return `/workshop-static${url}`;
   if (url.startsWith("images/")) return `/workshop-static/${url}`;
   if (url.startsWith("/")) return `/workshop-static${url}`;
