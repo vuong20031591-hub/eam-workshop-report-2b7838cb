@@ -91,7 +91,7 @@ Không giống các triển khai serverless điển hình, Upscale AI yêu cầu
 
 | Danh mục | Dịch vụ | Chi phí |
 |---------|---------|--------|
-| Compute | EC2 (g5.xlarge, GPU A10G) | $734.00 |
+| Compute | EC2 (t3.large, 24/7) | $120.00 |
 | Mạng | NAT Gateway, ALB | $70.00 |
 | Lưu trữ | EFS, S3, ECR | $4.60 |
 | Database | ElastiCache Redis | $15.00 |
@@ -99,9 +99,9 @@ Không giống các triển khai serverless điển hình, Upscale AI yêu cầu
 | Giám sát | CloudWatch | $5.00 |
 | CI/CD | CodePipeline, CodeBuild | $1.12 |
 | Khác | Cognito, IAM, VPC, ACM | $0.00 |
-| **Tổng** | | **~$841.52/tháng** |
+| **Tổng** | | **~$227.52/tháng** |
 
-> Lưu ý: `g5.xlarge` on-demand (~$1.006/giờ) cần thiết cho GPU suy luận Real-ESRGAN. Dùng Spot / Savings Plans khi lên production để giảm chi phí.
+> Lưu ý: Workshop dùng `t3.large` (CPU) làm baseline cho test. Production nếu cần GPU inference: chuyển sang `g4dn.xlarge` (NVIDIA T4, ~$379/tháng on-demand) và bật **Spot Instances** để giảm 60–70% chi phí EC2.
 
 ---
 
