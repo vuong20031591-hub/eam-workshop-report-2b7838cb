@@ -10,28 +10,28 @@ pre: " <b> 1.1. </b> "
 
 ### Week 1 Objectives
 
-Tuần đầu tôi dành cho việc chốt scope MVP của Upscale AI, dựng khung quản lý công việc trên Linear + GitHub, và đặt guardrail AWS trước khi bắt đầu code. Với vai trò Project Lead, focus tuần này là planning và setup — chưa đụng vào implementation.
+Tuần đầu thực tập. Tôi được phân vào dự án Upscale AI với vai trò intern học AWS từ đầu. Mục tiêu đơn giản: setup xong, làm quen team, đọc hết workshop guide và mở AWS account để tuần sau bắt đầu bấm nút.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Chốt MVP: Real-ESRGAN x4 cho tuyến AI, LANCZOS cho Standard, CodeFormer cho face; viết product brief 2 trang. | 17/04/2026 | 17/04/2026 | - |
-| 2 | Tạo Linear workspace, team `UPS`, project **AI Upscaler**; định nghĩa label `BE / FE / Bug / Feature / Task`. | 17/04/2026 | 17/04/2026 | [Linear](https://linear.app/) |
-| 3 | Tạo backlog UPS-* và chia đầu việc theo module (BE core, BE + infra AWS, FE); mở checklist prerequisite AWS. | 18/04/2026 | 18/04/2026 | - |
-| 4 | Khởi tạo 2 GitHub repo `upscale-BE` (FastAPI) và `upscale-FE` (TanStack Start), bật branch protection main + PR review bắt buộc. | 18/04/2026 | 19/04/2026 | [GitHub Branch Protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches) |
-| 5 | Draft **API contract v0** (`/upscale/ai`, `/upscale/standard`, `/face/enhance`) — request/response schema, error codes. | 20/04/2026 | 21/04/2026 | - |
-| 6 | Rà lại checklist AWS: IAM user `upscale-deployer` + AdministratorAccess + MFA, region `ap-southeast-1`, Budgets $10/tháng. | 22/04/2026 | 22/04/2026 | [IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) |
-| 7 | Sprint planning cho tuần 2: sắp thứ tự issue, ưu tiên S3 + FastAPI skeleton, chốt Definition of Done. | 23/04/2026 | 23/04/2026 | - |
+| 1 | Onboarding, được cấp quyền GitHub repo, Slack và workspace Linear `UPS`. | 17/04/2026 | 17/04/2026 | [Linear](https://linear.app/) |
+| 2 | Đọc chương 5.1 Introduction của workshop để hiểu Upscale AI làm gì. | 18/04/2026 | 18/04/2026 | - |
+| 3 | Tạo AWS account cá nhân, bật MFA cho root user. | 19/04/2026 | 19/04/2026 | [AWS Signup](https://aws.amazon.com) |
+| 4 | Đặt Budgets alert $10/tháng để không bị bill bất ngờ. | 20/04/2026 | 20/04/2026 | [AWS Budgets](https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html) |
+| 5 | Nhận issue Linear đầu tiên `UPS-1` (đọc workshop, ghi chú). | 21/04/2026 | 21/04/2026 | - |
+| 6 | Vẽ tay sơ đồ kiến trúc để tự kiểm tra xem có hiểu flow không. | 22/04/2026 | 22/04/2026 | - |
+| 7 | Sprint planning trên Linear, đóng `UPS-1`, nhận `UPS-2` cho tuần sau. | 23/04/2026 | 23/04/2026 | - |
 
 ### Week 1 Achievements
 
-Backlog Linear có label và priority rõ, không còn tình trạng issue mơ hồ. Hai repo GitHub live, branch protection bật, PR template có sẵn. Product brief và API contract v0 đóng vai trò source of truth để tuần sau bắt đầu spec chi tiết.
+AWS account đã mở, MFA bật, budget alert xong. Board Linear có tên tôi ở `UPS-1` và `UPS-2`. Tôi có thể tự nói lại flow Upscale AI trong một đoạn ngắn mà không cần mở doc.
 
 ### Challenges & Lessons
 
-Việc lớn nhất tuần đầu không phải kỹ thuật mà là ép mình viết brief xong trước khi tạo issue. Cám dỗ chung là nhảy vào code luôn cho có cảm giác làm việc, nhưng nếu API contract không rõ sớm thì tuần 3 FE và BE sẽ lệch nhau về response shape. Bài học: brief là công cụ align rẻ nhất — 2 tiếng viết doc tiết kiệm cả tuần tranh cãi.
+AWS console có quá nhiều service, tôi cứ mở nhầm chỗ. Bài học: pin lên top bar mấy service thật sự cần (IAM, VPC, S3, EC2), còn lại tạm bỏ qua.
 
 ### Next Week Plan
 
-Viết spec S3 bucket (prefix weights / tmp / output, lifecycle, encryption) và spec FastAPI folder layout. Bắt đầu draft high-level architecture diagram cho UPS-17.
+Chương 5.2 Prerequisites: tạo IAM admin user, chốt region `ap-southeast-1`, đóng `UPS-2`.
