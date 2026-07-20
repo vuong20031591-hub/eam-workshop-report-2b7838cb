@@ -1,37 +1,37 @@
 ---
-title: "Nhật ký công việc Tuần 12"
+title: "Week 12 Worklog"
 date: 2024-01-01
 weight: 12
 chapter: false
 pre: " <b> 1.12. </b> "
 ---
 
-## TUẦN 12 - NHẬT KÝ
+## WEEK 12 WORKLOG
 
-### Mục tiêu Tuần 12
+### Week 12 Objectives
 
-Go-live week. Mình làm launch checklist, chạy final review Linear (close hết open issue quan trọng), review Khiêm set Route 53 + Savings Plan, và chạy retro tổng kết 12 tuần. Với vai trò Lead, tuần này 80% là communication: sync với stakeholder, viết launch note, tổ chức demo.
+Tuần cuối: launch checklist, game-day failover, hand-off doc. Vai trò tôi: chốt Go/No-go criteria, chạy game-day, viết runbook incident, và go-live tại `upscale.dev`.
 
-### Các công việc thực hiện trong tuần
+### Tasks to be carried out this week
 
-| Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
+| Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Viết launch checklist (35 mục): DNS, cert, monitoring, alerts, rollback plan, communication. | 20/07/2026 | 20/07/2026 | - |
-| 2 | Review Khiêm: Route 53 hosted zone `upscale.dev` + alias A record → CloudFront (FE) và `api.upscale.dev` → ALB (BE). | 21/07/2026 | 21/07/2026 | [Route 53 Alias](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html) |
-| 3 | Cost review với Khiêm: Cost Explorer 30 ngày, chốt mua Compute Savings Plan 1 năm cho baseline g4dn.xlarge → ước tiết kiệm 30%. | 22/07/2026 | 22/07/2026 | [Compute Savings Plan](https://aws.amazon.com/savingsplans/compute-pricing/) |
-| 4 | Close Linear issue còn tồn: UPS-5 (format bug Thắng), UPS-8 (config trusted_proxies Thắng), UPS-9→16 (FE Quân), UPS-17 (architecture — mình finalize), UPS-18 (draw.io lib — Quân). | 23/07/2026 | 24/07/2026 | - |
-| 5 | Chạy final demo với stakeholder: login → upload 8K → upscale → download; end-to-end 12s. | 25/07/2026 | 25/07/2026 | - |
-| 6 | Launch chính thức 10:00 sáng: DNS switch, monitor dashboard 3 tiếng, không có alarm. | 26/07/2026 | 26/07/2026 | - |
-| 7 | Sprint retro toàn project: 3 điều làm tốt, 3 điều cần cải thiện; viết post-mortem chuẩn bị cho v2. | 26/07/2026 | 26/07/2026 | - |
+| 1 | Viết launch checklist Go/No-go: SLO p95 ≤ 12s, error rate < 1%, WAF live, GuardDuty enable, backup DB daily. | 13/07/2026 | 13/07/2026 | - |
+| 2 | Chạy game-day: kill 1 GPU task giữa load 50 VU, verify SQS retry + ASG replace trong 5 phút. | 14/07/2026 | 14/07/2026 | - |
+| 3 | Viết runbook incident: 5 kịch bản (GPU OOM, SQS backlog, Cognito outage, S3 5xx, Redis down); action step chi tiết. | 15/07/2026 | 15/07/2026 | - |
+| 4 | Viết post-mortem template + đăng ký PagerDuty on-call rotation cho 4 tuần đầu sau go-live. | 16/07/2026 | 16/07/2026 | [PagerDuty](https://www.pagerduty.com/) |
+| 5 | Review PR CI/CD pipeline final: GitHub Actions build → push ECR → ECS force-deploy trên tag `v1.*`. | 17/07/2026 | 17/07/2026 | - |
+| 6 | Go-live: chuyển DNS `upscale.dev` sang CloudFront prod; monitor CloudWatch 4h; smoke test 30 lần. | 18/07/2026 | 18/07/2026 | - |
+| 7 | Retro cả project + hand-off doc cho vận hành: kiến trúc, runbook, ADR, contact matrix. | 19/07/2026 | 19/07/2026 | - |
 
-### Kết quả đạt được Tuần 12
+### Week 12 Achievements
 
-`upscale.dev` live. 12 tuần từ zero đến production. Chi phí baseline ~$227/tháng với Savings Plan. Team đóng đủ mọi issue P1/P2 trên Linear. Post-mortem có 3 lesson lớn: (1) design doc trước code, (2) property test bắt bug sớm, (3) chọn managed service khi phù hợp — sẽ mang sang v2.
+Upscale AI live tại `upscale.dev` với SLO p95 = 10.8s (dưới 12s target), error rate 0.3%. Game-day chứng minh hệ thống tự phục hồi trong 5 phút khi GPU chết. Runbook + hand-off doc giúp team vận hành tiếp tục mà không cần tôi kèm.
 
-### Thách thức & Bài học
+### Challenges & Lessons
 
-Đêm trước launch mình hồi hộp — checklist 35 mục nhưng vẫn sợ sót. Bài học lớn nhất 12 tuần: vai trò Lead không phải là làm nhiều nhất, mà là làm đúng thứ cần làm — design, review, quyết định, unblock. Nếu mình nhảy vào code thay Thắng hay Khiêm thì team sẽ mất coach, không mất coder. Mình cũng học được nghệ thuật "để người khác làm" — khó hơn tự làm nhiều, nhưng đó mới là scale.
+Bài học lớn nhất cả 12 tuần: launch không phải kết thúc, mà là chuyển giao. Nếu doc thiếu, người trực sau không thể xử lý incident lúc 3 giờ sáng. Tôi rút ra: Lead phải dành ít nhất 1 tuần cuối cho hand-off, không cắm đầu vào feature mới. Ngoài ra, game-day trước go-live là bảo hiểm rẻ nhất — 1 buổi chạy giả tiết kiệm cả tuần dập lửa thật.
 
-### Kế hoạch tuần sau
+### Next Week Plan
 
-Nghỉ 1 tuần. Sau đó v2: multi-region, Grafana dashboard, và có thể migrate sang EKS nếu team đã sẵn sàng.
+Post-launch: monitor 4 tuần, viết retrospective toàn project, chuẩn bị đề xuất phase 2 (video upscale, batch API).

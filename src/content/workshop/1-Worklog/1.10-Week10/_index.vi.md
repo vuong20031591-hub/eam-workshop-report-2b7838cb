@@ -1,37 +1,37 @@
 ---
-title: "Nhật ký công việc Tuần 10"
+title: "Week 10 Worklog"
 date: 2024-01-01
 weight: 10
 chapter: false
 pre: " <b> 1.10. </b> "
 ---
 
-## TUẦN 10 - NHẬT KÝ
+## WEEK 10 WORKLOG
 
-### Mục tiêu Tuần 10
+### Week 10 Objectives
 
-Security hardening tuần: Secrets Manager rotation cho DB password + API key, WAF managed rules (OWASP top 10), Prometheus `/metrics` (UPS-6) cho Khiêm. Song song mình viết API docs public + ADR tổng kết security posture.
+Hardening security trước khi mở scale. Tôi audit IAM least privilege, chốt Secrets Manager rotation, và bắt đầu viết spec kiến trúc ECS on EC2 + ASG + SQS cho tuần 11.
 
-### Các công việc thực hiện trong tuần
+### Tasks to be carried out this week
 
-| Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
+| Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Review Khiêm: Secrets Manager `upscale/db` + `upscale/api-keys` + rotation Lambda 90 ngày. | 06/07/2026 | 07/07/2026 | [Secrets Manager Rotation](https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html) |
-| 2 | Review Khiêm: WAF rule group `AWSManagedRulesCommonRuleSet` + `AWSManagedRulesKnownBadInputsRuleSet` áp cho ALB + CloudFront. | 08/07/2026 | 08/07/2026 | [WAF Managed Rules](https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups.html) |
-| 3 | Review PR Khiêm UPS-6: expose `/metrics` (prometheus-fastapi-instrumentator) + CloudWatch Agent scrape. | 09/07/2026 | 09/07/2026 | [prometheus-fastapi-instrumentator](https://github.com/trallnag/prometheus-fastapi-instrumentator) |
-| 4 | Viết API docs public (Redoc từ OpenAPI): endpoint public + auth flow + rate limit + error codes. | 10/07/2026 | 11/07/2026 | [Redoc](https://redocly.com/) |
-| 5 | Security review meeting với team: đi qua checklist OWASP + IAM least-privilege audit; ghi 3 finding cho tuần 11. | 12/07/2026 | 12/07/2026 | - |
-| 6 | Review PR Thắng: sửa 2 finding (input validation strict hơn cho `object_key`, log không leak PII). | 12/07/2026 | 12/07/2026 | - |
-| 7 | Viết ADR-006 security posture: authn Cognito, authz middleware, secrets rotation, WAF, log retention. | 12/07/2026 | 12/07/2026 | - |
+| 1 | Audit IAM: chuyển role `EC2-Upscale-Role` từ wildcard `s3:*` sang chỉ prefix `weights/*`, `tmp/*`, `output/*`. | 29/06/2026 | 29/06/2026 | [IAM Least Privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) |
+| 2 | Chốt Secrets Manager cho DB password + Cognito App Client secret; rotation 30 ngày. | 30/06/2026 | 30/06/2026 | [Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/) |
+| 3 | Review PR migrate secrets từ env-var sang Secrets Manager (SDK boto3 fetch on startup). | 01/07/2026 | 01/07/2026 | - |
+| 4 | Chốt VPC Flow Logs + GuardDuty enable cho account; review chi phí phát sinh (~$8/tháng). | 02/07/2026 | 02/07/2026 | [GuardDuty](https://docs.aws.amazon.com/guardduty/latest/ug/) |
+| 5 | Viết spec kiến trúc ECS on EC2: ASG Capacity Provider, task definition GPU-aware, SQS `upscale-job-queue`. | 03/07/2026 | 03/07/2026 | [ECS Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
+| 6 | Viết ADR-006: chọn ECS trên EC2 thay vì Fargate GPU (Fargate không có GPU option chính thức lúc này). | 04/07/2026 | 04/07/2026 | - |
+| 7 | Sprint retro: security posture tăng rõ; tuần 11 bắt đầu ECS migration. | 05/07/2026 | 05/07/2026 | - |
 
-### Kết quả đạt được Tuần 10
+### Week 10 Achievements
 
-Ba lớp security đã đóng: identity (Cognito), transport (ALB TLS + WAF), storage (SSE-S3 + Secrets Manager rotation). API docs public tại `docs.upscale.dev`. Prometheus metrics chạy song song với CloudWatch, cho phép Grafana dashboard tuần sau nếu cần. UPS-6 close.
+IAM policy còn ~40% quyền cũ, xoá toàn bộ wildcard. Secrets Manager rotation chạy tự động. GuardDuty phát hiện 2 API call bất thường từ IP nước ngoài trong ngày đầu → chốt bật permanent. Spec ECS on EC2 xong, sẵn sàng cho tuần 11.
 
-### Thách thức & Bài học
+### Challenges & Lessons
 
-WAF managed rule ban đầu chặn nhầm 1 request FE hợp lệ (nghi ngờ XSS trên filename), mình phải review log rồi giao Khiêm thêm exception rule cho path `/upload/init`. Bài học: managed rule tiện nhưng phải monitor false positive tuần đầu, không bật-quên. Với Lead, đây là quyết định trade-off giữa "chặn hết" và "để user chạy được".
+Audit IAM là việc chán nhất nhưng bắt buộc phải làm trước khi go-live. Wildcard `s3:*` là bom nổ chậm — nếu key rò rỉ thì attacker xoá cả bucket. Tôi nhắc bản thân: mỗi lần tạo policy mới, viết tối thiểu resource và action, không copy-paste wildcard từ tutorial.
 
-### Kế hoạch tuần sau
+### Next Week Plan
 
-Scale ngang: ECS on EC2, ASG, SQS async, ElastiCache Redis, EFS shared. Playwright E2E. Đây là tuần lớn nhất — mình sẽ chia nhỏ issue cho từng người.
+Migrate BE sang ECS + ASG + SQS. Viết spec worker consume SQS. Chốt strategy autoscale policy.

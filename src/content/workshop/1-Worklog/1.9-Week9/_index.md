@@ -10,28 +10,28 @@ pre: " <b> 1.9. </b> "
 
 ### Week 9 Objectives
 
-Load test + tile inference + dashboard. Tôi design test plan (RPS mục tiêu, ảnh mẫu), giao Thang implement tile inference cho ảnh > 4K (tránh OOM GPU), review dashboard Khiem build. Kết quả tuần này là căn cứ để tuần 11 quyết định horizontal scale.
+Week 9 was about scale: real numbers via k6 load tests, and a tile-based inference spec for 8K images so we don't OOM the 16GB GPU.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Design load test plan: k6 script, 3 kịch bản (spike 50 RPS, sustained 20 RPS 30 phút, endurance 5 RPS 4h). | 29/06/2026 | 29/06/2026 | [k6](https://k6.io/docs/) |
-| 2 | Chốt strategy tile inference: cắt ảnh > 4K thành tile 1024×1024 overlap 32px, ghép lại; ADR-005. | 30/06/2026 | 30/06/2026 | - |
-| 3 | Review PR Thang: `TileProcessor` + unit test seam continuity (không thấy đường ghép). | 01/07/2026 | 02/07/2026 | - |
-| 4 | Review integration test suite Thang implement từ spec tuần 8: 20/20 pass. | 03/07/2026 | 03/07/2026 | - |
-| 5 | Chạy load test cùng Khiem: sustained 20 RPS OK, spike 50 RPS thấy 502 sau 3 phút → cần scale ngang. | 04/07/2026 | 04/07/2026 | - |
-| 6 | Review Khiem: CloudWatch Dashboard `upscale-dev` (ALB 5XX, TargetResponseTime, GPU util, p90 latency) + SNS alarm p90 > 8s. | 05/07/2026 | 05/07/2026 | [CloudWatch Dashboards](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html) |
-| 7 | Retro + roadmap tuần 11: chốt ECS on EC2 + ASG capacity provider + SQS async cho request > 30s. | 05/07/2026 | 05/07/2026 | - |
+| 1 | Wrote the load test plan spec: k6 script simulating 50 VUs over 10 minutes, ramp 5 → 50; upload → poll → download scenario. | 22/06/2026 | 22/06/2026 | [k6](https://k6.io/) |
+| 2 | Reviewed the k6 script + Grafana Cloud dashboard PR; ran the single-instance baseline. | 23/06/2026 | 23/06/2026 | - |
+| 3 | Read the baseline: p95 = 9.2s at 30 VUs, 0% fail rate; identified GPU 16GB OOM at 4K → need tiling. | 24/06/2026 | 24/06/2026 | - |
+| 4 | Wrote the tile-based inference spec: 512×512 tiles, 32px overlap, Gaussian blend; documented in ADR-005. | 25/06/2026 | 25/06/2026 | [Tiled Inference](https://github.com/xinntao/Real-ESRGAN#--tile) |
+| 5 | Reviewed the tile-mode implementation + benchmark PR: 4K no longer OOMs, latency +18% (acceptable). | 26/06/2026 | 26/06/2026 | - |
+| 6 | Locked Redis cache for job status (instead of DB polling): TTL 1h, key `job:{uuid}`; handed off ElastiCache provisioning. | 27/06/2026 | 27/06/2026 | [ElastiCache](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/) |
+| 7 | Sprint retro: real load numbers in hand; agreed on Week 10 security hardening + Week 11 auto-scale. | 28/06/2026 | 28/06/2026 | - |
 
 ### Week 9 Achievements
 
-Tile inference cho phép xử lý ảnh 8K không OOM (test với 7680×4320). Load test có số thật: 1 instance GPU chịu 20 RPS ổn định, > 30 RPS bắt đầu 502. Dashboard live, alarm SNS bắn ping tới Slack. Số này là input cho quyết định scale ngang tuần 11.
+Real numbers to bring to stakeholders: one g4dn.xlarge handles ~30 concurrent VUs with p95 under SLO. Tile mode unlocks 8K images without OOM. ElastiCache Redis replaces DB polling, cutting DB load significantly.
 
 ### Challenges & Lessons
 
-502 dưới spike là dấu hiệu single-instance chạm trần. Team ban đầu muốn nhảy sang EKS luôn, tôi giữ lại — chọn ECS on EC2 vì team chưa có ai quản Kubernetes, chi phí learning quá cao so với lợi ích. Bài học: chọn tech theo năng lực team, không theo hype. Nếu ép EKS lúc này thì tuần 11 sẽ chậm 2 tuần.
+Measure first, decide second. Without a real k6 run, the team argues about capacity forever. Once numbers are on the board, everyone converges quickly. For tile mode, the critical choice is enough overlap to hide seams — 16px shows a visible line, 32px is smooth. That only shows up in real image tests.
 
 ### Next Week Plan
 
-Security hardening: Secrets Manager rotation, WAF managed rules, API docs public. Review Khiem provision Secrets Manager + rotate DB password.
+Security hardening: Secrets Manager rotation, IAM least-privilege audit. Write the ECS on EC2 + ASG architecture spec for auto-scaling.

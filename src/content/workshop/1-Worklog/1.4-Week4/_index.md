@@ -10,28 +10,28 @@ pre: " <b> 1.4. </b> "
 
 ### Week 4 Objectives
 
-Focus tuần 4: mở tuyến Standard (LANCZOS trên CPU) để không phải GPU nào cũng gánh, và bắt đầu observability. Tôi spec endpoint cho Thang, chốt log format với Khiem, và design property tests để coverage không bị mỏng ở phần xử lý ảnh.
+Week 4 focus: open the Standard lane (LANCZOS on CPU) so not every request burns GPU, and start observability. I wrote the endpoint spec, locked the log format, and designed the property test plan so coverage doesn't stay thin around image processing.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Spec `/upscale/standard`: LANCZOS Pillow, CPU-only, giữ EXIF metadata; giao Thang implement. | 14/05/2026 | 14/05/2026 | [Pillow LANCZOS](https://pillow.readthedocs.io/en/stable/handbook/concepts.html#filters) |
-| 2 | Chốt log format với Khiem: JSON `{ts, level, request_id, path, latency_ms, gpu_util}`; giao Khiem set CloudWatch Log Group. | 15/05/2026 | 15/05/2026 | [CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/) |
-| 3 | Review PR Thang: `/upscale/standard` + save output S3 `output/` + presigned URL; approve. | 16/05/2026 | 17/05/2026 | - |
-| 4 | Design property tests với Thang: `hypothesis` sinh ảnh random size 100-4000px, verify output không crash + đúng shape. | 18/05/2026 | 19/05/2026 | [Hypothesis](https://hypothesis.readthedocs.io/) |
-| 5 | Review PR Thang: 20 property tests + coverage report; approve khi coverage ≥ 80%. | 20/05/2026 | 20/05/2026 | - |
-| 6 | Review Khiem: CloudWatch Log Group `/upscale/be` + Metric Filter cho `latency_ms` p90; approve. | 21/05/2026 | 21/05/2026 | - |
-| 7 | Sprint retro: baseline p90 = 6.1s (AI), 1.4s (Standard); chốt SLO 8s cho tuần sau. | 22/05/2026 | 22/05/2026 | - |
+| 1 | Wrote the `/upscale/standard` spec: LANCZOS Pillow, CPU-only, preserve EXIF metadata. | 14/05/2026 | 14/05/2026 | [Pillow LANCZOS](https://pillow.readthedocs.io/en/stable/handbook/concepts.html#filters) |
+| 2 | Locked the log format: JSON `{ts, level, request_id, path, latency_ms, gpu_util}`; specced the CloudWatch Log Group. | 15/05/2026 | 15/05/2026 | [CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/) |
+| 3 | Reviewed the `/upscale/standard` PR + S3 `output/` save + presigned URL; approved. | 16/05/2026 | 17/05/2026 | - |
+| 4 | Designed the property test plan: `hypothesis` generates random images 100-4000px, verifies output shape and no-crash. | 18/05/2026 | 19/05/2026 | [Hypothesis](https://hypothesis.readthedocs.io/) |
+| 5 | Reviewed the 20 property tests + coverage report PR; approved when coverage hit ≥ 80%. | 20/05/2026 | 20/05/2026 | - |
+| 6 | Reviewed the CloudWatch Log Group `/upscale/be` + p90 `latency_ms` Metric Filter PR; approved. | 21/05/2026 | 21/05/2026 | - |
+| 7 | Sprint retro: baseline p90 = 6.1s (AI), 1.4s (Standard); locked SLO at 8s for next week. | 22/05/2026 | 22/05/2026 | - |
 
 ### Week 4 Achievements
 
-Hai endpoint đã chạy song song. CloudWatch có log JSON, filter được p90 latency. Property tests bắt được 2 bug edge case (ảnh 1×1 và ảnh có alpha channel) — Thang fix ngay trong tuần. SLO 8s được cả team đồng thuận, có căn cứ đo lường.
+Both endpoints run in parallel. CloudWatch has JSON logs, p90 latency is filterable. Property tests caught 2 edge-case bugs (1×1 images and images with alpha channel) before production. The 8s SLO got team-wide buy-in with real measurement behind it.
 
 ### Challenges & Lessons
 
-Cái khó không phải viết test, mà là ép team viết test trước khi merge feature. Tôi phải đặt quy tắc: PR không có test là auto-reject. Ban đầu Thang thấy phiền, nhưng đến khi property test bắt được bug alpha channel — nếu chạy production sẽ crash — thì anh tự nói "may là test bắt được sớm". Đây là văn hoá cần Lead cứng ngay từ tuần đầu, để lâu càng khó ép.
+The hard part isn't writing tests, it's enforcing the process: no tests, auto-reject the PR. Initial pushback fades when a property test catches an alpha-channel bug before production. This is a culture the Lead has to hold firm on from Week 1 — leaving it later only gets harder.
 
 ### Next Week Plan
 
-FE tuần 5: chốt stack (TanStack Start), design page structure, giao Quan bootstrap. Review Khiem provision S3 static hosting + CloudFront + ACM cho FE.
+FE week: lock TanStack Start as the stack, write the page structure spec. Review the S3 static hosting + CloudFront + ACM setup for the FE.
