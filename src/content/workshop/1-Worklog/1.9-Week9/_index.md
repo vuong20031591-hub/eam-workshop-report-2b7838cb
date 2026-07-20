@@ -16,7 +16,7 @@ Run a 20-concurrent upload load test through the ALB to find the GPU bottleneck.
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Run `hey -n 100 -c 5 -m POST` against the API Gateway endpoint with a 1080p image. | 28/06/2026 | 28/06/2026 | [hey](https://github.com/rakyll/hey) |
+| 1 | Run `hey -n 100 -c 5 -m POST` against the ALB endpoint with a 1080p image. | 28/06/2026 | 28/06/2026 | [hey](https://github.com/rakyll/hey) |
 | 2 | Measure p50=6.2s, p90=9.8s, GPU util ~95% (via CloudWatch custom metric). | 29/06/2026 | 29/06/2026 | - |
 | 3 | Enable `TILE_SIZE=512` for inputs >2K, remeasure — p90 down to 8.1s, no more OOM. | 30/06/2026 | 01/07/2026 | - |
 | 4 | Serialize AI requests through an `asyncio.Lock`, keep Standard mode parallel. | 02/07/2026 | 03/07/2026 | - |
@@ -34,4 +34,4 @@ Under high concurrency a single GPU thrashes: multiple requests loading the mode
 
 ### Next Week Plan
 
-Generate API docs (OpenAPI + Redoc). Move analytics tokens to AWS Secrets Manager instead of `.env`. Put AWS WAF in front of CloudFront and API Gateway.
+Generate API docs (OpenAPI + Redoc). Move analytics tokens to AWS Secrets Manager instead of `.env`. Put AWS WAF in front of CloudFront and the ALB.

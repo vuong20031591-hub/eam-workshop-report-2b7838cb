@@ -16,8 +16,8 @@ Deploy production at `upscaler.vuongtech.dev` and `api.upscaler.vuongtech.dev` v
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Route 53 hosted zone `vuongtech.dev`, A-alias `upscaler` → CloudFront, `api.upscaler` → API Gateway custom domain. | 24/07/2026 | 24/07/2026 | [Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/) |
-| 2 | Enable **CloudFront logging** to S3 + **API Gateway access logs** to CloudWatch. | 25/07/2026 | 25/07/2026 | - |
+| 1 | Route 53 hosted zone `vuongtech.dev`, A-alias `upscaler` → CloudFront, `api.upscaler` → ALB (alias). | 24/07/2026 | 24/07/2026 | [Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/) |
+| 2 | Enable **CloudFront logging** to S3 + **ALB access logs** to S3. | 25/07/2026 | 25/07/2026 | - |
 | 3 | Tag every resource `Project=Upscale, Env=prod` so Cost Explorer can filter. | 26/07/2026 | 26/07/2026 | [AWS Tagging](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) |
 | 4 | Run **Cost Explorer** over 30 days: EC2 g5 = 78%, S3 = 6%, CloudFront = 4%, misc for the rest. | 27/07/2026 | 27/07/2026 | [Cost Explorer](https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html) |
 | 5 | Model out a **Compute Savings Plan** 1-year no-upfront: ~27% saved on g5. | 28/07/2026 | 28/07/2026 | [Savings Plans](https://docs.aws.amazon.com/savingsplans/latest/userguide/) |

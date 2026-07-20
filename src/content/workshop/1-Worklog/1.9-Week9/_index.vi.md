@@ -34,4 +34,4 @@ Khi concurrency lên cao, một GPU đơn lẻ bị thrash: nhiều request cùn
 
 ### Kế hoạch tuần sau
 
-Sinh docs API (OpenAPI + Redoc). Đưa AWS Secrets Manager vào giữ token analytics thay .env. Gắn AWS WAF trước CloudFront và API Gateway.
+Sinh docs API (OpenAPI + Redoc). Đưa AWS Secrets Manager vào giữ token analytics thay .env. Gắn AWS WAF trước CloudFront và ALB.

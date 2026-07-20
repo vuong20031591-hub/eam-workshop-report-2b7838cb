@@ -10,7 +10,7 @@ pre: " <b> 1.10. </b> "
 
 ### Week 10 Objectives
 
-Generate API documentation from FastAPI's OpenAPI, deploy Redoc to S3+CloudFront. Move analytics tokens into AWS Secrets Manager instead of the `.env` file on EC2. Turn on AWS WAF managed rule set in front of both CloudFront and API Gateway.
+Generate API documentation from FastAPI's OpenAPI, deploy Redoc to S3+CloudFront. Move analytics tokens into AWS Secrets Manager instead of the `.env` file on EC2. Turn on AWS WAF managed rule set in front of both CloudFront and the ALB.
 
 ### Tasks to be carried out this week
 
@@ -21,7 +21,7 @@ Generate API documentation from FastAPI's OpenAPI, deploy Redoc to S3+CloudFront
 | 3 | Create secret `upscaler/dev/analytics` in **Secrets Manager**, grant IAM read policy to the EC2 role. | 09/07/2026 | 09/07/2026 | [Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/) |
 | 4 | Refactor `APIConfig`: when `USE_SECRETS_MANAGER=true` → call `secretsmanager:GetSecretValue`, cache for 5 minutes. | 10/07/2026 | 11/07/2026 | - |
 | 5 | Enable **AWS WAF v2** WebACL with managed rule `AWSManagedRulesCommonRuleSet` + rate-based rule 2000 req/5min/IP. | 12/07/2026 | 13/07/2026 | [AWS WAF](https://docs.aws.amazon.com/waf/latest/developerguide/) |
-| 6 | Attach the WebACL to the FE CloudFront distribution and the API Gateway stage. | 14/07/2026 | 14/07/2026 | - |
+| 6 | Attach the WebACL to the FE CloudFront distribution and the ALB. | 14/07/2026 | 14/07/2026 | - |
 | 7 | Write a top-level README + AWS architecture diagram (draw.io). | 15/07/2026 | 15/07/2026 | - |
 
 ### Week 10 Achievements
