@@ -267,3 +267,7 @@ export function getPrevNext(
 export function getRootEntry(locale: Locale): WorkshopEntry | undefined {
   return getEntry("", locale);
 }
+
+export function getAllSlugs(locale: Locale = "en"): string[] {
+  return locale === "vi" ? flatVi : flatEn;
+}
