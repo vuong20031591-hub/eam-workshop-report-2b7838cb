@@ -19,7 +19,7 @@ Sơ đồ trên ánh xạ mọi dịch vụ AWS sử dụng trong dự án AI Up
 | Dịch vụ AWS | Vai trò trong pipeline | Đưa vào ở |
 | --- | --- | --- |
 | IAM · Budgets · CloudTrail | Guardrail tài khoản, least-privilege, audit trail | [Tuần 1](1.1-week1/) |
-| Amazon S3 (`upscaler-io`) | Lưu weights, input tạm, output; lifecycle + SSE | [Tuần 2](1.2-week2/), [Tuần 7](1.7-week7/) |
+| Amazon S3 (`upscale-io`) | Lưu weights, input tạm, output; lifecycle + SSE | [Tuần 2](1.2-week2/), [Tuần 7](1.7-week7/) |
 | EC2 g5.xlarge (A10G GPU) | Host FastAPI + Real-ESRGAN inference | [Tuần 3](1.3-week3/), [Tuần 11](1.11-week11/) |
 | CloudWatch Logs / Metrics / Alarms | Log JSON, GPU util, alarm p90 | [Tuần 4](1.4-week4/), [Tuần 9](1.9-week9/) |
 | S3 + CloudFront + ACM (FE) | Static TanStack Start (SPA), edge cache, TLS | [Tuần 5](1.5-week5/) |
