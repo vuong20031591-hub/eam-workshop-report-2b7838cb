@@ -10,28 +10,28 @@ pre: " <b> 1.11. </b> "
 
 ### Week 11 Objectives
 
-Migrate BE từ EC2 đơn sang ECS on EC2 + ASG + SQS. Vai trò tôi: chốt kiến trúc chi tiết, viết spec worker + autoscale policy, review từng PR trong migration path.
+Chương 5.9 Deployment. Build frontend, upload lên bucket S3 static, invalidate CloudFront để người dùng thật sự thấy bản mới.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Chốt kiến trúc: ALB → ECS task API (2 vCPU) → SQS `upscale-job-queue` → ECS task Worker GPU (g4dn.xlarge). | 06/07/2026 | 06/07/2026 | - |
-| 2 | Review PR provision ECS cluster + ASG Capacity Provider (min 0, max 4, target 100% utilization). | 07/07/2026 | 07/07/2026 | [Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
-| 3 | Viết spec worker: consume SQS long-poll 20s, xử lý job, push status Redis, retry x2, DLQ sau 3 lần fail. | 08/07/2026 | 08/07/2026 | [SQS Long Polling](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html) |
-| 4 | Review PR refactor `/upscale/ai` push job vào SQS + return `job_id`; worker service consume. | 09/07/2026 | 09/07/2026 | - |
-| 5 | Chốt autoscale policy: target tracking `SQSMessagesVisible` = 5 msg/task; scale-in cooldown 300s. | 10/07/2026 | 10/07/2026 | [ECS Target Tracking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-autoscaling-targettracking.html) |
-| 6 | Chạy load test 100 VU: autoscale từ 1 → 3 GPU instance trong 4 phút; p95 giữ 11s. | 11/07/2026 | 11/07/2026 | - |
-| 7 | Sprint retro: migration ECS live; scale-to-0 lúc 0 traffic tiết kiệm ~40% bill so với EC2 24/7. | 12/07/2026 | 12/07/2026 | - |
+| 1 | Chạy `npm run build` ở local, kiểm tra thư mục `dist/`. | 28/06/2026 | 28/06/2026 | - |
+| 2 | Upload `dist/` lên `upscale-static-*` qua S3 console. | 29/06/2026 | 29/06/2026 | - |
+| 3 | Tạo CloudFront invalidation cho `/*` và chờ. | 30/06/2026 | 30/06/2026 | - |
+| 4 | Mở site, upload ảnh thật, thấy bản upscaled trả về. | 01/07/2026 | 01/07/2026 | - |
+| 5 | Chia sẻ URL trong Slack cho team dùng thử. Ghi lại feedback ngày đầu. | 02/07/2026 | 02/07/2026 | - |
+| 6 | Viết ghi chú "how to deploy" ngắn trên Linear ticket để sau khỏi quên các bước. | 03/07/2026 | 03/07/2026 | - |
+| 7 | Đóng `UPS-13` trên Linear, mở `UPS-14` (cleanup + retro). | 04/07/2026 | 04/07/2026 | - |
 
 ### Week 11 Achievements
 
-Hệ thống chịu được burst 100 VU với autoscale mượt. Scale-to-0 mở ra khả năng giảm chi phí đáng kể vào giờ thấp điểm. SQS + DLQ đảm bảo không mất job khi worker crash — trước đây EC2 đơn crash là mất luôn request.
+Frontend đã live. Người dùng upload ảnh và vài giây sau nhận bản nét hơn. Mười tuần trước tôi không hình dung được, tuần này là tuần "hái quả".
 
 ### Challenges & Lessons
 
-ECS on EC2 phức tạp hơn Fargate rất nhiều — capacity provider, ASG, task placement đều phải chỉnh. Nhưng đổi lại có GPU. Bài học cho Lead: khi chọn tech đắt về operational complexity, phải chuẩn bị runbook và alarm ngay tuần đầu, không để rơi vào tình huống production incident mới học.
+Lần đầu tôi quên invalidate CloudFront, mất 20 phút cứ nghĩ deploy bị hỏng. Bài học: với CloudFront, "file đã ở S3" không phải là "cả thế giới thấy được".
 
 ### Next Week Plan
 
-Tuần cuối: viết launch checklist, chạy game-day test failover, viết post-mortem template, chuẩn bị hand-off doc cho vận hành.
+Tuần cuối: chương 5.10 Cleanup, viết retro, đóng nốt các Linear ticket còn lại.

@@ -10,28 +10,28 @@ pre: " <b> 1.11. </b> "
 
 ### Week 11 Objectives
 
-Migrate BE from a single EC2 to ECS on EC2 + ASG + SQS. My role: lock the detailed architecture, write the worker + autoscale policy spec, and review each PR along the migration path.
+Chapter 5.9 Deployment. Build the frontend, upload it to the S3 static bucket, and invalidate CloudFront so users actually see the new version.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Locked the architecture: ALB → API ECS task (2 vCPU) → SQS `upscale-job-queue` → Worker ECS task on GPU (g4dn.xlarge). | 06/07/2026 | 06/07/2026 | - |
-| 2 | Reviewed the ECS cluster + ASG Capacity Provider (min 0, max 4, target 100% utilization) provisioning PR. | 07/07/2026 | 07/07/2026 | [Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
-| 3 | Wrote the worker spec: SQS long-poll 20s, process job, push status to Redis, retry x2, DLQ after 3 failures. | 08/07/2026 | 08/07/2026 | [SQS Long Polling](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html) |
-| 4 | Reviewed the `/upscale/ai` refactor PR: push job to SQS + return `job_id`; worker service consumes. | 09/07/2026 | 09/07/2026 | - |
-| 5 | Locked the autoscale policy: target tracking on `SQSMessagesVisible` = 5 msg/task; scale-in cooldown 300s. | 10/07/2026 | 10/07/2026 | [ECS Target Tracking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-autoscaling-targettracking.html) |
-| 6 | Ran a 100 VU load test: autoscale from 1 → 3 GPU instances in 4 minutes; p95 stayed at 11s. | 11/07/2026 | 11/07/2026 | - |
-| 7 | Sprint retro: ECS migration live; scale-to-0 at idle saves ~40% on the bill versus 24/7 EC2. | 12/07/2026 | 12/07/2026 | - |
+| 1 | Ran `npm run build` locally, checked the `dist/` folder. | 28/06/2026 | 28/06/2026 | - |
+| 2 | Uploaded `dist/` to `upscale-static-*` through the S3 console. | 29/06/2026 | 29/06/2026 | - |
+| 3 | Created a CloudFront invalidation for `/*` and waited it out. | 30/06/2026 | 30/06/2026 | - |
+| 4 | Opened the site, uploaded a real image, watched an upscaled version come back. | 01/07/2026 | 01/07/2026 | - |
+| 5 | Shared the URL in Slack for the team to try. Collected first-day feedback. | 02/07/2026 | 02/07/2026 | - |
+| 6 | Wrote a short "how to deploy" note on the Linear ticket so I do not forget the steps. | 03/07/2026 | 03/07/2026 | - |
+| 7 | Closed `UPS-13` on Linear, opened `UPS-14` (cleanup + retro). | 04/07/2026 | 04/07/2026 | - |
 
 ### Week 11 Achievements
 
-The system handled a 100 VU burst with smooth autoscaling. Scale-to-0 unlocks meaningful cost savings during off-peak hours. SQS + DLQ mean jobs aren't lost when a worker crashes — with the old single EC2, a crash meant losing the request outright.
+The frontend is live. When people upload a photo it comes back sharper a few seconds later. Nothing about that felt possible ten weeks ago, so this was the payoff week.
 
 ### Challenges & Lessons
 
-ECS on EC2 is far more complex than Fargate — capacity provider, ASG, task placement all need tuning. But it buys us GPUs. Lesson for the Lead: when picking a stack that's expensive in operational complexity, prepare the runbook and alarms in Week 1, don't wait until a production incident forces the learning.
+I forgot to invalidate CloudFront the first time and spent 20 minutes convinced the deploy was broken. Lesson: for CloudFront, "the file is in S3" is not the same as "the world can see it".
 
 ### Next Week Plan
 
-Final week: launch checklist, game-day failover, incident post-mortem template, ops hand-off doc.
+Final week: chapter 5.10 Cleanup, write the retro, close out remaining Linear tickets.

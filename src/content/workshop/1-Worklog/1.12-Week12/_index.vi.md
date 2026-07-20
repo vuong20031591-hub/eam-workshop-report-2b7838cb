@@ -10,28 +10,28 @@ pre: " <b> 1.12. </b> "
 
 ### Week 12 Objectives
 
-Tuần cuối: launch checklist, game-day failover, hand-off doc. Vai trò tôi: chốt Go/No-go criteria, chạy game-day, viết runbook incident, và go-live tại `upscale.dev`.
+Tuần cuối. Chương 5.10 Cleanup: xoá hết resource đã tạo để bill về 0. Sau đó viết retro thực tập và đóng nốt Linear ticket còn lại.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Viết launch checklist Go/No-go: SLO p95 ≤ 12s, error rate < 1%, WAF live, GuardDuty enable, backup DB daily. | 13/07/2026 | 13/07/2026 | - |
-| 2 | Chạy game-day: kill 1 GPU task giữa load 50 VU, verify SQS retry + ASG replace trong 5 phút. | 14/07/2026 | 14/07/2026 | - |
-| 3 | Viết runbook incident: 5 kịch bản (GPU OOM, SQS backlog, Cognito outage, S3 5xx, Redis down); action step chi tiết. | 15/07/2026 | 15/07/2026 | - |
-| 4 | Viết post-mortem template + đăng ký PagerDuty on-call rotation cho 4 tuần đầu sau go-live. | 16/07/2026 | 16/07/2026 | [PagerDuty](https://www.pagerduty.com/) |
-| 5 | Review PR CI/CD pipeline final: GitHub Actions build → push ECR → ECS force-deploy trên tag `v1.*`. | 17/07/2026 | 17/07/2026 | - |
-| 6 | Go-live: chuyển DNS `upscale.dev` sang CloudFront prod; monitor CloudWatch 4h; smoke test 30 lần. | 18/07/2026 | 18/07/2026 | - |
-| 7 | Retro cả project + hand-off doc cho vận hành: kiến trúc, runbook, ADR, contact matrix. | 19/07/2026 | 19/07/2026 | - |
+| 1 | Đọc kỹ chương 5.10, ghi lại thứ tự xoá trước khi động vào cái gì. | 05/07/2026 | 05/07/2026 | - |
+| 2 | Xoá ECS service và cluster, sau đó ASG và launch template. | 06/07/2026 | 06/07/2026 | - |
+| 3 | Xoá ALB, target group, CloudFront distribution và WAF web ACL. | 07/07/2026 | 07/07/2026 | - |
+| 4 | Xoá Redis, SQS queue và dead-letter queue. | 08/07/2026 | 08/07/2026 | - |
+| 5 | Xoá EFS, ECR repo, bucket S3 và secret trong Secrets Manager. | 09/07/2026 | 09/07/2026 | - |
+| 6 | Xoá NAT Gateway, subnet và cuối cùng là VPC. Mở Cost Explorer để chắc bill đang giảm. | 10/07/2026 | 10/07/2026 | - |
+| 7 | Viết retro thực tập, đóng nốt các Linear ticket còn lại (`UPS-14` đến `UPS-18`). | 11/07/2026 | 11/07/2026 | - |
 
 ### Week 12 Achievements
 
-Upscale AI live tại `upscale.dev` với SLO p95 = 10.8s (dưới 12s target), error rate 0.3%. Game-day chứng minh hệ thống tự phục hồi trong 5 phút khi GPU chết. Runbook + hand-off doc giúp team vận hành tiếp tục mà không cần tôi kèm.
+Account về trạng thái sạch. Cost Explorer cho thấy chi phí giảm mạnh sau khi NAT Gateway bị xoá. Tôi đã dựng và dỡ nguyên một stack AWS từ số 0 trong 12 tuần, và hiểu đủ từng phần để giải thích khi phỏng vấn.
 
 ### Challenges & Lessons
 
-Bài học lớn nhất cả 12 tuần: launch không phải kết thúc, mà là chuyển giao. Nếu doc thiếu, người trực sau không thể xử lý incident lúc 3 giờ sáng. Tôi rút ra: Lead phải dành ít nhất 1 tuần cuối cho hand-off, không cắm đầu vào feature mới. Ngoài ra, game-day trước go-live là bảo hiểm rẻ nhất — 1 buổi chạy giả tiết kiệm cả tuần dập lửa thật.
+Cleanup dạy tôi về dependency nhiều hơn cả lúc build. Không xoá được VPC khi còn NAT Gateway, không xoá được NAT khi còn ENI, không xoá được ENI khi task còn chạy. Resource AWS là một đồ thị, cleanup là đồ thị đó chạy ngược. Đây là mô hình tôi sẽ giữ lại sau thực tập.
 
 ### Next Week Plan
 
-Post-launch: monitor 4 tuần, viết retrospective toàn project, chuẩn bị đề xuất phase 2 (video upscale, batch API).
+Thực tập kết thúc ở đây. Việc cá nhân sau: viết một blog post về những gì học được, làm lại chương 5.5 và 5.6 theo trí nhớ xem thứ gì thật sự đọng lại.

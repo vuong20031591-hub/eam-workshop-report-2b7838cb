@@ -10,28 +10,28 @@ pre: " <b> 1.10. </b> "
 
 ### Week 10 Objectives
 
-Security hardening before opening scale. I audited IAM for least privilege, locked Secrets Manager rotation, and started writing the ECS on EC2 + ASG + SQS architecture spec for Week 11.
+Chapter 5.8 Observability. Send logs from ECS to CloudWatch, build a small dashboard, and add one alarm so I know when the API is having a bad day.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Audited IAM: switched role `EC2-Upscale-Role` from wildcard `s3:*` to only prefixes `weights/*`, `tmp/*`, `output/*`. | 29/06/2026 | 29/06/2026 | [IAM Least Privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) |
-| 2 | Locked Secrets Manager for DB password + Cognito App Client secret; 30-day rotation. | 30/06/2026 | 30/06/2026 | [Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/) |
-| 3 | Reviewed the PR migrating secrets from env vars to Secrets Manager (boto3 fetch on startup). | 01/07/2026 | 01/07/2026 | - |
-| 4 | Locked VPC Flow Logs + GuardDuty for the account; reviewed the added cost (~$8/month). | 02/07/2026 | 02/07/2026 | [GuardDuty](https://docs.aws.amazon.com/guardduty/latest/ug/) |
-| 5 | Wrote the ECS on EC2 architecture spec: ASG Capacity Provider, GPU-aware task definition, SQS `upscale-job-queue`. | 03/07/2026 | 03/07/2026 | [ECS Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
-| 6 | Wrote ADR-006: chose ECS on EC2 over Fargate GPU (Fargate has no official GPU option at the time). | 04/07/2026 | 04/07/2026 | - |
-| 7 | Sprint retro: security posture visibly stronger; Week 11 begins the ECS migration. | 05/07/2026 | 05/07/2026 | - |
+| 1 | Created CloudWatch log groups `/ecs/upscale-api` and `/ecs/upscale-postgres`. | 21/06/2026 | 21/06/2026 | [CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/) |
+| 2 | Confirmed the ECS task is streaming stdout into the log group. | 22/06/2026 | 22/06/2026 | - |
+| 3 | Built a CloudWatch dashboard with 4 widgets: request count, 5xx rate, CPU, GPU util. | 23/06/2026 | 23/06/2026 | - |
+| 4 | Created one alarm on 5xx rate > 5% for 5 minutes. | 24/06/2026 | 24/06/2026 | - |
+| 5 | Wired the alarm to my email through SNS. | 25/06/2026 | 25/06/2026 | [SNS](https://docs.aws.amazon.com/sns/latest/dg/) |
+| 6 | Broke the app on purpose (killed a task) to see the alarm actually fire. | 26/06/2026 | 26/06/2026 | - |
+| 7 | Closed `UPS-12` on Linear, pulled `UPS-13` (deploy the frontend). | 27/06/2026 | 27/06/2026 | - |
 
 ### Week 10 Achievements
 
-IAM policies down to ~40% of the old surface, all wildcards gone. Secrets Manager rotation runs automatically. GuardDuty flagged 2 unusual API calls from foreign IPs on day one — decided to keep it permanently on. ECS on EC2 spec is ready for Week 11.
+I can watch the API from a single tab. The alarm works end to end: kill a task, get an email. This is the first week the project felt like something I could operate, not just build.
 
 ### Challenges & Lessons
 
-IAM audits are the most tedious task and absolutely required before go-live. `s3:*` is a slow-burning bomb — if a key leaks, an attacker wipes the whole bucket. Reminder to self: every new policy starts with the minimum resource and action, no copy-pasted wildcards from tutorials.
+Logs did not show up at first because the task role did not have `logs:CreateLogStream`. The error hides in the "Stopped reason" of the task. Lesson: check the task events before opening the code.
 
 ### Next Week Plan
 
-Migrate BE to ECS + ASG + SQS. Write the SQS worker spec. Lock the autoscale policy.
+Chapter 5.9 Deployment: build the frontend, upload to S3, invalidate CloudFront. Track on `UPS-13`.
