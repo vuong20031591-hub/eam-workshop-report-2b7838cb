@@ -8,26 +8,16 @@ pre: " <b> 1.7. </b> "
 
 ## WEEK 7 WORKLOG
 
-### Focus
+ECS on EC2 week. The compute layer where FastAPI and the CodeFormer worker actually run, so most of what we did in the last six weeks was setup for this.
 
-ECS on EC2. The compute layer where FastAPI and the CodeFormer worker actually run.
+`UPS-11` broke into the cluster, an ASG with a capacity provider, task definitions for FastAPI and the worker, and service registration. I ran the sizing discussion and we landed on `t3.medium` on-demand for the API and `g4dn.xlarge` spot for the worker. Spot for the worker is a real cost saver as long as we handle interruption properly, and the reasoning went into an ADR so we do not re-debate it every sprint.
 
-### What I did
+Review this week: one task definition came in without the EFS mount at `/mnt/models`, which means the worker would boot fine and then crash on the first inference. Sent back. The capacity provider PR was ok but I wanted the spot drain path spelled out, so we added that before merging.
 
-- Broke `UPS-11` into: cluster, ASG with capacity provider, task definition for FastAPI, task definition for the worker, service registration.
-- Chaired a sizing discussion: `t3.medium` on-demand for FastAPI, `g4dn.xlarge` spot for the worker. Wrote the reasoning into an ADR so no one revisits it every sprint.
-- Reviewed both task definitions, sent one back because it did not mount EFS at `/mnt/models`.
-- Reviewed the capacity provider PR, made sure spot interruption drains correctly.
-- Hands-on: chose the scaling policy (target tracking on CPU for API, queue depth for worker), wrote the deploy checklist, and paired on the first end-to-end task run.
+On my own I picked the scaling policies (target tracking on CPU for the API, queue depth for the worker), wrote the deploy checklist, and paired on the first end-to-end task run so I could see the whole flow with my own eyes.
 
-### Result
+Cluster is live, both services registered, and the first upscale job ran end to end from SQS to S3. It is slow, but it works. That is enough for this week.
 
-Cluster live, both services registered, first upscale job ran end to end from SQS to S3. Slow, but working.
+The one real bite: a spot interruption landed in the middle of a job during testing. The worker now catches SIGTERM and re-queues the current message before it goes down. Not glamorous, but the alternative is losing user work.
 
-### Friction
-
-Spot interruption in the middle of a job. The worker now catches SIGTERM and re-queues the current job before shutdown.
-
-### Next week
-
-Chapter 5.8. Put ALB in front so the API is reachable properly.
+Next week is chapter 5.8. Put an ALB in front so the API is reachable properly.

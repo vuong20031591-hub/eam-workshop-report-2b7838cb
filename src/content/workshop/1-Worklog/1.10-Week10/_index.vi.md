@@ -8,26 +8,18 @@ pre: " <b> 1.10. </b> "
 
 ## WORKLOG TUẦN 10
 
-### Trọng tâm
+Tuần Cognito và CloudWatch. Sign-in không phải tự dựng, và một góc monitoring thật sự báo được khi có vấn đề, chứ không phải "cái gì cũng là đồ thị".
 
-Cognito cho đăng nhập user và một góc CloudWatch thực sự báo được khi có vấn đề.
+`UPS-15` (Cognito user pool + Google OAuth) và `UPS-16` (observability) mở ra. Thiết kế auth đơn giản một khi thống nhất hình dạng: Cognito user pool với hosted UI, Google làm identity provider, ID token đổi lấy session cookie ở FastAPI. Không ai phải đụng vào chuyện lưu password, đúng cái tôi muốn.
 
-### Việc tôi làm
+PR Cognito tôi siết danh sách callback OAuth chỉ còn prod và local dev. Callback wildcard là loại thứ mà sau này có người chỉ ra mới thấy đáng tiếc.
 
-- Chia việc thành `UPS-15` (Cognito user pool + Google OAuth) và `UPS-16` (observability).
-- Chủ trì buổi thiết kế luồng auth: Cognito user pool, hosted UI, Google làm identity provider, ID token đổi lấy session cookie ở FastAPI.
-- Review PR Cognito, siết danh sách callback OAuth chỉ còn prod và local dev.
-- Review PR dashboard CloudWatch, cắt bớt nửa số widget vì không ai nhìn.
-- Tự làm: viết tài liệu luồng auth cho nhóm, và chọn alarm để paging (ALB 5xx > 1% trong 5 phút, DLQ SQS khác rỗng, GPU util > 90% kéo dài, ECS service unhealthy).
+PR dashboard CloudWatch nộp lên với khoảng mười hai widget. Tôi cắt nửa, vì dashboard không ai nhìn còn tệ hơn không có dashboard. Cái còn lại là tập nhỏ mình thực sự mở ra mỗi sáng.
 
-### Kết quả
+Tự tay tôi viết tài liệu luồng auth cho nhóm để cả team code theo một hợp đồng, và chọn alarm để paging: ALB 5xx > 1% trong 5 phút, DLQ SQS khác rỗng, GPU util > 90% kéo dài, ECS service unhealthy. Thứ dưới ngưỡng đó chỉ là đồ thị, không phải page.
 
 User đăng nhập được bằng Google, API xác thực token, dashboard chỉ hiện bốn số thực sự cần nhìn.
 
-### Khó khăn
+CORS Cognito hosted UI ngốn vài tiếng. Tôi viết ghi chú ngắn "quy tắc callback URL" vào runbook để không mất chừng đó thời gian mỗi lần.
 
-CORS Cognito hosted UI ngốn vài tiếng. Viết một ghi chú ngắn "quy tắc callback URL" vào runbook.
-
-### Kế hoạch tuần sau
-
-Đóng chương 5.9. Diễn tập deploy end-to-end và demo.
+Tuần sau đóng chương 5.9. Diễn tập deploy end-to-end và buổi demo đầu tiên tử tế.

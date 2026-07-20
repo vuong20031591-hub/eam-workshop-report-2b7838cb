@@ -8,26 +8,14 @@ pre: " <b> 1.1. </b> "
 
 ## WEEK 1 WORKLOG
 
-### Focus
+Kickoff week. I did not write any AWS resource this week, and that was on purpose. As team lead I wanted the project to have a shape before anyone opened the console.
 
-Kickoff. As team lead I need the project to have a clear shape before anyone writes code, so this week is mostly planning and reading.
+Most of the week was reading. I went through the workshop start to finish twice, then wrote a one-page summary of chapter 5.1 so the team had something concrete to argue with instead of vibes. Once we had that, I put the 12-week roadmap onto Linear as epics and opened `UPS-1` (Planning) and `UPS-2` (Architecture doc) as the tickets everything else would hang off.
 
-### What I did
+The rest was small decisions I did not want to have every week: region `ap-southeast-1`, prefix `upscale-`, env names `dev` and `prod`, a Git flow, a PR template. Standup is fifteen minutes each morning, planning Monday, review Friday. Boring, but I would rather set it once.
 
-- Read the full workshop end to end and lifted chapter 5.1 into a one-page architecture summary the team can actually discuss.
-- Broke the 12-week roadmap into epics on Linear and opened `UPS-1` (Planning) and `UPS-2` (Architecture doc) as the anchor tickets.
-- Set project conventions: region `ap-southeast-1`, resource prefix `upscale-`, naming for envs (`dev`, `prod`), Git flow, PR template.
-- Set up the working rhythm: daily 15-minute standup, weekly Monday planning, Friday review.
-- Hands-on: drew the target architecture diagram (User → CloudFront → ALB → ECS with FastAPI + CodeFormer, SQS, Redis, S3) and wrote a first cost baseline.
+I also drew the target diagram (User, CloudFront, ALB, ECS running FastAPI and the CodeFormer worker, SQS, Redis, S3) and put together a rough cost baseline so we would not be surprised later.
 
-### Result
+Honestly, half the week went to cutting things out of scope. The workshop covers a lot and it is tempting to try all of it. We are not going to.
 
-Team has a shared picture of what we are building, a Linear board that maps to the workshop, and a set of conventions no one has to re-argue later.
-
-### Friction
-
-Scope was fuzzy at first. Half of week 1 went into cutting things out of scope, not adding them.
-
-### Next week
-
-Chapter 5.2 Prerequisites. I will chair the IAM design and get the account baseline standardised.
+Next week is chapter 5.2. I will chair the IAM design and get the account baseline nailed down.
