@@ -34,4 +34,4 @@ Out of habit I requested the ACM cert in `ap-southeast-1`, until CloudFront poli
 
 ### Next Week Plan
 
-SSE progress endpoint. CORS + presigned upload direct from FE to S3. Put API Gateway in front of FastAPI.
+SSE progress endpoint. CORS + presigned upload direct from FE to S3. Put an ALB in front of FastAPI with a Cognito-authenticated listener.

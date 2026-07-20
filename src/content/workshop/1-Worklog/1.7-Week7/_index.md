@@ -34,4 +34,4 @@ Even with PyTorch trimmed as much as I could, the `nvidia/cuda-runtime` image la
 
 ### Next Week Plan
 
-Put API Gateway HTTP API in front of EC2 as a proxy. IAM role for ECS/EC2 to pull from ECR. More property tests for the presign endpoint.
+Put an ALB in front of EC2 (target group + HTTPS listener). IAM role for ECS/EC2 to pull from ECR. More property tests for the presign endpoint.

@@ -34,4 +34,4 @@ Image `nvidia/cuda-runtime` sau khi cài xong PyTorch vẫn nặng khoảng 2.1G
 
 ### Kế hoạch tuần sau
 
-Đưa API Gateway HTTP API đứng trước EC2 (proxy). Cấu hình IAM role cho ECS/EC2 pull ECR. Bổ sung property test cho endpoint presign.
+Đưa ALB đứng trước EC2 (target group + listener HTTPS). Cấu hình IAM role cho ECS/EC2 pull ECR. Bổ sung property test cho endpoint presign.
