@@ -8,30 +8,26 @@ pre: " <b> 1.5. </b> "
 
 ## WEEK 5 WORKLOG
 
-### Week 5 Objectives
+### Focus
 
-Finish chapter 5.4 Storage: EFS for shared model weights, ECR for Docker images, Secrets Manager for credentials. Everything the application will need to actually run once I get to chapter 5.5.
+Shared storage. EFS for model weights the workers all need, ECR for the images we ship.
 
-### Tasks to be carried out this week
+### What I did
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Created EFS filesystem `upscale-efs` and mount targets in both private subnets. | 17/05/2026 | 17/05/2026 | [EFS](https://docs.aws.amazon.com/efs/latest/ug/) |
-| 2 | Mounted EFS on a test EC2 and copied a dummy weights file to confirm it works. | 18/05/2026 | 18/05/2026 | - |
-| 3 | Created ECR repositories `upscale-api` and `upscale-worker`. | 19/05/2026 | 19/05/2026 | [ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/) |
-| 4 | Practised `docker push` to ECR from my laptop using the deployer profile. | 20/05/2026 | 20/05/2026 | - |
-| 5 | Stored the database password and Cognito client secret in Secrets Manager. | 21/05/2026 | 21/05/2026 | [Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/) |
-| 6 | Updated my notes with the full storage picture: S3 for objects, EFS for weights, ECR for images. | 22/05/2026 | 22/05/2026 | - |
-| 7 | Closed `UPS-6` on Linear, moved `UPS-7` (ECS cluster) into next sprint. | 23/05/2026 | 23/05/2026 | - |
+- Split `UPS-8` into EFS provisioning, mount plan, and ECR repo layout.
+- Chaired a short session on where model weights live: baked into the image (slow rebuild) vs on EFS (shared, warm). Went with EFS for weights, image only for code.
+- Reviewed the EFS access-point config and pushed back on world-writable permissions.
+- Reviewed the ECR lifecycle policy PR (keep last 20 tagged, expire untagged after 7 days).
+- Hands-on: wrote the mount convention (`/mnt/models` on every worker), the image-tag convention (`<service>:<git-sha>` plus a moving `staging` tag), and updated the runbook.
 
-### Week 5 Achievements
+### Result
 
-Storage is done. When I get to the app layer next week, everything it needs is already sitting there and I do not have to interrupt the workshop steps to go create a bucket.
+Workers can pull weights from a single warm mount, and image storage does not grow forever. Every service now knows exactly where to push and pull from.
 
-### Challenges & Lessons
+### Friction
 
-The first `docker push` failed because I forgot `aws ecr get-login-password`. Reading the error out loud (instead of pasting it into search) told me the answer immediately. Small habit, big win.
+First EFS mount test hung. Turned out to be a missing SG rule from `UPS-6`. Added a regression note to the SG matrix.
 
-### Next Week Plan
+### Next week
 
-Chapter 5.5 Application part A and B: Redis + SQS. Work under `UPS-7`.
+Chapter 5.6. Redis for cache, SQS for the job queue.
