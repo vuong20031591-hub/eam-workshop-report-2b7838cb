@@ -6,40 +6,32 @@ chapter: false
 pre: " <b> 7. </b> "
 ---
 
-This is where I write down what I actually thought about the Upscale AI workshop and the First Cloud AI Journey program around it. I want to be honest about both the parts that worked and the parts that could be better, so the FCAJ team has real input for the next cohort.
+This section is my honest take on the First Cloud AI Journey program itself, separate from any specific project. I want to give the FCAJ team useful input for the next cohort, so I try to name both what worked and what did not.
 
-### The workshop itself
+### Mentor style
 
-The brief was well chosen. Upscale AI is small enough to build solo, but hard enough because it forces you into GPU compute, stateful services (EFS, PostgreSQL, Redis), and an async queue. Pick a stateless app without GPU and you skip the most interesting part of AWS, which is ECS on EC2 with capacity providers. That was the hardest chapter and also the one I got the most out of.
+The mentor let me try first and only stepped in when I was clearly stuck. In the first few weeks that felt slow, but by the second month I understood why it works: you remember something you had to dig out yourself far longer than something you were handed. When I asked for extra time on a harder topic, the answer was yes without a debate.
 
-### Mentor and materials
+### Materials
 
-The mentor let me try first and only stepped in when I was clearly stuck. The first three weeks that annoyed me because it cost time, but by week four I understood why it works. The workshop materials are detailed on networking and ECS, thinner on Cognito and CI/CD. I ended up reading AWS docs directly for those two, which is not a problem, but worth patching in the next revision.
+The written materials are strong on the fundamentals and thinner on the newer or more specialised topics, where I ended up reading vendor documentation directly. That is not a real problem, but a short pointer list ("for this topic, go read X") inside the material would save a few hours per participant.
 
 ### Fit with what I already knew
 
-Roughly 60% overlapped with what I had done before (Linux, Docker, basic networking) and 40% was new territory: fine-grained IAM, ALB target groups, EFS mount targets, ElastiCache. That ratio is about right. Familiar enough that I did not drown, new enough that I did not coast.
-
-### What I learned
-
-I picked up the habit of writing an architecture proposal before touching the Console, reading the AWS bill line by line to find waste, and cleaning up resources in reverse creation order. On the writing side, keeping a weekly worklog even in slow weeks was more useful than I expected.
+Roughly 60% overlapped with things I had touched before and 40% was new territory. That ratio felt right: familiar enough that I did not drown in the first week, new enough that I did not coast in the last one.
 
 ### Program rhythm
 
-FCAJ paced things well: short standups, a mid-program review, a demo at the end. No manufactured deadlines. When I asked for an extra week because Cognito was more work than planned, the mentor said yes without a debate.
+FCAJ paced things well: short standups, a mid-program review, a demo at the end, no manufactured deadlines. The weekly worklog, which I resisted at first, turned out to be more useful than I expected for spotting where I was actually stuck.
 
-### Cost and policy
+### Onboarding
 
-The AWS credit covered the whole workshop as long as I was careful with NAT Gateway and did not leave EC2 running overnight. I forgot a couple of times and lost about 8 USD I did not need to lose. That was on me, not on the policy.
+The first-week onboarding is the weakest part. I spent about three days figuring out who does what and where the internal documents live. A single "start here" page for new participants would remove that friction almost entirely.
 
-### A few specific questions
+### Overall
 
-What I was most satisfied with: finishing the program with a system that actually runs, not slides. Typing a URL and watching the image come back upscaled from the backend was the strongest motivation I had.
-
-What I think could improve: the first-week onboarding is thin. I spent about three days figuring out who does what and where the internal docs live. A single "start here" page for new participants would save that time completely.
-
-Would I recommend it to a friend: yes, with the warning that the program expects a lot of self-driven work. It is not a fit for anyone who wants to be walked through every step.
+What I was most satisfied with: finishing with something real, not just slides. Would I recommend the program to a friend: yes, with the honest warning that it expects a lot of self-driven work and is not a fit for anyone who wants to be walked through every step.
 
 ### Suggestions
 
-If it fits the format, I would add a mid-program session with a participant from the previous cohort, so we get the perspective of someone who just went through it. I would also be happy to keep attending FCAJ technical talks after finishing, including as a volunteer helping the next cohort.
+If the format allows, I would add a mid-program session with a participant from the previous cohort so we get the perspective of someone who just went through it. I would also be happy to keep attending FCAJ technical talks afterwards, including as a volunteer helping the next cohort.
