@@ -1,37 +1,33 @@
 ---
-title: "Week 9 Worklog"
+title: "Worklog Tuần 9"
 date: 2024-01-01
 weight: 9
 chapter: false
 pre: " <b> 1.9. </b> "
 ---
 
-## WEEK 9 WORKLOG
+## WORKLOG TUẦN 9
 
-### Week 9 Objectives
+### Trọng tâm
 
-Chương 5.7 Delivery. Thêm HTTPS với ACM, đặt CloudFront trước ALB và bucket S3 static, bật WAF để chặn cơ bản.
+Lớp edge. CloudFront trước ALB, WAF để phòng thủ cơ bản, Route 53 cho domain thật.
 
-### Tasks to be carried out this week
+### Việc tôi làm
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Request ACM cert cho domain workshop, validate qua DNS. | 14/06/2026 | 14/06/2026 | [ACM](https://docs.aws.amazon.com/acm/latest/userguide/) |
-| 2 | Tạo CloudFront distribution với origin là bucket S3 static. | 15/06/2026 | 15/06/2026 | [CloudFront](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/) |
-| 3 | Thêm origin thứ hai trỏ về ALB cho `/api/*`. | 16/06/2026 | 16/06/2026 | - |
-| 4 | Gắn cert ACM vào CloudFront, bật HTTPS-only. | 17/06/2026 | 17/06/2026 | - |
-| 5 | Tạo WAF web ACL với AWS-managed rule set và gắn vào CloudFront. | 18/06/2026 | 18/06/2026 | [WAF](https://docs.aws.amazon.com/waf/latest/developerguide/) |
-| 6 | Kiểm tra trên trình duyệt: có ổ khoá, request API vẫn chạy. | 19/06/2026 | 19/06/2026 | - |
-| 7 | Đóng `UPS-11` trên Linear, nhận `UPS-12` (observability). | 20/06/2026 | 20/06/2026 | - |
+- Chia việc thành `UPS-13` (CloudFront + Route 53) và `UPS-14` (WAF).
+- Chủ trì buổi thiết kế cache: cache mạnh frontend tĩnh, không cache `/api/*`, forward header `Authorization`.
+- Review PR ruleset WAF, cắt một rule dư trùng với managed common rule group.
+- Review PR Route 53, chốt apex dùng alias trỏ tới CloudFront.
+- Tự làm: viết spec cache behavior, chọn WAF managed rule (Common + Known Bad Inputs + rate limit 2000 req/5 phút mỗi IP), soạn kế hoạch chuyển DNS.
 
-### Week 9 Achievements
+### Kết quả
 
-Traffic đi qua CloudFront với HTTPS đầu-cuối, WAF chặn ngầm mấy request rác rõ ràng. Domain workshop cuối cùng cũng có ổ khoá thay vì màn cảnh báo đáng sợ.
+Domain resolve được, HTTPS kết thúc ở CloudFront, WAF chặn nhiễu rõ ràng ngay ngày đầu, ALB nằm gọn sau edge.
 
-### Challenges & Lessons
+### Khó khăn
 
-Cert bị `Pending validation` cả tiếng. Tôi thêm CNAME nhầm hosted zone. Bài học với mọi thứ DNS: xác minh bằng `dig` ở terminal trước khi ngồi chờ.
+CloudFront cache nhầm response lỗi ban đầu của frontend. Thêm TTL ngắn cho 4xx/5xx vào spec để không lặp lại ở prod.
 
-### Next Week Plan
+### Kế hoạch tuần sau
 
-Chương 5.8 Observability: CloudWatch log, alarm, dashboard nhỏ. Làm ở `UPS-12`.
+Vẫn chương 5.9. Cognito cho đăng nhập, và ép CloudWatch dashboard thật sự có ích.

@@ -8,30 +8,26 @@ pre: " <b> 1.8. </b> "
 
 ## WEEK 8 WORKLOG
 
-### Week 8 Objectives
+### Focus
 
-Chapter 5.6 Access. Put an Application Load Balancer in front of the ECS service and get real HTTP traffic reaching the API from outside the VPC.
+Put an Application Load Balancer in front of the API and make the routing explicit.
 
-### Tasks to be carried out this week
+### What I did
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Created ALB `upscale-alb` in the two public subnets. | 07/06/2026 | 07/06/2026 | [ALB](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/) |
-| 2 | Created target group `upscale-api-tg` with health check on `/health`. | 08/06/2026 | 08/06/2026 | - |
-| 3 | Registered the ECS service with the target group. | 09/06/2026 | 09/06/2026 | - |
-| 4 | Added an HTTP listener on port 80 → target group. | 10/06/2026 | 10/06/2026 | - |
-| 5 | Watched the target go from `initial` to `healthy` and finally hit the ALB DNS from my browser. | 11/06/2026 | 11/06/2026 | - |
-| 6 | Uploaded a real image through the API and saw the file appear in S3. | 12/06/2026 | 12/06/2026 | - |
-| 7 | Closed `UPS-10` on Linear, took `UPS-11` (CloudFront + WAF). | 13/06/2026 | 13/06/2026 | - |
+- Split `UPS-12` into: ALB provisioning, target group for FastAPI, listener rules, TLS certificate via ACM.
+- Chaired a short design on path routing: `/api/*` to FastAPI, `/health` for the balancer itself, everything else 404.
+- Reviewed the ALB PR, asked for stickiness off (jobs are async) and idle timeout raised to 120s for long polling.
+- Reviewed the target group config, tightened the health check to `/health` with a 2/2 threshold.
+- Hands-on: chose the health-check spec, requested the ACM certificate, wrote the DNS plan for next week, and updated the deploy checklist.
 
-### Week 8 Achievements
+### Result
 
-The API is reachable from the public internet. End to end works: browser → ALB → ECS task → S3. This was the week Upscale AI stopped being a diagram in my notebook.
+FastAPI reachable through the ALB over HTTPS. Health checks stable, no flapping targets.
 
-### Challenges & Lessons
+### Friction
 
-Health check kept returning `unhealthy` because the SG on ECS did not allow inbound from the ALB SG on the container port. I had done the reverse rule. Reading SGs from both sides (source and destination) is a small habit I want to keep.
+ACM validation stuck for half a day because the DNS record was in the wrong hosted zone. Documented the exact validation flow in the runbook.
 
-### Next Week Plan
+### Next week
 
-Chapter 5.7 Delivery: ACM certificate, CloudFront distribution, WAF. Track on `UPS-11`.
+Chapter 5.9. CloudFront in front of the ALB, WAF on top, and Route 53 pointing at the whole thing.
