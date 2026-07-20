@@ -8,26 +8,14 @@ pre: " <b> 1.12. </b> "
 
 ## WEEK 12 WORKLOG
 
-### Focus
+Last week. Cleanup, final report, handover. The goal is to close the internship with the account tidy and the knowledge in a place the next person can find.
 
-Cleanup, final report, handover. Close the internship with the account tidy and the knowledge transferred.
+I split `UPS-18` into cleanup, report, and handover. Cleanup ran against chapter 5.10 in reverse order: CloudFront, WAF, ALB, ECS, EFS, Redis, SQS, S3, VPC, IAM. Reverse is important. Delete the VPC first and half the other resources refuse to go until you fix the dependencies you just broke. I kept only the artefacts we want to retain, which is the exported logs, the IaC repo, and the doc site.
 
-### What I did
+After that I read the billing page carefully to confirm nothing is quietly still running. This part is boring and skipping it costs real money.
 
-- Turned `UPS-18` into cleanup, report, and handover sub-tickets.
-- Ran cleanup against chapter 5.10 in reverse order (CloudFront → WAF → ALB → ECS → EFS → Redis → SQS → S3 → VPC → IAM), keeping only the artefacts we want to retain (logs export, IaC repo, doc site).
-- Reviewed the final billing to confirm nothing is left running.
-- Chaired the retrospective with the team: what worked, what to keep, what to drop next time.
-- Hands-on: wrote the final internship report, updated the doc site so a new joiner can rebuild the stack from scratch, and produced a short handover deck.
+I chaired the retrospective with the team. What worked, what to keep, what to drop next time. Hands-on I wrote the final internship report, updated the doc site so a new joiner can rebuild the stack from scratch by reading it in order, and put together a short handover deck.
 
-### Result
+Account is clean, the bill drops to near zero the next day, the report is in, the doc site is up to date, retrospective notes are shared. Internship closed.
 
-Account clean, bill drops to near zero the next day. Report submitted, doc site up to date, retrospective notes shared. Internship closed.
-
-### Friction
-
-Manual cleanup is error-prone. I noted for the retrospective that next time the stack should be Terraform end to end so cleanup is one command.
-
-### Next
-
-Wrap-up.
+If I did this again, manual cleanup would not be the way. It is error-prone and slow. Next time the stack should be Terraform end to end so cleanup is a single command instead of a checklist. That went into the retrospective as the top recommendation for the next cohort.

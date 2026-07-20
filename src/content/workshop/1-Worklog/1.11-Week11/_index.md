@@ -8,26 +8,16 @@ pre: " <b> 1.11. </b> "
 
 ## WEEK 11 WORKLOG
 
-### Focus
+Rehearsal week. No new features. The job is to prove the whole thing actually works from an empty account, not to add anything on top.
 
-Deployment rehearsal and end-to-end testing. This week is about proving the whole thing works, not adding features.
+I turned `UPS-17` into a rehearsal ticket with a checklist the team could tick together, and then I ran a full deploy from scratch into a fresh account, following the runbook line by line. Every place I had to guess or improvise was a place the runbook was wrong. I rewrote those parts as I went.
 
-### What I did
+After the first end-to-end run I ran a bug triage session and split the findings into "must fix before demo" and "later". Then I reviewed every PR that touched the deploy path this week and blocked anything unrelated. Rehearsal week is not the week to sneak in new work.
 
-- Turned `UPS-17` into a rehearsal ticket with a checklist the whole team could tick off together.
-- Ran a full deploy from scratch into a fresh account against the runbook, and rewrote the parts that were wrong or missing.
-- Chaired a bug triage session after the first end-to-end run and prioritised the fixes that had to land before demo.
-- Reviewed every PR that touched the deploy path this week and blocked anything unrelated to the rehearsal.
-- Hands-on: wrote the smoke-test script (upload → job → poll → download), the demo script, and a rollback note.
+Hands-on I wrote the smoke test script (upload, job, poll, download), the demo script, and a short rollback note in case something goes badly wrong on demo day.
 
-### Result
+End of the week the full stack deploys from an empty account in one sitting, smoke tests pass, and we rehearsed the demo twice. The board is green.
 
-Full stack deployed from an empty account in one sitting, smoke test passes, demo script rehearsed twice. The board is green.
+The one thing that keeps catching people out is order of operations. EFS mount targets have to exist before the ECS service starts, or tasks crash-loop. The runbook now spells this out in the exact order.
 
-### Friction
-
-Order of operations. EFS mount targets need to exist before the ECS service starts, otherwise tasks crash-loop. Runbook now spells that out.
-
-### Next week
-
-Chapter 5.10. Cleanup, final report, and handover.
+Next week is chapter 5.10. Cleanup, final report, handover.
