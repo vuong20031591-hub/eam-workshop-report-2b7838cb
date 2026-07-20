@@ -10,7 +10,7 @@ pre: " <b> 1. </b> "
 
 Thông thường và cũng là tiêu chuẩn, một worklog được thực hiện trong khoảng 3 tháng (trong suốt thời gian thực tập) với nội dung các tuần như sau:
 
-### Sơ đồ kiến trúc AWS — Pipeline AI Upscaler
+## Sơ đồ kiến trúc AWS — Pipeline AI Upscaler
 
 ![AWS Architecture](/workshop-static/images/1-Worklog/aws-architecture.png)
 

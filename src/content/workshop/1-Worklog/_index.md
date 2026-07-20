@@ -10,7 +10,7 @@ pre: " <b> 1. </b> "
 
 Typically, and as a standard, a worklog is carried out over about 3 months (throughout the internship period) with weekly contents as follows:
 
-### AWS Architecture — AI Upscaler pipeline
+## AWS Architecture — AI Upscaler pipeline
 
 ![AWS Architecture](/workshop-static/images/1-Worklog/aws-architecture.png)
 
