@@ -10,14 +10,14 @@ pre: " <b> 1.1. </b> "
 
 ### Mục tiêu Tuần 1
 
-Tuần đầu chủ yếu để dọn nền: mở tài khoản AWS, dựng guardrail trước khi động vào bất cứ thứ gì tốn tiền. Cụ thể là IAM user `upscaler-dev` với MFA và policy tối thiểu, AWS Budgets cảnh báo chi phí, CloudTrail để có audit trail. Song song đó tạo hai repo GitHub `upscale-BE` (FastAPI) và `upscale-FE` (TanStack Start + React 19), đẩy commit khung. Scope MVP cũng chốt luôn trong tuần: Real-ESRGAN x4 cho AI mode, LANCZOS cho Standard, còn bucket S3 để lưu input/output thì để tuần 2 dựng.
+Tuần đầu chủ yếu để dọn nền: mở tài khoản AWS, dựng guardrail trước khi động vào bất cứ thứ gì tốn tiền. Cụ thể là IAM user `upscale-dev` với MFA và policy tối thiểu, AWS Budgets cảnh báo chi phí, CloudTrail để có audit trail. Song song đó tạo hai repo GitHub `upscale-BE` (FastAPI) và `upscale-FE` (TanStack Start + React 19), đẩy commit khung. Scope MVP cũng chốt luôn trong tuần: Real-ESRGAN x4 cho AI mode, LANCZOS cho Standard, còn bucket S3 để lưu input/output thì để tuần 2 dựng.
 
 ### Các công việc thực hiện trong tuần
 
 | Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
 | 1 | Đăng ký AWS Free Tier, bật **AWS Budgets** cảnh báo $10/tháng, bật **CloudTrail** cho region `ap-southeast-1`. | 17/04/2026 | 17/04/2026 | [AWS Free Tier](https://aws.amazon.com/free/) |
-| 2 | Tạo **IAM** user `upscaler-dev` + group `Developers`, gắn policy `AmazonS3FullAccess` (dev-only) và `IAMReadOnlyAccess`; bật MFA. | 18/04/2026 | 18/04/2026 | [IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) |
+| 2 | Tạo **IAM** user `upscale-dev` + group `Developers`, gắn policy `AmazonS3FullAccess` (dev-only) và `IAMReadOnlyAccess`; bật MFA. | 18/04/2026 | 18/04/2026 | [IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) |
 | 3 | Tạo GitHub repo `upscale-BE`, `upscale-FE`, push initial commit. | 19/04/2026 | 19/04/2026 | [upscale-BE](https://github.com/vuong20031591-hub/upscale-BE), [upscale-FE](https://github.com/vuong20031591-hub/upscale-FE) |
 | 4 | Chốt stack BE: Python 3.11 + FastAPI + PyTorch, GPU CUDA FP16, lưu file qua **boto3** lên **S3**. | 20/04/2026 | 20/04/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
 | 5 | Chốt stack FE: **TanStack Start** (React 19 + Vite 8) + TS + Tailwind v4 + shadcn/ui (Radix) + react-hook-form + zod + OIDC (Cognito qua `react-oidc-context`); hosting **S3 + CloudFront** (SPA build). | 21/04/2026 | 21/04/2026 | [TanStack Start](https://tanstack.com/start) |
@@ -34,4 +34,4 @@ IAM policy là chỗ dễ sai nhất vì chưa quen — reflex đầu tiên là 
 
 ### Kế hoạch tuần sau
 
-Bootstrap FastAPI skeleton kèm `boto3` client cho S3. Tạo bucket `upscaler-io-dev` bật versioning và lifecycle. Tải `RealESRGAN_x4plus.pth` lên S3 rồi viết `ModelManager` để BE load được weights.
+Bootstrap FastAPI skeleton kèm `boto3` client cho S3. Tạo bucket `upscale-io` bật versioning và lifecycle. Tải `RealESRGAN_x4plus.pth` lên S3 rồi viết `ModelManager` để BE load được weights.

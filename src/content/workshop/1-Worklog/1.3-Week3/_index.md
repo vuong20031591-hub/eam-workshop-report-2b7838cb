@@ -17,7 +17,7 @@ First week actually touching a real GPU: launch an EC2 g5.xlarge, attach an IAM 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
 | 1 | Launch **EC2 g5.xlarge** (NVIDIA A10G 24GB, Ubuntu 22.04 Deep Learning AMI), attach EBS gp3 100GB. | 05/05/2026 | 05/05/2026 | [EC2 G5](https://aws.amazon.com/ec2/instance-types/g5/) |
-| 2 | Attach **IAM Role** `EC2-Upscaler-Dev` to the instance (S3 read/write on `upscaler-io-dev`) to avoid access keys. | 06/05/2026 | 06/05/2026 | [IAM Roles for EC2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html) |
+| 2 | Attach **IAM Role** `EC2-Upscale-Role` to the instance (S3 read/write on `upscale-io`) to avoid access keys. | 06/05/2026 | 06/05/2026 | [IAM Roles for EC2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html) |
 | 3 | Install `nvidia-smi`, PyTorch 2.4 + CUDA 12.4, verify FP16 inference. | 07/05/2026 | 08/05/2026 | - |
 | 4 | Write `ModelManager` Singleton: `load()` downloads from S3 → `/opt/weights/`, keeps model in memory. | 09/05/2026 | 10/05/2026 | - |
 | 5 | Write the validator: max 10MB, extensions `jpg/png/webp`, verified with Pillow. | 11/05/2026 | 11/05/2026 | - |

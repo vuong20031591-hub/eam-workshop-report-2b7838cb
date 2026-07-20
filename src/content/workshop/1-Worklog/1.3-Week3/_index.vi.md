@@ -17,7 +17,7 @@ pre: " <b> 1.3. </b> "
 | Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
 | 1 | Launch **EC2 g5.xlarge** (NVIDIA A10G 24GB, Ubuntu 22.04 Deep Learning AMI), gắn EBS gp3 100GB. | 05/05/2026 | 05/05/2026 | [EC2 G5](https://aws.amazon.com/ec2/instance-types/g5/) |
-| 2 | Gắn **IAM Role** `EC2-Upscaler-Dev` cho instance (S3 read/write bucket `upscaler-io-dev`), tránh dùng access key. | 06/05/2026 | 06/05/2026 | [IAM Roles for EC2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html) |
+| 2 | Gắn **IAM Role** `EC2-Upscale-Role` cho instance (S3 read/write bucket `upscale-io`), tránh dùng access key. | 06/05/2026 | 06/05/2026 | [IAM Roles for EC2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html) |
 | 3 | Cài `nvidia-smi`, PyTorch 2.4 + CUDA 12.4, verify FP16 inference. | 07/05/2026 | 08/05/2026 | - |
 | 4 | Viết `ModelManager` Singleton: `load()` download từ S3 → `/opt/weights/`, hold model in-memory. | 09/05/2026 | 10/05/2026 | - |
 | 5 | Viết validator: max 10MB, đuôi `jpg/png/webp`, dùng Pillow verify. | 11/05/2026 | 11/05/2026 | - |

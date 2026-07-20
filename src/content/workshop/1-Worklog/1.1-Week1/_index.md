@@ -10,14 +10,14 @@ pre: " <b> 1.1. </b> "
 
 ### Week 1 Objectives
 
-Week one was mostly about clearing the ground: open an AWS account and put guardrails in place before touching anything that costs money. Concretely that meant an IAM user `upscaler-dev` with MFA and a minimal policy, AWS Budgets for spend alerts, and CloudTrail for the audit trail. In parallel, spin up two GitHub repos (`upscale-BE` for FastAPI and `upscale-FE` for TanStack Start + React 19) and push the initial commits. MVP scope was locked in the same week: Real-ESRGAN x4 for AI mode, LANCZOS for Standard, with the S3 bucket for input/output pushed to week 2.
+Week one was mostly about clearing the ground: open an AWS account and put guardrails in place before touching anything that costs money. Concretely that meant an IAM user `upscale-dev` with MFA and a minimal policy, AWS Budgets for spend alerts, and CloudTrail for the audit trail. In parallel, spin up two GitHub repos (`upscale-BE` for FastAPI and `upscale-FE` for TanStack Start + React 19) and push the initial commits. MVP scope was locked in the same week: Real-ESRGAN x4 for AI mode, LANCZOS for Standard, with the S3 bucket for input/output pushed to week 2.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
 | 1 | Sign up for AWS Free Tier, enable **AWS Budgets** with a $10/month alert, turn on **CloudTrail** for `ap-southeast-1`. | 17/04/2026 | 17/04/2026 | [AWS Free Tier](https://aws.amazon.com/free/) |
-| 2 | Create **IAM** user `upscaler-dev` + group `Developers`, attach `AmazonS3FullAccess` (dev-only) and `IAMReadOnlyAccess`; enable MFA. | 18/04/2026 | 18/04/2026 | [IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) |
+| 2 | Create **IAM** user `upscale-dev` + group `Developers`, attach `AmazonS3FullAccess` (dev-only) and `IAMReadOnlyAccess`; enable MFA. | 18/04/2026 | 18/04/2026 | [IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) |
 | 3 | Create GitHub repos `upscale-BE`, `upscale-FE`, push initial commit. | 19/04/2026 | 19/04/2026 | [upscale-BE](https://github.com/vuong20031591-hub/upscale-BE), [upscale-FE](https://github.com/vuong20031591-hub/upscale-FE) |
 | 4 | Lock BE stack: Python 3.11 + FastAPI + PyTorch, GPU CUDA FP16, files pushed to **S3** via **boto3**. | 20/04/2026 | 20/04/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
 | 5 | Lock FE stack: **TanStack Start** (React 19 + Vite 8) + TS + Tailwind v4 + shadcn/ui (Radix) + react-hook-form + zod + OIDC (Cognito via `react-oidc-context`); hosted on **S3 + CloudFront** (SPA build). | 21/04/2026 | 21/04/2026 | [TanStack Start](https://tanstack.com/start) |
@@ -34,4 +34,4 @@ IAM policy is the easy place to get wrong when you're new — the first reflex i
 
 ### Next Week Plan
 
-Bootstrap the FastAPI skeleton with a `boto3` S3 client. Create the `upscaler-io-dev` bucket with versioning and lifecycle rules. Upload `RealESRGAN_x4plus.pth` to S3 and write `ModelManager` so BE can load weights.
+Bootstrap the FastAPI skeleton with a `boto3` S3 client. Create the `upscale-io` bucket with versioning and lifecycle rules. Upload `RealESRGAN_x4plus.pth` to S3 and write `ModelManager` so BE can load weights.

@@ -17,9 +17,9 @@ Two tracks this week: read up on Real-ESRGAN to pick the right weights, and stan
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
 | 1 | Read the Real-ESRGAN paper, pick weights `RealESRGAN_x4plus.pth` (~64MB). | 26/04/2026 | 27/04/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) |
-| 2 | Create **S3 bucket** `upscaler-io-dev` in `ap-southeast-1`, enable versioning + SSE-S3 (AES-256). | 28/04/2026 | 28/04/2026 | [S3 Encryption](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingServerSideEncryption.html) |
+| 2 | Create **S3 bucket** `upscale-io` in `ap-southeast-1`, enable versioning + SSE-S3 (AES-256). | 28/04/2026 | 28/04/2026 | [S3 Encryption](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingServerSideEncryption.html) |
 | 3 | Configure **S3 Lifecycle**: delete `tmp/*` after 7 days, move `output/*` to Standard-IA after 30 days. | 29/04/2026 | 29/04/2026 | [S3 Lifecycle](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html) |
-| 4 | Upload weights to `s3://upscaler-io-dev/weights/`; write `download_weight()` using boto3. | 30/04/2026 | 30/04/2026 | - |
+| 4 | Upload weights to `s3://upscale-io/weights/`; write `download_weight()` using boto3. | 30/04/2026 | 30/04/2026 | - |
 | 5 | Bootstrap FastAPI: `app/main.py`, `app/core/config.py` load env via `pydantic-settings`. | 01/05/2026 | 02/05/2026 | [Pydantic Settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) |
 | 6 | Test S3 upload/download via script, measure latency (~120ms for a 2MB image from same-region EC2). | 03/05/2026 | 03/05/2026 | - |
 | 7 | Move Linear issues UPS-3 and UPS-4 to Done. | 04/05/2026 | 04/05/2026 | - |

@@ -17,7 +17,7 @@ Finish `/upscale/standard` running LANCZOS via Pillow — the point is to keep t
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
 | 1 | Implement `/upscale/standard` using `Pillow.Image.resize(LANCZOS)` for scales 2/3/4. | 14/05/2026 | 14/05/2026 | [Pillow](https://pillow.readthedocs.io/) |
-| 2 | Install **CloudWatch Agent** on EC2, ship `/var/log/upscaler/*.log` to log group `/upscaler/be/dev`. | 15/05/2026 | 15/05/2026 | [CloudWatch Agent](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html) |
+| 2 | Install **CloudWatch Agent** on EC2, ship `/var/log/upscale/*.log` to log group `/upscale/be/dev`. | 15/05/2026 | 15/05/2026 | [CloudWatch Agent](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html) |
 | 3 | Configure structured (JSON) logging via `structlog`, each request carries `request_id`. | 16/05/2026 | 17/05/2026 | - |
 | 4 | Write 14 property tests with Hypothesis: sizes, channels, EXIF orientation. | 18/05/2026 | 19/05/2026 | [Hypothesis](https://hypothesis.readthedocs.io/) |
 | 5 | PSNR test: LANCZOS x4 vs Real-ESRGAN x4 across 20 sample images — Real-ESRGAN ahead by ~2.4 dB. | 20/05/2026 | 20/05/2026 | - |

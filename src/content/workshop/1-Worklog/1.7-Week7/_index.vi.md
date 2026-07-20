@@ -10,14 +10,14 @@ pre: " <b> 1.7. </b> "
 
 ### Mục tiêu Tuần 7
 
-Đóng gói BE thành Docker image multi-stage với base `nvidia/cuda:12.4-runtime`, push lên Amazon ECR private repo `upscaler-be`. Đồng thời chuyển pattern upload sang presigned POST để FE đẩy file trực tiếp lên S3 thay vì proxy qua BE.
+Đóng gói BE thành Docker image multi-stage với base `nvidia/cuda:12.4-runtime`, push lên Amazon ECR private repo `upscale-be`. Đồng thời chuyển pattern upload sang presigned POST để FE đẩy file trực tiếp lên S3 thay vì proxy qua BE.
 
 ### Các công việc thực hiện trong tuần
 
 | Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
 | 1 | Viết `Dockerfile` multi-stage: builder cài deps → runtime `nvidia/cuda:12.4-runtime-ubuntu22.04`, image ~2.1GB. | 10/06/2026 | 10/06/2026 | [Docker multi-stage](https://docs.docker.com/build/building/multi-stage/) |
-| 2 | Tạo **ECR** repo `upscaler-be`, bật scan-on-push + image immutable tag. | 11/06/2026 | 11/06/2026 | [Amazon ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/) |
+| 2 | Tạo **ECR** repo `upscale-be`, bật scan-on-push + image immutable tag. | 11/06/2026 | 11/06/2026 | [Amazon ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/) |
 | 3 | GitHub Actions: `aws ecr get-login-password | 12/06/2026 | 13/06/2026 | 12/06/2026 | - |
 | 4 | Endpoint `/upload/presign` trả `{url, fields}` cho **S3 Presigned POST**, giới hạn size 10MB + content-type. | 14/06/2026 | 14/06/2026 | [Presigned POST](https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html) |
 | 5 | FE `UploadZone` dùng presigned POST → S3 trực tiếp, sau đó chỉ gửi `s3_key` tới BE. | 15/06/2026 | 16/06/2026 | - |
@@ -34,4 +34,4 @@ Image `nvidia/cuda-runtime` sau khi cài xong PyTorch vẫn nặng khoảng 2.1G
 
 ### Kế hoạch tuần sau
 
-Đưa API Gateway HTTP API đứng trước EC2 (proxy). Cấu hình IAM role cho ECS/EC2 pull ECR. Bổ sung property test cho endpoint presign.
+Đưa ALB đứng trước EC2 (target group + listener HTTPS). Cấu hình IAM role cho ECS/EC2 pull ECR. Bổ sung property test cho endpoint presign.
