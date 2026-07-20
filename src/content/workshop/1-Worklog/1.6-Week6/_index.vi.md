@@ -1,37 +1,33 @@
 ---
-title: "Week 6 Worklog"
+title: "Worklog Tuần 6"
 date: 2024-01-01
 weight: 6
 chapter: false
 pre: " <b> 1.6. </b> "
 ---
 
-## WEEK 6 WORKLOG
+## WORKLOG TUẦN 6
 
-### Week 6 Objectives
+### Trọng tâm
 
-Chương 5.5 Application, nửa đầu: dựng ElastiCache Redis cho cache và SQS cho job queue. Đây là hai chỗ FastAPI dựa vào, nên tôi set up trước rồi mới đến ECS cluster.
+Redis và SQS. Hai mảnh quyết định hệ thống có mượt khi tải cao hay không.
 
-### Tasks to be carried out this week
+### Việc tôi làm
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Tạo ElastiCache subnet group gồm 2 private subnet. | 24/05/2026 | 24/05/2026 | [ElastiCache](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/) |
-| 2 | Tạo Redis cluster `upscale-redis` trên `cache.t3.micro`. | 25/05/2026 | 25/05/2026 | - |
-| 3 | Kết nối Redis từ EC2 test, chạy `PING` → nhận `PONG`. Vui nhỏ. | 26/05/2026 | 26/05/2026 | - |
-| 4 | Tạo SQS queue `upscale-job-queue` và một dead-letter queue cho job fail. | 27/05/2026 | 27/05/2026 | [SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/) |
-| 5 | Gửi và nhận thử message qua AWS CLI để thấy queue hoạt động thật. | 28/05/2026 | 28/05/2026 | - |
-| 6 | Viết comment ngắn trên Linear `UPS-7` giải thích Redis và SQS dùng để làm gì bằng lời mình. | 29/05/2026 | 29/05/2026 | - |
-| 7 | Đóng `UPS-7`, mở `UPS-8` (ECS cluster + task definition). | 30/05/2026 | 30/05/2026 | - |
+- Chia việc thành `UPS-9` (Redis) và `UPS-10` (SQS), gắn owner rõ.
+- Chủ trì buổi thiết kế queue: một main queue kèm DLQ, redrive sau 3 lần thất bại, visibility timeout khớp p95 thời gian upscale.
+- Review PR cấu hình Redis, gạt phương án single-node, yêu cầu multi-AZ.
+- Review PR worker consume SQS, cờ chỗ quên delete message ở nhánh lỗi.
+- Tự làm: viết schema message (JSON: job_id, s3_input, s3_output, params, submitted_at), retry policy, và convention key cache.
 
-### Week 6 Achievements
+### Kết quả
 
-Redis và SQS đã live, EC2 test kết nối được. Việc phải giải thích lại trên Linear ép tôi hiểu thật, không phải bấm qua wizard cho xong.
+Queue và cache đã dựng, schema chung để mọi người code theo. DLQ đưa lên CloudWatch board để phát hiện lỗi sớm.
 
-### Challenges & Lessons
+### Khó khăn
 
-Ban đầu tôi không connect được Redis. Hoá ra EC2 test ở SG khác, mà SG của Redis chỉ cho SG của ECS vào. Bài học: connection timeout thì nghi ngờ security group trước, đừng vội đổ cho code.
+Visibility timeout ban đầu đặt thấp, job dài bị retry trong khi đang chạy. Nâng lên 15 phút và ghi rõ lý do.
 
-### Next Week Plan
+### Kế hoạch tuần sau
 
-Chương 5.5 nửa sau: ECS cluster với EC2 GPU, task definition, service. Theo dõi ở `UPS-8`.
+Chương 5.7. Dựng ECS cluster và chạy task đầu tiên.
