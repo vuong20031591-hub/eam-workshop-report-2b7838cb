@@ -46,6 +46,7 @@ Unlike typical serverless deployments, Upscale AI requires **persistent GPU comp
 #### Frontend Layer
 | Service | Purpose |
 |---------|---------|
+| Amazon Route 53 | DNS resolution + ACM validation |
 | Amazon S3 | Static React app hosting |
 | Amazon CloudFront | Global CDN with edge caching |
 | AWS ACM | SSL/TLS certificates |
@@ -74,13 +75,13 @@ Unlike typical serverless deployments, Upscale AI requires **persistent GPU comp
 | Amazon VPC | Network isolation |
 | AWS IAM | Role-based access control |
 | AWS Secrets Manager | Credential storage |
-| Amazon Cognito | User authentication |
+| Amazon Cognito | User authentication (planned — not yet in workshop) |
 
 #### Observability Layer
 | Service | Purpose |
 |---------|---------|
 | Amazon CloudWatch | Logs, metrics, alarms |
-| AWS CodePipeline | CI/CD automation |
+| AWS CodePipeline | CI/CD automation (planned — not yet in workshop) |
 
 ---
 
@@ -90,7 +91,7 @@ Unlike typical serverless deployments, Upscale AI requires **persistent GPU comp
 
 | Category | Services | Cost |
 |----------|----------|------|
-| Compute | EC2 (t3.large) | $120.00 |
+| Compute | EC2 (g5.xlarge, A10G GPU) | $734.00 |
 | Networking | NAT Gateway, ALB | $70.00 |
 | Storage | EFS, S3, ECR | $4.60 |
 | Database | ElastiCache Redis | $15.00 |
@@ -98,7 +99,9 @@ Unlike typical serverless deployments, Upscale AI requires **persistent GPU comp
 | Monitoring | CloudWatch | $5.00 |
 | CI/CD | CodePipeline, CodeBuild | $1.12 |
 | Other | Cognito, IAM, VPC, ACM | $0.00 |
-| **Total** | | **~$227.52/month** |
+| **Total** | | **~$841.52/month** |
+
+> Note: `g5.xlarge` on-demand (~$1.006/h) is required for Real-ESRGAN GPU inference. Use Spot / Savings Plans in production to reduce cost.
 
 ---
 
@@ -111,7 +114,7 @@ Unlike typical serverless deployments, Upscale AI requires **persistent GPU comp
 - **WAF Rules**: Rate limiting, SQL injection, IP reputation filtering
 
 #### Data Security
-- **Encryption at Rest**: EFS, S3, RDS (future)
+- **Encryption at Rest**: EFS, S3, PostgreSQL-on-ECS
 - **Encryption in Transit**: TLS 1.2+ everywhere
 - **Secrets Management**: No hardcoded credentials
 - **IAM Roles**: Task-specific permissions
@@ -125,26 +128,32 @@ Unlike typical serverless deployments, Upscale AI requires **persistent GPU comp
 
 ### 6. Deployment Strategy
 
-#### Phase 1: Foundation
+#### Phase 1: Prerequisites
+AWS account setup, CLI, IAM admin user, budgets, cost alerts
+
+#### Phase 2: Foundation (Infrastructure)
 VPC, subnets, security groups, IAM roles
 
-#### Phase 2: Data Layer
+#### Phase 3: Data Layer (Storage)
 S3 buckets, EFS, ECR, Secrets Manager
 
-#### Phase 3: Application
+#### Phase 4: Application
 ECS cluster, task definitions, services
 
-#### Phase 4: Access
+#### Phase 5: Access
 ALB, target groups, listeners
 
-#### Phase 5: Delivery
+#### Phase 6: Delivery
 CloudFront, WAF, ACM
 
-#### Phase 6: Observability
+#### Phase 7: Observability
 CloudWatch logs, alarms, dashboard
 
-#### Phase 7: Deployment
+#### Phase 8: Deployment
 Frontend build, S3 upload, CloudFront invalidation
+
+#### Phase 9: Cleanup
+Delete stacks in reverse order to avoid orphaned resources and cost leaks
 
 ---
 
