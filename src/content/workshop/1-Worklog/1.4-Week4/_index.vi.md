@@ -10,28 +10,28 @@ pre: " <b> 1.4. </b> "
 
 ### Week 4 Objectives
 
-Focus tuần 4: mở tuyến Standard (LANCZOS trên CPU) để không phải GPU nào cũng gánh, và bắt đầu observability. Tôi viết spec endpoint, chốt log format, và design property test plan để coverage không bị mỏng ở phần xử lý ảnh.
+Hoàn tất chương 5.3 (security group và IAM role), rồi bước vào chương 5.4 Storage cho S3. Đây là lúc workshop bắt đầu bắt tôi suy nghĩ xem ai được nói chuyện với ai, phải cẩn thận với từng rule.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Viết spec `/upscale/standard`: LANCZOS Pillow, CPU-only, giữ EXIF metadata. | 14/05/2026 | 14/05/2026 | [Pillow LANCZOS](https://pillow.readthedocs.io/en/stable/handbook/concepts.html#filters) |
-| 2 | Chốt log format: JSON `{ts, level, request_id, path, latency_ms, gpu_util}`; spec CloudWatch Log Group. | 15/05/2026 | 15/05/2026 | [CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/) |
-| 3 | Review PR `/upscale/standard` + save output S3 `output/` + presigned URL; approve. | 16/05/2026 | 17/05/2026 | - |
-| 4 | Design property test plan: `hypothesis` sinh ảnh random size 100-4000px, verify output shape đúng và không crash. | 18/05/2026 | 19/05/2026 | [Hypothesis](https://hypothesis.readthedocs.io/) |
-| 5 | Review PR 20 property tests + coverage report; approve khi coverage ≥ 80%. | 20/05/2026 | 20/05/2026 | - |
-| 6 | Review PR CloudWatch Log Group `/upscale/be` + Metric Filter cho `latency_ms` p90; approve. | 21/05/2026 | 21/05/2026 | - |
-| 7 | Sprint retro: baseline p90 = 6.1s (AI), 1.4s (Standard); chốt SLO 8s cho tuần sau. | 22/05/2026 | 22/05/2026 | - |
+| 1 | Tạo security group: `upscale-alb-sg`, `upscale-ecs-sg`, `upscale-redis-sg`. | 10/05/2026 | 10/05/2026 | - |
+| 2 | Cấu hình inbound rule để SG của ALB gọi được SG của ECS ở port 8000. | 11/05/2026 | 11/05/2026 | [Security Groups](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html) |
+| 3 | Tạo IAM role `ecs-task-execution-role` để pull image và ghi log. | 12/05/2026 | 12/05/2026 | - |
+| 4 | Tạo bucket S3 `upscale-static-*` cho frontend build. | 13/05/2026 | 13/05/2026 | [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/) |
+| 5 | Tạo bucket S3 `upscale-images-*` cho ảnh người dùng upload, bật versioning. | 14/05/2026 | 14/05/2026 | - |
+| 6 | Upload ảnh test qua console, xác nhận chỉ đọc được qua presigned URL. | 15/05/2026 | 15/05/2026 | - |
+| 7 | Đóng `UPS-4` và `UPS-5` trên Linear, plan S3 lifecycle và EFS cho tuần sau. | 16/05/2026 | 16/05/2026 | - |
 
 ### Week 4 Achievements
 
-Hai endpoint chạy song song. CloudWatch có log JSON, filter được p90 latency. Property tests bắt được 2 bug edge case (ảnh 1×1 và ảnh có alpha channel) trước khi lên production. SLO 8s được cả nhóm đồng thuận, có căn cứ đo lường.
+Security group vẽ ra và đặt tên nhất quán. Hai bucket S3 đã live. Upload và download được, hiểu Block Public Access đang bảo vệ mình cái gì. Sprint Linear đúng tiến độ.
 
 ### Challenges & Lessons
 
-Cái khó không phải viết test, mà là ép quy trình: PR không có test là auto-reject. Ban đầu bị càm ràm là phiền, nhưng đến khi property test bắt được bug alpha channel trước production thì team tự đồng ý. Văn hoá này Lead phải cứng ngay từ tuần đầu, để lâu càng khó ép.
+Security group chỉ thật sự sáng khi tôi ngừng nghĩ về nó như "firewall" mà xem nó như nhãn: ALB có nhãn, ECS task có nhãn, tôi mở cửa giữa hai nhãn đó. Nhìn kiểu vậy là hết đoán mò.
 
 ### Next Week Plan
 
-Tuần FE: chốt stack TanStack Start, viết spec page structure. Review setup S3 static hosting + CloudFront + ACM cho FE.
+Chương 5.4 phần còn lại: EFS, ECR, Secrets Manager. Nhận `UPS-6`.

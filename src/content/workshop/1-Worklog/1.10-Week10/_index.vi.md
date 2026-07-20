@@ -10,28 +10,28 @@ pre: " <b> 1.10. </b> "
 
 ### Week 10 Objectives
 
-Hardening security trước khi mở scale. Tôi audit IAM least privilege, chốt Secrets Manager rotation, và bắt đầu viết spec kiến trúc ECS on EC2 + ASG + SQS cho tuần 11.
+Chương 5.8 Observability. Đẩy log từ ECS sang CloudWatch, dựng dashboard nhỏ và thêm một alarm để biết khi API có vấn đề.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Audit IAM: chuyển role `EC2-Upscale-Role` từ wildcard `s3:*` sang chỉ prefix `weights/*`, `tmp/*`, `output/*`. | 29/06/2026 | 29/06/2026 | [IAM Least Privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) |
-| 2 | Chốt Secrets Manager cho DB password + Cognito App Client secret; rotation 30 ngày. | 30/06/2026 | 30/06/2026 | [Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/) |
-| 3 | Review PR migrate secrets từ env-var sang Secrets Manager (SDK boto3 fetch on startup). | 01/07/2026 | 01/07/2026 | - |
-| 4 | Chốt VPC Flow Logs + GuardDuty enable cho account; review chi phí phát sinh (~$8/tháng). | 02/07/2026 | 02/07/2026 | [GuardDuty](https://docs.aws.amazon.com/guardduty/latest/ug/) |
-| 5 | Viết spec kiến trúc ECS on EC2: ASG Capacity Provider, task definition GPU-aware, SQS `upscale-job-queue`. | 03/07/2026 | 03/07/2026 | [ECS Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
-| 6 | Viết ADR-006: chọn ECS trên EC2 thay vì Fargate GPU (Fargate không có GPU option chính thức lúc này). | 04/07/2026 | 04/07/2026 | - |
-| 7 | Sprint retro: security posture tăng rõ; tuần 11 bắt đầu ECS migration. | 05/07/2026 | 05/07/2026 | - |
+| 1 | Tạo CloudWatch log group `/ecs/upscale-api` và `/ecs/upscale-postgres`. | 21/06/2026 | 21/06/2026 | [CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/) |
+| 2 | Xác nhận ECS task đang stream stdout vào log group. | 22/06/2026 | 22/06/2026 | - |
+| 3 | Dựng dashboard CloudWatch 4 widget: request count, tỉ lệ 5xx, CPU, GPU util. | 23/06/2026 | 23/06/2026 | - |
+| 4 | Tạo một alarm khi tỉ lệ 5xx > 5% trong 5 phút. | 24/06/2026 | 24/06/2026 | - |
+| 5 | Đấu alarm về email qua SNS. | 25/06/2026 | 25/06/2026 | [SNS](https://docs.aws.amazon.com/sns/latest/dg/) |
+| 6 | Cố tình phá app (kill task) để xem alarm có kêu thật không. | 26/06/2026 | 26/06/2026 | - |
+| 7 | Đóng `UPS-12` trên Linear, kéo `UPS-13` (deploy frontend). | 27/06/2026 | 27/06/2026 | - |
 
 ### Week 10 Achievements
 
-IAM policy còn ~40% quyền cũ, xoá toàn bộ wildcard. Secrets Manager rotation chạy tự động. GuardDuty phát hiện 2 API call bất thường từ IP nước ngoài trong ngày đầu → chốt bật permanent. Spec ECS on EC2 xong, sẵn sàng cho tuần 11.
+Tôi có thể theo dõi API trong một tab. Alarm chạy đúng: kill task là có email. Tuần đầu tiên dự án cảm giác vận hành được, không chỉ dựng xong.
 
 ### Challenges & Lessons
 
-Audit IAM là việc chán nhất nhưng bắt buộc phải làm trước khi go-live. Wildcard `s3:*` là bom nổ chậm — nếu key rò rỉ thì attacker xoá cả bucket. Tôi nhắc bản thân: mỗi lần tạo policy mới, viết tối thiểu resource và action, không copy-paste wildcard từ tutorial.
+Ban đầu log không lên do task role thiếu `logs:CreateLogStream`. Lỗi ẩn trong "Stopped reason" của task. Bài học: xem event của task trước khi mở code ra debug.
 
 ### Next Week Plan
 
-Migrate BE sang ECS + ASG + SQS. Viết spec worker consume SQS. Chốt strategy autoscale policy.
+Chương 5.9 Deployment: build frontend, upload lên S3, invalidate CloudFront. Theo dõi ở `UPS-13`.

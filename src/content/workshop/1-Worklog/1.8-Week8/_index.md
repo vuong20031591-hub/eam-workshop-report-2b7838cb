@@ -10,28 +10,28 @@ pre: " <b> 1.8. </b> "
 
 ### Week 8 Objectives
 
-In Week 8 I invested in auth and security baseline. Locked Cognito over self-managed JWT (ADR-004), wrote the FastAPI rate-limit spec, and locked the WAF rule baseline before opening public traffic.
+Chapter 5.6 Access. Put an Application Load Balancer in front of the ECS service and get real HTTP traffic reaching the API from outside the VPC.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Wrote ADR-004 auth: chose Cognito User Pool + Google Federation over self-managed JWT; documented trade-offs. | 15/06/2026 | 15/06/2026 | [Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/) |
-| 2 | Wrote the Cognito setup spec: `upscale-users` User Pool, App Client, Google IdP; hosted UI domain. | 16/06/2026 | 16/06/2026 | - |
-| 3 | Reviewed the Cognito provisioning PR + FastAPI JWT verification middleware using JWKS. | 17/06/2026 | 17/06/2026 | [Cognito JWT Verify](https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html) |
-| 4 | Wrote the rate-limit spec: `slowapi` 30 req/min/user on `/upscale/*`; return 429 with `Retry-After`. | 18/06/2026 | 18/06/2026 | [slowapi](https://slowapi.readthedocs.io/) |
-| 5 | Locked WAF baseline: AWS Managed Rules Common + IP reputation + geo-block; full request logging; handed off to provisioning. | 19/06/2026 | 19/06/2026 | [AWS WAF](https://docs.aws.amazon.com/waf/latest/developerguide/) |
-| 6 | Reviewed the FE Cognito hosted UI integration + token refresh flow PR. | 20/06/2026 | 20/06/2026 | - |
-| 7 | Sprint retro: end-to-end auth working, WAF live; noted the Week 9 load-test prep. | 21/06/2026 | 21/06/2026 | - |
+| 1 | Created ALB `upscale-alb` in the two public subnets. | 07/06/2026 | 07/06/2026 | [ALB](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/) |
+| 2 | Created target group `upscale-api-tg` with health check on `/health`. | 08/06/2026 | 08/06/2026 | - |
+| 3 | Registered the ECS service with the target group. | 09/06/2026 | 09/06/2026 | - |
+| 4 | Added an HTTP listener on port 80 → target group. | 10/06/2026 | 10/06/2026 | - |
+| 5 | Watched the target go from `initial` to `healthy` and finally hit the ALB DNS from my browser. | 11/06/2026 | 11/06/2026 | - |
+| 6 | Uploaded a real image through the API and saw the file appear in S3. | 12/06/2026 | 12/06/2026 | - |
+| 7 | Closed `UPS-10` on Linear, took `UPS-11` (CloudFront + WAF). | 13/06/2026 | 13/06/2026 | - |
 
 ### Week 8 Achievements
 
-Cognito + Google OAuth work end-to-end. WAF blocked test SQLi/XSS payloads on day one. 30 req/min rate limit protects the GPU from abuse. ADR-004 makes it easy to explain to stakeholders why we're not writing JWT from scratch.
+The API is reachable from the public internet. End to end works: browser → ALB → ECS task → S3. This was the week Upscale AI stopped being a diagram in my notebook.
 
 ### Challenges & Lessons
 
-The biggest lesson picking Cognito: it isn't cheaper than self-managed JWT in dollars — it's cheaper in maintenance time. I'd been leaning self-managed thinking it was simpler, but once I listed the checklist (password reset, MFA, refresh token rotation, revoke, audit log) Cognito wins outright. Lead skill to sharpen: when torn, list the checklist in detail instead of going with gut feel.
+Health check kept returning `unhealthy` because the SG on ECS did not allow inbound from the ALB SG on the container port. I had done the reverse rule. Reading SGs from both sides (source and destination) is a small habit I want to keep.
 
 ### Next Week Plan
 
-Write the k6 load test plan spec. Write the tile-based inference spec for 8K images to avoid GPU OOM.
+Chapter 5.7 Delivery: ACM certificate, CloudFront distribution, WAF. Track on `UPS-11`.

@@ -10,28 +10,28 @@ pre: " <b> 1.5. </b> "
 
 ### Week 5 Objectives
 
-FE week. I locked the stack (TanStack Start + React 19), wrote the page structure and UX flow spec, and wrote the FE-side API contract spec. In parallel I reviewed the S3 static hosting + CloudFront + ACM setup to get a real HTTPS domain.
+Finish chapter 5.4 Storage: EFS for shared model weights, ECR for Docker images, Secrets Manager for credentials. Everything the application will need to actually run once I get to chapter 5.5.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Locked the FE stack in ADR-002: TanStack Start (SSR/SSG + file-based routing), React 19, Tailwind v4. | 24/05/2026 | 24/05/2026 | [TanStack Start](https://tanstack.com/start) |
-| 2 | Wrote the page structure spec: `/` (upload), `/result/:id`, `/history`; Figma wireframes. | 25/05/2026 | 26/05/2026 | - |
-| 3 | Wrote the FE-side API contract spec: fetch presigned URL, poll status, display progress. | 26/05/2026 | 26/05/2026 | - |
-| 4 | Reviewed the TanStack Start bootstrap + Tailwind + upload component PR; round-1 feedback (missing error state). | 27/05/2026 | 28/05/2026 | - |
-| 5 | Reviewed the round-2 PR after error/loading states were added; approved. | 29/05/2026 | 29/05/2026 | - |
-| 6 | Reviewed the S3 `upscale-fe` bucket + CloudFront distribution + ACM `upscale.dev` cert + alias record PR. | 30/05/2026 | 30/05/2026 | [CloudFront + ACM](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-procedures.html) |
-| 7 | Ran an end-to-end FE → BE demo on staging; noted UX gaps for next week. | 31/05/2026 | 31/05/2026 | - |
+| 1 | Created EFS filesystem `upscale-efs` and mount targets in both private subnets. | 17/05/2026 | 17/05/2026 | [EFS](https://docs.aws.amazon.com/efs/latest/ug/) |
+| 2 | Mounted EFS on a test EC2 and copied a dummy weights file to confirm it works. | 18/05/2026 | 18/05/2026 | - |
+| 3 | Created ECR repositories `upscale-api` and `upscale-worker`. | 19/05/2026 | 19/05/2026 | [ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/) |
+| 4 | Practised `docker push` to ECR from my laptop using the deployer profile. | 20/05/2026 | 20/05/2026 | - |
+| 5 | Stored the database password and Cognito client secret in Secrets Manager. | 21/05/2026 | 21/05/2026 | [Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/) |
+| 6 | Updated my notes with the full storage picture: S3 for objects, EFS for weights, ECR for images. | 22/05/2026 | 22/05/2026 | - |
+| 7 | Closed `UPS-6` on Linear, moved `UPS-7` (ECS cluster) into next sprint. | 23/05/2026 | 23/05/2026 | - |
 
 ### Week 5 Achievements
 
-FE staging is live at `staging.upscale.dev` — real upload, real BE calls, real output. CloudFront caches HTML with `s-maxage=60` and assets with `max-age=31536000`, so no manual cache purges each deploy.
+Storage is done. When I get to the app layer next week, everything it needs is already sitting there and I do not have to interrupt the workshop steps to go create a bucket.
 
 ### Challenges & Lessons
 
-First-time FE review lesson: don't just check that the code runs, ask what the user sees when the network drops or the BE returns 500. A blank UI is worse than the 500 itself. From this week I added a rule: every FE PR must include a screenshot of the error state before review.
+The first `docker push` failed because I forgot `aws ecr get-login-password`. Reading the error out loud (instead of pasting it into search) told me the answer immediately. Small habit, big win.
 
 ### Next Week Plan
 
-Write the SSE progress contract spec to show real progress bars. Review the plan to enable AWS X-Ray tracing across S3 → model → output.
+Chapter 5.5 Application part A and B: Redis + SQS. Work under `UPS-7`.
