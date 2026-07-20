@@ -10,28 +10,28 @@ pre: " <b> 1.5. </b> "
 
 ### Week 5 Objectives
 
-This week the attention swings over to FE. Init the `upscale-FE` project with TanStack Start (React 19 + Vite 8): upload UI using `react-dropzone`, an AI/Standard mode toggle, OIDC Cognito auth via `react-oidc-context`. Design tokens also got locked: violet `#7C3AED`, cyan `#06B6D4`, Space Grotesk / DM Sans, components from shadcn/ui (Radix) on Tailwind v4. In parallel, the FE hosting stack: S3 static website + CloudFront + ACM for the SPA build.
+Tuần FE. Tôi chốt stack (TanStack Start + React 19), design page structure và UX flow, giao Quan bootstrap. Song song giao Khiem provision S3 static hosting + CloudFront + ACM để có domain HTTPS thật, không phải `.s3-website` xấu xí.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Init `upscale-FE`: **TanStack Start** (Vite 8) + Tailwind v4 + shadcn/ui + react-dropzone + lucide-react + sonner. | 23/05/2026 | 23/05/2026 | [TanStack Start](https://tanstack.com/start) |
-| 2 | Build `UploadZone`, `ModeToggle`, `ResultCard` (file routes under `src/routes/*`, TanStack Query); call BE via `VITE_API_URL`. | 24/05/2026 | 25/05/2026 | [TanStack Router](https://tanstack.com/router) |
-| 3 | Create **S3 bucket** `upscale-fe` (enable static website hosting), block public access + OAC. | 26/05/2026 | 26/05/2026 | [CloudFront OAC](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) |
-| 4 | Create **CloudFront distribution** in front of S3, default cache policy + a custom one for hashed `/assets/*` (1 year), SPA fallback `403/404 → /index.html`. | 27/05/2026 | 28/05/2026 | [CloudFront](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/) |
-| 5 | Request **ACM certificate** for `upscaler.vuongtech.dev` (must live in `us-east-1` for CloudFront). | 29/05/2026 | 29/05/2026 | [ACM](https://docs.aws.amazon.com/acm/latest/userguide/) |
-| 6 | CI on GitHub Actions: `vite build` → sync `dist/` to `s3://upscale-fe` → `cloudfront create-invalidation`. | 30/05/2026 | 30/05/2026 | - |
-| 7 | Deploy preview to CloudFront, TTFB around 85ms from the Singapore edge. | 31/05/2026 | 31/05/2026 | - |
+| 1 | Chốt stack FE: TanStack Start (SSR/SSG + file-based route), React 19, Tailwind v4; viết ADR-002. | 24/05/2026 | 24/05/2026 | [TanStack Start](https://tanstack.com/start) |
+| 2 | Design page structure: `/` (upload), `/result/:id`, `/history`; wireframe Figma. | 25/05/2026 | 26/05/2026 | - |
+| 3 | Design API contract phía FE: fetch presigned URL, poll status, hiển thị progress; sync với Thang. | 26/05/2026 | 26/05/2026 | - |
+| 4 | Review PR Quan: bootstrap TanStack Start + Tailwind + upload component; feedback vòng 1 (thiếu error state). | 27/05/2026 | 28/05/2026 | - |
+| 5 | Review PR Quan vòng 2: đã thêm error/loading state; approve. | 29/05/2026 | 29/05/2026 | - |
+| 6 | Review Khiem: S3 bucket `upscale-fe`, CloudFront distribution, ACM cert `upscale.dev`, alias record. | 30/05/2026 | 30/05/2026 | [CloudFront + ACM](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-procedures.html) |
+| 7 | Chạy end-to-end demo FE → BE trên staging domain; note UX gaps cho tuần sau. | 31/05/2026 | 31/05/2026 | - |
 
 ### Week 5 Achievements
 
-FE is live on CloudFront with HTTPS through ACM. CI/CD is clean: push to `main` and it syncs S3 and invalidates CloudFront on its own. Lighthouse Performance sits at 92, and the TTFB win is basically edge cache doing its job — no magic beyond that.
+FE staging live tại `staging.upscale.dev`, upload thật, gọi BE thật, nhận output thật. CloudFront cache HTML với `s-maxage=60` và asset với `max-age=31536000` — tôi review setup của Khiem, chốt phương án này để không phải purge cache thủ công mỗi lần deploy.
 
 ### Challenges & Lessons
 
-Out of habit I requested the ACM cert in `ap-southeast-1`, until CloudFront politely refused to use it. CloudFront only accepts certs from `us-east-1` because it's a global service. Re-requesting in the right region unblocked everything, and I kept the `ap-southeast-1` cert around for the ALB later. The lesson is short: a few AWS services are pinned to `us-east-1`, don't forget it.
+Quan mới TanStack Start nên PR đầu thiếu error handling — nếu BE trả 500, UI trắng xoá. Tôi review thẳng: "user thấy gì khi mất mạng?" — anh sửa ngay. Bài học chung: PR review không chỉ nhìn code chạy, mà phải nhìn user path khi thứ tệ nhất xảy ra. Với FE điều này càng quan trọng vì user thấy trực tiếp.
 
 ### Next Week Plan
 
-SSE progress endpoint. CORS + presigned upload direct from FE to S3. Put an ALB in front of FastAPI with a Cognito-authenticated listener.
+Design SSE progress contract để show progress bar thật (không phải fake). Review Khiem set X-Ray tracing cho request path S3 → model → output.

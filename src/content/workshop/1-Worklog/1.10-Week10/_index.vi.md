@@ -10,28 +10,28 @@ pre: " <b> 1.10. </b> "
 
 ### Mục tiêu Tuần 10
 
-Sinh tài liệu API từ OpenAPI của FastAPI, deploy Redoc lên S3+CloudFront. Đưa AWS Secrets Manager vào giữ token analytics thay vì `.env` trên EC2. Bật AWS WAF managed rule set cho cả CloudFront và ALB.
+Security hardening tuần: Secrets Manager rotation cho DB password + API key, WAF managed rules (OWASP top 10), Prometheus `/metrics` (UPS-6) cho Khiêm. Song song mình viết API docs public + ADR tổng kết security posture.
 
 ### Các công việc thực hiện trong tuần
 
 | Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
-| 1 | Export `openapi.json`, dùng `redocly` build static HTML. | 07/07/2026 | 07/07/2026 | [Redoc](https://github.com/Redocly/redoc) |
-| 2 | Deploy docs lên `s3://upscale-docs` + CloudFront distribution phụ. | 08/07/2026 | 08/07/2026 | - |
-| 3 | Tạo secret trong **Secrets Manager** `upscaler/dev/analytics`, cấp IAM policy đọc cho EC2 role. | 09/07/2026 | 09/07/2026 | [Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/) |
-| 4 | Refactor `APIConfig`: nếu env `USE_SECRETS_MANAGER=true` → gọi `secretsmanager:GetSecretValue`, cache 5 phút. | 10/07/2026 | 11/07/2026 | - |
-| 5 | Bật **AWS WAF v2** WebACL, gắn managed rule `AWSManagedRulesCommonRuleSet` + rate-based rule 2000 req/5min/IP. | 12/07/2026 | 13/07/2026 | [AWS WAF](https://docs.aws.amazon.com/waf/latest/developerguide/) |
-| 6 | Gắn WebACL vào CloudFront distribution FE và ALB. | 14/07/2026 | 14/07/2026 | - |
-| 7 | Viết README chung + kiến trúc AWS diagram (draw.io). | 15/07/2026 | 15/07/2026 | - |
+| 1 | Review Khiêm: Secrets Manager `upscale/db` + `upscale/api-keys` + rotation Lambda 90 ngày. | 06/07/2026 | 07/07/2026 | [Secrets Manager Rotation](https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html) |
+| 2 | Review Khiêm: WAF rule group `AWSManagedRulesCommonRuleSet` + `AWSManagedRulesKnownBadInputsRuleSet` áp cho ALB + CloudFront. | 08/07/2026 | 08/07/2026 | [WAF Managed Rules](https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups.html) |
+| 3 | Review PR Khiêm UPS-6: expose `/metrics` (prometheus-fastapi-instrumentator) + CloudWatch Agent scrape. | 09/07/2026 | 09/07/2026 | [prometheus-fastapi-instrumentator](https://github.com/trallnag/prometheus-fastapi-instrumentator) |
+| 4 | Viết API docs public (Redoc từ OpenAPI): endpoint public + auth flow + rate limit + error codes. | 10/07/2026 | 11/07/2026 | [Redoc](https://redocly.com/) |
+| 5 | Security review meeting với team: đi qua checklist OWASP + IAM least-privilege audit; ghi 3 finding cho tuần 11. | 12/07/2026 | 12/07/2026 | - |
+| 6 | Review PR Thắng: sửa 2 finding (input validation strict hơn cho `object_key`, log không leak PII). | 12/07/2026 | 12/07/2026 | - |
+| 7 | Viết ADR-006 security posture: authn Cognito, authz middleware, secrets rotation, WAF, log retention. | 12/07/2026 | 12/07/2026 | - |
 
 ### Kết quả đạt được Tuần 10
 
-Docs public tại `docs.upscaler.vuongtech.dev`. Secrets không còn nằm trong `.env` trên EC2. WAF chặn 3 request malicious ngay ngày đầu bật (mình tự test là chính, nhưng vẫn tính).
+Ba lớp security đã đóng: identity (Cognito), transport (ALB TLS + WAF), storage (SSE-S3 + Secrets Manager rotation). API docs public tại `docs.upscale.dev`. Prometheus metrics chạy song song với CloudWatch, cho phép Grafana dashboard tuần sau nếu cần. UPS-6 close.
 
 ### Thách thức & Bài học
 
-Managed rule của WAF chặn nhầm request FE bình thường, thủ phạm là `SizeRestrictions_BODY`. Mình thêm exception cho path `/upload/presign` với body limit 100KB và mọi thứ trở lại bình thường. WAF managed rule mạnh nhưng cần tune theo app cụ thể; kinh nghiệm là luôn để `count` trước, quan sát vài ngày rồi mới chuyển sang `block`.
+WAF managed rule ban đầu chặn nhầm 1 request FE hợp lệ (nghi ngờ XSS trên filename), mình phải review log rồi giao Khiêm thêm exception rule cho path `/upload/init`. Bài học: managed rule tiện nhưng phải monitor false positive tuần đầu, không bật-quên. Với Lead, đây là quyết định trade-off giữa "chặn hết" và "để user chạy được".
 
 ### Kế hoạch tuần sau
 
-E2E Playwright cho luồng chính. Auto-scaling qua ASG + Launch Template cho GPU worker. Chuẩn bị deploy production.
+Scale ngang: ECS on EC2, ASG, SQS async, ElastiCache Redis, EFS shared. Playwright E2E. Đây là tuần lớn nhất — mình sẽ chia nhỏ issue cho từng người.

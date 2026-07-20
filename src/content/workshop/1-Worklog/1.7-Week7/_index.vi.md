@@ -10,28 +10,28 @@ pre: " <b> 1.7. </b> "
 
 ### Mục tiêu Tuần 7
 
-Đóng gói BE thành Docker image multi-stage với base `nvidia/cuda:12.4-runtime`, push lên Amazon ECR private repo `upscale-be`. Đồng thời chuyển pattern upload sang presigned POST để FE đẩy file trực tiếp lên S3 thay vì proxy qua BE.
+Chuyển pipeline sang container + presigned direct-upload. Mình chốt strategy Docker multi-stage (giữ image slim), giao Thắng viết Dockerfile production (UPS-4), giao Khiêm set ECR + push CI (UPS-7 remove weights khỏi git). FE-side, Quân sửa upload flow dùng presigned URL.
 
 ### Các công việc thực hiện trong tuần
 
 | Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
-| 1 | Viết `Dockerfile` multi-stage: builder cài deps → runtime `nvidia/cuda:12.4-runtime-ubuntu22.04`, image ~2.1GB. | 10/06/2026 | 10/06/2026 | [Docker multi-stage](https://docs.docker.com/build/building/multi-stage/) |
-| 2 | Tạo **ECR** repo `upscale-be`, bật scan-on-push + image immutable tag. | 11/06/2026 | 11/06/2026 | [Amazon ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/) |
-| 3 | GitHub Actions: `aws ecr get-login-password | 12/06/2026 | 13/06/2026 | 12/06/2026 | - |
-| 4 | Endpoint `/upload/presign` trả `{url, fields}` cho **S3 Presigned POST**, giới hạn size 10MB + content-type. | 14/06/2026 | 14/06/2026 | [Presigned POST](https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html) |
-| 5 | FE `UploadZone` dùng presigned POST → S3 trực tiếp, sau đó chỉ gửi `s3_key` tới BE. | 15/06/2026 | 16/06/2026 | - |
-| 6 | Đo bandwidth: giảm 40% traffic qua BE (không proxy 2MB nữa). | 17/06/2026 | 17/06/2026 | - |
-| 7 | Chạy ECR scan: 0 CRITICAL, 2 HIGH (torch CVE), tạm accept + note. | 18/06/2026 | 18/06/2026 | - |
+| 1 | Chốt Docker strategy: multi-stage, base `nvidia/cuda:12.4.0-runtime-ubuntu22.04`, image target ≤ 2GB; ADR-003. | 08/06/2026 | 08/06/2026 | [Docker Multi-stage](https://docs.docker.com/build/building/multi-stage/) |
+| 2 | Review PR Thắng UPS-4: Dockerfile + docker-compose + healthcheck; feedback (thiếu non-root user), duyệt vòng 2. | 09/06/2026 | 10/06/2026 | - |
+| 3 | Review PR Khiêm UPS-7: xoá weights khỏi git history + `.gitignore` + script pull từ S3 ở entrypoint. | 11/06/2026 | 11/06/2026 | [git filter-repo](https://github.com/newren/git-filter-repo) |
+| 4 | Review Khiêm: tạo ECR repo `upscale-be` + IAM policy push/pull + GitHub Actions push on tag. | 12/06/2026 | 12/06/2026 | [Amazon ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/) |
+| 5 | Design presigned direct-upload flow: FE xin URL từ `/upload/init`, PUT thẳng S3, gọi `/upscale/ai` với `object_key`. | 13/06/2026 | 13/06/2026 | - |
+| 6 | Review PR Thắng: endpoint `/upload/init` (trả presigned PUT 5 phút) + refactor `/upscale/ai` nhận `object_key`. | 14/06/2026 | 14/06/2026 | - |
+| 7 | Review PR Quân: FE dùng presigned PUT + progress upload thật; end-to-end test ảnh 20MB không qua BE. | 14/06/2026 | 14/06/2026 | - |
 
 ### Kết quả đạt được Tuần 7
 
-Image BE giờ build reproducible qua CI, ECR quét lỗ hổng tự động trước khi mình pull. Presigned POST kéo lượng I/O phía BE xuống đáng kể vì file không còn đi vòng nữa.
+Docker image production 1.7GB, chạy trên EC2 GPU đúng như dev. ECR có tag `v0.7.0`. Presigned direct-upload giảm latency perceived ~40% cho ảnh > 10MB — user thấy progress upload chạy tay, không phải chờ BE proxy. UPS-4, UPS-7 close.
 
 ### Thách thức & Bài học
 
-Image `nvidia/cuda-runtime` sau khi cài xong PyTorch vẫn nặng khoảng 2.1GB, cold-start kéo lâu vì phải pull cả GB xuống. Tạm chấp nhận cho MVP và ghi note cho tuần 11 sẽ thử `slim` variant kèm trim bớt CUDA lib không dùng. Cái insight lớn hơn là presigned POST rất phù hợp với thinking serverless — compute và transfer nên tách nhau, đường nào chạy đường nấy.
+UPS-7 (remove weights khỏi git) là bài học lớn: repo đã commit weights 64MB từ tuần 2, giờ phải `git filter-repo` viết lại history. Team phải re-clone. Lesson: nếu tuần 1 mình ép `.gitignore` chặt hơn thì không mất buổi này. Mình thêm rule vào PR template: "confirm không có file > 10MB trong PR" — checklist đơn giản nhưng hiệu quả.
 
 ### Kế hoạch tuần sau
 
-Đưa ALB đứng trước EC2 (target group + listener HTTPS). Cấu hình IAM role cho ECS/EC2 pull ECR. Bổ sung property test cho endpoint presign.
+Auth: chốt Cognito hay tự viết JWT. Design API contract auth. Review Khiêm provision ALB + WAF + Cognito user pool.

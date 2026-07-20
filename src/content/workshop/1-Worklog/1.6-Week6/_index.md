@@ -10,28 +10,28 @@ pre: " <b> 1.6. </b> "
 
 ### Week 6 Objectives
 
-Three things this week: write the SSE endpoint `/upscale/ai/stream` that reports percent + step; turn on AWS X-Ray tracing for FastAPI via `aws-xray-sdk`; and on FE, add a progress bar + skeleton loading so users aren't staring at a blank screen while the model runs.
+Progress bar thật + distributed tracing. Tôi design contract SSE (`/upscale/ai/stream`) và giao đôi bên: Thang implement server side, Quan consume phía FE. Song song giao Khiem bật AWS X-Ray để nhìn được bottleneck từ S3 → model → output trong 1 trace.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Implement the SSE endpoint with `StreamingResponse`, yielding `{progress, step}` every 200ms. | 01/06/2026 | 01/06/2026 | [FastAPI SSE](https://fastapi.tiangolo.com/advanced/custom-response/) |
-| 2 | Integrate `aws-xray-sdk-python`, wrap boto3 + requests; segments for `model.load`, `s3.upload`, `inference`. | 02/06/2026 | 02/06/2026 | [AWS X-Ray Python](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-python.html) |
-| 3 | Install the **X-Ray daemon** on EC2, attach IAM policy `AWSXRayDaemonWriteAccess`. | 03/06/2026 | 04/06/2026 | - |
-| 4 | Review the service map in X-Ray console: FastAPI → S3 → GPU inference. | 05/06/2026 | 06/06/2026 | - |
-| 5 | Consume SSE on FE with `EventSource`, render shadcn `<Progress>`. | 07/06/2026 | 07/06/2026 | - |
-| 6 | Latency breakdown: `s3.get 180ms + load 90ms + infer 4.1s + s3.put 210ms`. | 08/06/2026 | 08/06/2026 | - |
-| 7 | Update Linear UPS-10, UPS-11. | 09/06/2026 | 09/06/2026 | - |
+| 1 | Design SSE contract: event `progress` (percent, stage), event `done` (output_url), event `error`; document trong OpenAPI extension. | 01/06/2026 | 01/06/2026 | [SSE](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) |
+| 2 | Review PR Thang: `/upscale/ai/stream` với `StreamingResponse` FastAPI + progress hook trong pipeline. | 02/06/2026 | 03/06/2026 | - |
+| 3 | Review PR Quan: `EventSource` phía FE + progress bar + reconnect logic. | 04/06/2026 | 04/06/2026 | - |
+| 4 | Chốt X-Ray strategy: 3 subsegment (`s3.download`, `model.inference`, `s3.upload`), sampling rate 10%; giao Khiem set. | 05/06/2026 | 05/06/2026 | [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/) |
+| 5 | Review Khiem: X-Ray daemon + IAM permission + service map hiển thị đúng flow. | 06/06/2026 | 06/06/2026 | - |
+| 6 | Đọc trace X-Ray thật: `s3.download` chiếm 30% latency với ảnh > 5MB → note optimize cho tuần 7 (presigned upload trực tiếp). | 07/06/2026 | 07/06/2026 | - |
+| 7 | Sprint retro: SSE + X-Ray đều live; team đồng ý tuần 7 chuyển sang presigned direct-upload. | 07/06/2026 | 07/06/2026 | - |
 
 ### Week 6 Achievements
 
-X-Ray's service map confirmed the earlier guess: inference is the bottleneck, S3 I/O is fine. FE now shows real-time progress, and the app feels different — the "did it hang?" moment during those first few seconds is gone.
+Progress bar hiển thị real progress, không phải fake spinner. X-Ray cho thấy chính xác điểm chậm — insight quan trọng nhất: upload S3 đang là bottleneck với ảnh lớn. Đây là lý do tuần 7 tôi chuyển strategy sang presigned URL FE upload trực tiếp, bỏ qua BE.
 
 ### Challenges & Lessons
 
-SSE kept getting cut off with CloudFront in the middle because it buffers streaming responses by default. Fix: add `X-Accel-Buffering: no` on the BE side and create a `CachingDisabled` policy on CloudFront specifically for `/upscale/*`. Every CDN leans toward caching by default, so any streaming endpoint needs its own explicit policy.
+Đọc X-Ray trace là kỹ năng phải học — lần đầu tôi nhìn service map không hiểu gì, phải mở AWS doc. Sau khi hiểu thì insight ra ngay: đừng đoán bottleneck, đo. Trước tuần này team hay đoán "chắc model chậm", đo xong mới thấy S3 upload mới là thủ phạm. Lead phải kéo team về data-driven decision, không dựa cảm giác.
 
 ### Next Week Plan
 
-Presigned POST so FE uploads straight to S3 without touching BE. Dockerize BE. Prep ECR.
+Chốt Docker strategy, ECR setup, presigned direct-upload flow. Review Khiem set ECR + Thang viết Dockerfile production.
