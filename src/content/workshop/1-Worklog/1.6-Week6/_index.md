@@ -10,28 +10,28 @@ pre: " <b> 1.6. </b> "
 
 ### Week 6 Objectives
 
-Real progress bar + distributed tracing. I wrote the SSE (`/upscale/ai/stream`) spec for both BE and FE, and locked the AWS X-Ray strategy so we can see the bottleneck from S3 → model → output in a single trace.
+Chapter 5.5 Application, first half: stand up ElastiCache Redis for caching and SQS for the async job queue. These are the two supporting pieces the FastAPI app will lean on, so I set them up before the ECS cluster itself.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Wrote the SSE contract spec: `progress`, `done`, `error` events; documented as an OpenAPI extension. | 01/06/2026 | 01/06/2026 | [SSE](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) |
-| 2 | Reviewed the `/upscale/ai/stream` PR using FastAPI `StreamingResponse` + progress hooks in the pipeline. | 02/06/2026 | 03/06/2026 | - |
-| 3 | Reviewed the FE `EventSource` + progress bar + reconnect logic PR. | 04/06/2026 | 04/06/2026 | - |
-| 4 | Locked X-Ray strategy: 3 subsegments (`s3.download`, `model.inference`, `s3.upload`), 10% sampling rate. | 05/06/2026 | 05/06/2026 | [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/) |
-| 5 | Reviewed the X-Ray daemon + IAM permission + service-map PR. | 06/06/2026 | 06/06/2026 | - |
-| 6 | Read real X-Ray traces: `s3.download` takes 30% of latency on images > 5MB → opened a note to move to presigned direct-upload. | 07/06/2026 | 07/06/2026 | - |
-| 7 | Sprint retro: SSE + X-Ray are both live; agreed to switch to presigned direct-upload in Week 7. | 07/06/2026 | 07/06/2026 | - |
+| 1 | Created ElastiCache subnet group with the two private subnets. | 24/05/2026 | 24/05/2026 | [ElastiCache](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/) |
+| 2 | Created Redis cluster `upscale-redis` on `cache.t3.micro`. | 25/05/2026 | 25/05/2026 | - |
+| 3 | Connected to Redis from a test EC2, ran `PING` → got `PONG`. Small win. | 26/05/2026 | 26/05/2026 | - |
+| 4 | Created SQS queue `upscale-job-queue` and a dead-letter queue for failed jobs. | 27/05/2026 | 27/05/2026 | [SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/) |
+| 5 | Sent and received a test message with the AWS CLI so I could see the queue actually working. | 28/05/2026 | 28/05/2026 | - |
+| 6 | Wrote a short Linear comment on `UPS-7` about what Redis and SQS are for in my own words. | 29/05/2026 | 29/05/2026 | - |
+| 7 | Closed `UPS-7`, opened `UPS-8` (ECS cluster + task definitions). | 30/05/2026 | 30/05/2026 | - |
 
 ### Week 6 Achievements
 
-The progress bar shows real progress, not a fake spinner. X-Ray pinpointed the slow segment — the key insight was that S3 upload is the bottleneck for large images, which drove the direct-upload decision.
+Redis and SQS are both live and reachable from my test EC2. Explaining them in the Linear comment forced me to actually understand them, not just click through the wizard.
 
 ### Challenges & Lessons
 
-Reading X-Ray traces is a skill I had to learn — the first time I opened the service map I had no idea what I was looking at and had to dig through AWS docs. Once it clicked, the principle was clear: don't guess at bottlenecks, measure them. Before this week I'd been assuming the model was slow; measurement revealed S3 upload was the real culprit. The Lead has to pull the team toward data-driven decisions, not gut feel.
+I could not connect to Redis at first. It turned out my test EC2 was in a different security group and the Redis SG only allowed the ECS SG. Lesson: when a connection times out, first suspect the security group, not the code.
 
 ### Next Week Plan
 
-Lock Docker strategy, ECR setup, and presigned direct-upload flow. Review the production Dockerfile spec.
+Chapter 5.5 second half: ECS cluster with EC2 GPU instances, task definitions, services. Track on `UPS-8`.

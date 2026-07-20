@@ -10,28 +10,28 @@ pre: " <b> 1.6. </b> "
 
 ### Week 6 Objectives
 
-Progress bar thật + distributed tracing. Tôi viết spec SSE (`/upscale/ai/stream`) cho cả BE và FE, và chốt strategy bật AWS X-Ray để nhìn bottleneck từ S3 → model → output trong 1 trace.
+Chương 5.5 Application, nửa đầu: dựng ElastiCache Redis cho cache và SQS cho job queue. Đây là hai chỗ FastAPI dựa vào, nên tôi set up trước rồi mới đến ECS cluster.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Viết spec SSE contract: event `progress`, event `done`, event `error`; document trong OpenAPI extension. | 01/06/2026 | 01/06/2026 | [SSE](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) |
-| 2 | Review PR `/upscale/ai/stream` với `StreamingResponse` FastAPI + progress hook trong pipeline. | 02/06/2026 | 03/06/2026 | - |
-| 3 | Review PR `EventSource` phía FE + progress bar + reconnect logic. | 04/06/2026 | 04/06/2026 | - |
-| 4 | Chốt X-Ray strategy: 3 subsegment (`s3.download`, `model.inference`, `s3.upload`), sampling rate 10%. | 05/06/2026 | 05/06/2026 | [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/) |
-| 5 | Review PR X-Ray daemon + IAM permission + service map hiển thị đúng flow. | 06/06/2026 | 06/06/2026 | - |
-| 6 | Đọc trace X-Ray thật: `s3.download` chiếm 30% latency với ảnh > 5MB → mở note optimize presigned direct-upload. | 07/06/2026 | 07/06/2026 | - |
-| 7 | Sprint retro: SSE + X-Ray đều live; chốt tuần 7 chuyển sang presigned direct-upload. | 07/06/2026 | 07/06/2026 | - |
+| 1 | Tạo ElastiCache subnet group gồm 2 private subnet. | 24/05/2026 | 24/05/2026 | [ElastiCache](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/) |
+| 2 | Tạo Redis cluster `upscale-redis` trên `cache.t3.micro`. | 25/05/2026 | 25/05/2026 | - |
+| 3 | Kết nối Redis từ EC2 test, chạy `PING` → nhận `PONG`. Vui nhỏ. | 26/05/2026 | 26/05/2026 | - |
+| 4 | Tạo SQS queue `upscale-job-queue` và một dead-letter queue cho job fail. | 27/05/2026 | 27/05/2026 | [SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/) |
+| 5 | Gửi và nhận thử message qua AWS CLI để thấy queue hoạt động thật. | 28/05/2026 | 28/05/2026 | - |
+| 6 | Viết comment ngắn trên Linear `UPS-7` giải thích Redis và SQS dùng để làm gì bằng lời mình. | 29/05/2026 | 29/05/2026 | - |
+| 7 | Đóng `UPS-7`, mở `UPS-8` (ECS cluster + task definition). | 30/05/2026 | 30/05/2026 | - |
 
 ### Week 6 Achievements
 
-Progress bar hiển thị real progress, không phải fake spinner. X-Ray cho thấy chính xác điểm chậm — insight quan trọng nhất: upload S3 đang là bottleneck với ảnh lớn, dẫn đến quyết định đổi strategy sang direct-upload.
+Redis và SQS đã live, EC2 test kết nối được. Việc phải giải thích lại trên Linear ép tôi hiểu thật, không phải bấm qua wizard cho xong.
 
 ### Challenges & Lessons
 
-Đọc X-Ray trace là kỹ năng phải học — lần đầu nhìn service map không hiểu gì, phải mở AWS doc. Sau khi hiểu thì rút ra nguyên tắc: đừng đoán bottleneck, đo. Trước tuần này tôi hay đoán chắc model chậm, đo xong mới thấy S3 upload mới là thủ phạm. Lead phải kéo team về data-driven decision, không dựa cảm giác.
+Ban đầu tôi không connect được Redis. Hoá ra EC2 test ở SG khác, mà SG của Redis chỉ cho SG của ECS vào. Bài học: connection timeout thì nghi ngờ security group trước, đừng vội đổ cho code.
 
 ### Next Week Plan
 
-Chốt Docker strategy, ECR setup, presigned direct-upload flow. Rà spec Dockerfile production.
+Chương 5.5 nửa sau: ECS cluster với EC2 GPU, task definition, service. Theo dõi ở `UPS-8`.
