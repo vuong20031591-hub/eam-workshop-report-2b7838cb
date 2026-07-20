@@ -8,26 +8,14 @@ pre: " <b> 1.1. </b> "
 
 ## WORKLOG TUẦN 1
 
-### Trọng tâm
+Tuần kickoff. Cả tuần tôi không đụng vào một resource AWS nào, và đó là chủ ý. Là team lead, tôi muốn dự án có hình hài trước khi ai đó mở console.
 
-Kickoff. Là team lead, tôi cần dự án có hình hài rõ trước khi ai đó gõ dòng code đầu tiên, nên tuần này chủ yếu là lên kế hoạch và đọc tài liệu.
+Phần lớn thời gian là ngồi đọc. Tôi đọc workshop hai lượt từ đầu đến cuối, rồi viết một trang tóm chương 5.1 để cả nhóm có cái cụ thể mà tranh luận, chứ không cãi nhau bằng cảm giác. Xong xuôi thì bê roadmap 12 tuần lên Linear thành các epic, mở `UPS-1` (Planning) và `UPS-2` (Architecture doc) làm hai ticket gốc để mọi thứ khác móc vào.
 
-### Việc tôi làm
+Còn lại là những quyết định nhỏ mà tôi không muốn tuần nào cũng phải bàn lại: region `ap-southeast-1`, prefix `upscale-`, env `dev` và `prod`, Git flow, PR template. Standup 15 phút mỗi sáng, planning thứ Hai, review thứ Sáu. Nhạt, nhưng chốt một lần cho xong.
 
-- Đọc hết workshop, tóm chương 5.1 thành một trang kiến trúc để cả nhóm có cái mà bàn.
-- Chia roadmap 12 tuần thành các epic trên Linear, mở `UPS-1` (Planning) và `UPS-2` (Architecture doc) làm ticket gốc.
-- Chốt convention chung: region `ap-southeast-1`, prefix `upscale-`, tên env `dev`/`prod`, Git flow, PR template.
-- Chốt nhịp làm việc: standup 15 phút mỗi sáng, planning thứ Hai, review thứ Sáu.
-- Tự làm: vẽ sơ đồ kiến trúc đích (User → CloudFront → ALB → ECS với FastAPI + CodeFormer, SQS, Redis, S3) và viết bản cost baseline đầu tiên.
+Tôi cũng vẽ sơ đồ đích (User, CloudFront, ALB, ECS chạy FastAPI và worker CodeFormer, SQS, Redis, S3) và ước tính chi phí sơ bộ để sau này khỏi giật mình.
 
-### Kết quả
+Thật ra nửa tuần trôi vào việc cắt scope. Workshop có nhiều thứ, ham thì làm hết. Mình không làm hết.
 
-Cả nhóm nhìn chung một bức tranh, Linear board bám sát workshop, và có bộ convention khỏi phải cãi lại về sau.
-
-### Khó khăn
-
-Đầu tuần scope còn mờ. Nửa tuần tôi ngồi cắt bớt việc chứ không thêm việc.
-
-### Kế hoạch tuần sau
-
-Chương 5.2 Prerequisites. Tôi sẽ chủ trì thiết kế IAM và chuẩn hoá baseline tài khoản.
+Tuần sau là chương 5.2. Tôi sẽ chủ trì thiết kế IAM và chốt baseline tài khoản.
