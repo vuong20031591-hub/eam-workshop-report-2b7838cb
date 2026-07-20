@@ -31,6 +31,18 @@ import {
   type TreeNode,
 } from "@/lib/workshop-content";
 
+const SITE_URL = "https://eam-workshop-report.lovable.app";
+
+function extractDescriptionFromHtml(html: string): string {
+  const paragraphs = html.match(/<p[\s\S]*?<\/p>/gi) ?? [];
+  for (const p of paragraphs) {
+    const text = p.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+    if (text.length < 50) continue;
+    return text.length > 160 ? text.slice(0, 157) + "..." : text;
+  }
+  return "Internship report by Nguyen Tien Vuong — First Cloud AI Journey at Amazon Web Services Vietnam.";
+}
+
 const searchSchema = z.object({
   lang: fallback(z.string(), "en").default("en"),
 });
@@ -54,13 +66,37 @@ export const Route = createFileRoute("/$")({
     };
   },
   head: ({ loaderData }) => ({
-    meta: loaderData
+    meta: (() => {
+      if (!loaderData) {
+        return [
+          { title: "Not found — Internship Report" },
+          { name: "robots", content: "noindex" },
+        ];
+      }
+      const title = `${loaderData.entry.frontmatter.title ?? "Internship Report"} — Nguyen Tien Vuong`;
+      const description = extractDescriptionFromHtml(loaderData.entry.html);
+      const url = `${SITE_URL}/${loaderData.slug}`.replace(/\/+$/, "") || SITE_URL;
+      const isArticle = loaderData.slug !== "" && (loaderData.entry.html.length > 400);
+      return [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: isArticle ? "article" : "website" },
+        { property: "og:url", content: url },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+      ];
+    })(),
+    links: loaderData
       ? [
           {
-            title: `${loaderData.entry.frontmatter.title ?? "Workshop"} — Internship Report`,
+            rel: "canonical",
+            href:
+              `${SITE_URL}/${loaderData.slug}`.replace(/\/+$/, "") || SITE_URL,
           },
         ]
-      : [{ title: "Internship Report" }],
+      : [],
   }),
   component: WorkshopPage,
   notFoundComponent: () => (
