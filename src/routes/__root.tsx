@@ -81,7 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Internship report by Nguyen Tien Vuong for the First Cloud AI Journey program at Amazon Web Services Vietnam — worklogs, proposal, blogs, and the Upscale AI workshop.",
+          "Nguyen Tien Vuong's FCAJ internship report at AWS Vietnam: worklogs, proposal, blogs, and the Upscale AI workshop.",
       },
       { name: "author", content: "Nguyen Tien Vuong" },
       { property: "og:site_name", content: "Internship Report — Nguyen Tien Vuong" },
