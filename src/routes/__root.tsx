@@ -84,7 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Nguyen Tien Vuong's FCAJ internship report at AWS Vietnam: worklogs, proposal, blogs, and the Upscale AI workshop.",
       },
       { name: "author", content: "Nguyen Tien Vuong" },
-      { property: "og:site_name", content: "Internship Report — Nguyen Tien Vuong" },
+      { property: "og:site_name", content: "FCAJ Internship Report" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
