@@ -6,32 +6,32 @@ chapter: false
 pre: " <b> 7. </b> "
 ---
 
-Phần này em ghi cảm nhận về chương trình First Cloud AI Journey, tách khỏi bất kỳ project cụ thể nào. Em cố nói thẳng cả chỗ hay lẫn chỗ chưa ổn, để team FCAJ có input thật cho kỳ sau.
+Vài dòng em để lại cho bất kỳ ai đọc phần này sau: người tham gia khoá kế, ban tổ chức, hay ai đó đang phân vân có nên bỏ thời gian cho một chương trình kiểu này không.
 
-### Cách mentor làm việc
+### Điều không ai nói với em lúc bắt đầu
 
-Mentor để em thử trước, chỉ nhảy vào khi em rõ ràng đang bí. Mấy tuần đầu cảm giác chậm, nhưng qua tháng thứ hai thì em hiểu vì sao cách này chạy: thứ mình tự đào ra sẽ nhớ lâu hơn hẳn thứ có sẵn. Khi em xin thêm thời gian cho phần khó, mentor duyệt mà không hỏi vặn.
+Giá trị lớn nhất không nằm ở các buổi học. Nó nằm ở đoạn giữa lúng túng, khi em đã đọc đủ để thấy tự tin, đã thử đủ để thấy bí, và cách một cú click nữa là làm hỏng thứ vừa dựng hai ngày. Những gì em thực sự giữ lại đều đến từ đoạn đó. Mấy tuần intro gọn gàng và buổi demo cuối trơn tru lại là phần em nhớ ít nhất.
 
-### Tài liệu
+### Điều em muốn nói với người mới vào tuần tới
 
-Tài liệu mạnh ở phần nền tảng, mỏng hơn ở các chủ đề mới hoặc chuyên sâu, chỗ đó em phải đọc thẳng docs của nhà cung cấp. Không phải vấn đề lớn, nhưng một danh sách gợi ý ngắn ("phần này đọc thêm ở X") ngay trong tài liệu sẽ tiết kiệm vài giờ cho mỗi học viên.
+Đừng mở console khi chưa vẽ được thứ mình định làm ra giấy. Đặt tên chán một chút và trung thành với nó, vì em-của-quá-khứ luôn đặt tên tệ hơn em tưởng. Bật cảnh báo chi phí trước khi bật bất cứ thứ gì khác. Khi một bước không chạy, đóng tab, đi bộ mười phút, quay lại với đầu tỉnh, đừng cố click mạnh hơn.
 
-### Sự phù hợp với chuyên môn
+### Chỗ em mất nhiều thời gian nhất
 
-Trùng khoảng 60% với những gì em đã biết và 40% là thứ em chưa động. Tỉ lệ đó hợp lý: quen đủ để không loạn tuần đầu, mới đủ để không nhàm tuần cuối.
+Copy-paste lệnh mà không đọc. Bỏ qua bước "kiểm tra xem có chạy không" vì ba bước trước đều ổn. Đổ lỗi cho công cụ trước khi đổ lỗi cho lỗi typo của chính mình. Đọc thì rẻ, làm mới đắt.
 
-### Nhịp chương trình
+### Điều format làm tốt
 
-FCAJ giữ nhịp tốt: standup ngắn, review giữa kỳ, demo cuối kỳ, không có deadline giả tạo. Worklog hàng tuần lúc đầu em ngại, nhưng hoá ra hữu ích hơn em tưởng để nhìn ra mình đang thực sự kẹt ở đâu.
+Nhóm nhỏ, sản phẩm cuối là thứ thật, và đủ dây cho em tự thắt cổ nếu không cẩn thận. Việc không được cầm tay chỉ việc rất bực ở tuần hai và rõ ràng là đúng ở tuần tám. Không gì làm mình tập trung bằng biết chắc 11 giờ đêm không ai gỡ hộ.
 
-### Onboarding
+### Điều em muốn thay đổi
 
-Onboarding tuần đầu là phần yếu nhất. Em mất khoảng ba ngày để biết ai làm gì và tài liệu nội bộ nằm ở đâu. Một trang "start here" cho học viên mới gần như xoá hẳn khoảng thời gian đó.
+Một trang tổng hợp các lỗi phổ biến, mỗi khoá viết thêm vào, sẽ đỡ cho nhóm sau rất nhiều vết bầm. Một buổi ngắn về viết, không phải build, vì mọi kỹ sư giỏi em quen đều diễn đạt được việc mình làm bằng câu bình thường, còn người đang kẹt thì thường không. Và nói rõ ngay từ đầu đây là workshop chứ không phải khoá học, khác biệt đó có ý nghĩa.
 
-### Tổng thể
+### Về chuyện hỏi
 
-Điều em hài lòng nhất: kết thúc chương trình em có thứ chạy thật, không phải slide. Có giới thiệu bạn bè không: có, nhưng em sẽ nói trước là chương trình đòi hỏi tự học nhiều, không hợp với ai chỉ muốn được cầm tay chỉ việc.
+Em hỏi vừa muộn vừa nhiều. Muộn vì không muốn bị nhìn là chậm, nhiều vì đến khi hỏi thì đổ ra một loạt thứ không liên quan. Cách chạy được: hỏi sớm, hỏi hẹp, quay lại với những gì đã thử. Không ai ngại câu hỏi cụ thể. Ai cũng ngại câu hỏi mơ hồ.
 
-### Đề xuất
+### Kết
 
-Nếu format cho phép, em muốn thêm một buổi giữa kỳ với một học viên khoá trước để có góc nhìn của người vừa đi qua chương trình. Em cũng muốn tiếp tục theo các buổi kỹ thuật của FCAJ sau khi kết thúc, kể cả với vai trò tình nguyện viên hỗ trợ khoá sau.
+Em rời chương trình kiên nhẫn hơn lúc vào và bớt bị công cụ làm hoa mắt. Cả hai đều đúng hướng. Cảm ơn những người đã trả lời câu hỏi mà chắc là dễ, và cả những người để em ngồi với vấn đề đủ lâu để tự giải.

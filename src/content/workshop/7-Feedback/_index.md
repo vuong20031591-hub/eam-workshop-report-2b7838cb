@@ -6,32 +6,32 @@ chapter: false
 pre: " <b> 7. </b> "
 ---
 
-This section is my honest take on the First Cloud AI Journey program itself, separate from any specific project. I want to give the FCAJ team useful input for the next cohort, so I try to name both what worked and what did not.
+A few notes I want to leave for anyone reading this later, whether that is the next participant, the organising team, or someone deciding whether a program like this is worth their time.
 
-### Mentor style
+### The thing nobody tells you at the start
 
-The mentor let me try first and only stepped in when I was clearly stuck. In the first few weeks that felt slow, but by the second month I understood why it works: you remember something you had to dig out yourself far longer than something you were handed. When I asked for extra time on a harder topic, the answer was yes without a debate.
+Most of the value does not come from the lessons. It comes from the awkward middle stretch where you have read enough to feel confident, tried enough to feel stuck, and are one wrong click away from breaking something you spent two days setting up. Everything I actually kept is from that stretch. The polished intro weeks and the tidy final demo are the parts I remember least.
 
-### Materials
+### What I would tell someone starting next week
 
-The written materials are strong on the fundamentals and thinner on the newer or more specialised topics, where I ended up reading vendor documentation directly. That is not a real problem, but a short pointer list ("for this topic, go read X") inside the material would save a few hours per participant.
+Do not open the console before you can draw the thing on paper. Pick boring names and stick to them, because past-you always names things worse than you think. Turn cost alerts on before you turn anything else on. When a step does not work, close the tab, walk for ten minutes, and try again with fresh eyes instead of clicking harder.
 
-### Fit with what I already knew
+### Where I lost the most time
 
-Roughly 60% overlapped with things I had touched before and 40% was new territory. That ratio felt right: familiar enough that I did not drown in the first week, new enough that I did not coast in the last one.
+Copy-pasting commands I did not read. Skipping the small "verify it works" step because the previous three worked. Blaming the tool before blaming my own typo. All of these are cheap lessons on paper and expensive lessons in practice.
 
-### Program rhythm
+### What the format got right
 
-FCAJ paced things well: short standups, a mid-program review, a demo at the end, no manufactured deadlines. The weekly worklog, which I resisted at first, turned out to be more useful than I expected for spotting where I was actually stuck.
+A small group, a real deliverable, and enough rope to hang yourself if you were not careful. The absence of hand-holding was frustrating in week two and obviously correct by week eight. Nothing sharpens attention like knowing no one is going to bail you out at 11pm.
 
-### Onboarding
+### What I would change
 
-The first-week onboarding is the weakest part. I spent about three days figuring out who does what and where the internal documents live. A single "start here" page for new participants would remove that friction almost entirely.
+A shared page of common mistakes, updated by each cohort, would save the next group a lot of the same bruises. A short session on writing itself, not just building, because every good engineer I know can explain their work in plain sentences and every stuck one cannot. And a clearer statement up front that this is not a course, it is a workshop, and the difference matters.
 
-### Overall
+### On asking for help
 
-What I was most satisfied with: finishing with something real, not just slides. Would I recommend the program to a friend: yes, with the honest warning that it expects a lot of self-driven work and is not a fit for anyone who wants to be walked through every step.
+I asked too late, too often. Late because I did not want to look slow, often because when I finally asked I dumped every unrelated question at once. The version that works: ask early, ask narrow, come back with what you tried. Nobody minds a specific question. Everyone minds a vague one.
 
-### Suggestions
+### Closing
 
-If the format allows, I would add a mid-program session with a participant from the previous cohort so we get the perspective of someone who just went through it. I would also be happy to keep attending FCAJ technical talks afterwards, including as a volunteer helping the next cohort.
+I am leaving this program more patient than I came in and less impressed by tools than I used to be. Both feel like the right direction. Thanks to the people who answered questions that were probably obvious, and to the ones who let me sit with a problem long enough to solve it myself.
