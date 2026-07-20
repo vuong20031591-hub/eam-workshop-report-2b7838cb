@@ -8,30 +8,26 @@ pre: " <b> 1.3. </b> "
 
 ## WEEK 3 WORKLOG
 
-### Week 3 Objectives
+### Focus
 
-Chapter 5.3 Infrastructure, part one. This is the first week I actually build something on AWS: a VPC with public and private subnets and the gateways that let traffic in and out. I followed the workshop steps closely and drew every subnet on paper as I created it.
+Network. Lock the VPC layout so everything downstream (ALB, ECS, EFS, Redis) has a stable place to land.
 
-### Tasks to be carried out this week
+### What I did
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Read chapter 5.3 part A end to end, wrote down what each subnet is for. | 03/05/2026 | 03/05/2026 | - |
-| 2 | Created `upscale-vpc` with CIDR `10.0.0.0/16`. | 04/05/2026 | 04/05/2026 | [VPC](https://docs.aws.amazon.com/vpc/latest/userguide/) |
-| 3 | Created two public subnets and two private subnets across `1a` and `1b`. | 05/05/2026 | 05/05/2026 | - |
-| 4 | Attached an Internet Gateway to the VPC. | 06/05/2026 | 06/05/2026 | - |
-| 5 | Created a NAT Gateway in the public subnet so private tasks can reach the internet. | 07/05/2026 | 07/05/2026 | - |
-| 6 | Set up route tables: public → IGW, private → NAT. | 08/05/2026 | 08/05/2026 | - |
-| 7 | Closed `UPS-3` on Linear, updated the sprint board, took `UPS-4` (SGs + IAM roles). | 09/05/2026 | 09/05/2026 | - |
+- Broke `UPS-5` (VPC) into sub-tickets: CIDR plan, subnets, routing, NAT, endpoints.
+- Ran a whiteboard session on the topology, then wrote it up so the team is not arguing from memory.
+- Reviewed the network diagram the team produced, pushed back on a single-AZ shortcut.
+- Reviewed PRs for subnet and route table changes.
+- Hands-on: chose CIDR (`10.20.0.0/16`), split public/private subnets across two AZs, decided on one NAT to keep cost sane, listed the VPC endpoints we actually need (S3, ECR, CloudWatch Logs). Wrote the network ADR.
 
-### Week 3 Achievements
+### Result
 
-The network is up. I can see the VPC and all four subnets in the console. A test EC2 in a public subnet reaches the internet; a test EC2 in a private subnet reaches it only through NAT. That is exactly what the workshop said should happen.
+VPC design merged as an ADR. Team knows which subnet each future service belongs in without asking me.
 
-### Challenges & Lessons
+### Friction
 
-I mixed up the route tables the first time and my "private" subnet had a direct route to the IGW, which defeats the point. Lesson: after every route table change, click into it and read the routes back before moving on.
+Cost vs redundancy on NAT. Went with one NAT for now, noted a follow-up ticket to add a second before production traffic.
 
-### Next Week Plan
+### Next week
 
-Finish chapter 5.3 (security groups, IAM roles) on `UPS-4`, then start chapter 5.4 Storage.
+Chapter 5.4. Security Groups and S3. I will own the bucket and policy conventions.

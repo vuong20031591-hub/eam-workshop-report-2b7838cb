@@ -1,37 +1,33 @@
 ---
-title: "Week 8 Worklog"
+title: "Worklog Tuần 8"
 date: 2024-01-01
 weight: 8
 chapter: false
 pre: " <b> 1.8. </b> "
 ---
 
-## WEEK 8 WORKLOG
+## WORKLOG TUẦN 8
 
-### Week 8 Objectives
+### Trọng tâm
 
-Chương 5.6 Access. Đặt Application Load Balancer trước ECS service, đưa traffic HTTP thật vào API từ ngoài VPC.
+Đặt Application Load Balancer trước API và làm routing rõ ràng.
 
-### Tasks to be carried out this week
+### Việc tôi làm
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Tạo ALB `upscale-alb` ở 2 public subnet. | 07/06/2026 | 07/06/2026 | [ALB](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/) |
-| 2 | Tạo target group `upscale-api-tg` với health check ở `/health`. | 08/06/2026 | 08/06/2026 | - |
-| 3 | Đăng ký ECS service vào target group. | 09/06/2026 | 09/06/2026 | - |
-| 4 | Thêm listener HTTP port 80 → target group. | 10/06/2026 | 10/06/2026 | - |
-| 5 | Xem target chuyển từ `initial` sang `healthy`, cuối cùng gõ DNS ALB từ trình duyệt là ra. | 11/06/2026 | 11/06/2026 | - |
-| 6 | Upload ảnh thật qua API, thấy file xuất hiện trong S3. | 12/06/2026 | 12/06/2026 | - |
-| 7 | Đóng `UPS-10` trên Linear, nhận `UPS-11` (CloudFront + WAF). | 13/06/2026 | 13/06/2026 | - |
+- Chia `UPS-12` thành: dựng ALB, target group cho FastAPI, listener rule, chứng chỉ TLS qua ACM.
+- Chủ trì buổi ngắn về path routing: `/api/*` sang FastAPI, `/health` cho balancer, còn lại 404.
+- Review PR ALB, yêu cầu tắt stickiness (job async) và nâng idle timeout lên 120s cho long polling.
+- Review cấu hình target group, siết health check `/health` với ngưỡng 2/2.
+- Tự làm: chọn spec health check, request chứng chỉ ACM, viết kế hoạch DNS cho tuần sau, cập nhật deploy checklist.
 
-### Week 8 Achievements
+### Kết quả
 
-API đã tiếp cận được từ internet. End-to-end chạy: trình duyệt → ALB → ECS task → S3. Tuần này Upscale AI mới hết là sơ đồ trong sổ.
+FastAPI tiếp cận được qua ALB bằng HTTPS. Health check ổn, không có target lấp lửng.
 
-### Challenges & Lessons
+### Khó khăn
 
-Health check báo `unhealthy` liên tục vì SG của ECS chưa cho SG của ALB vào port container. Tôi để nhầm chiều rule. Đọc SG từ cả hai phía (nguồn và đích) là thói quen nhỏ tôi muốn giữ.
+Validate ACM kẹt nửa ngày vì bản ghi DNS ở sai hosted zone. Ghi lại đúng luồng validate vào runbook.
 
-### Next Week Plan
+### Kế hoạch tuần sau
 
-Chương 5.7 Delivery: ACM cert, CloudFront distribution, WAF. Theo dõi ở `UPS-11`.
+Chương 5.9. CloudFront trước ALB, WAF phía trên, và Route 53 trỏ về.

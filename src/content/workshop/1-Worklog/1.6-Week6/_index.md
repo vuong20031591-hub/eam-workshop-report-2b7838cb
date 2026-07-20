@@ -8,30 +8,26 @@ pre: " <b> 1.6. </b> "
 
 ## WEEK 6 WORKLOG
 
-### Week 6 Objectives
+### Focus
 
-Chapter 5.5 Application, first half: stand up ElastiCache Redis for caching and SQS for the async job queue. These are the two supporting pieces the FastAPI app will lean on, so I set them up before the ECS cluster itself.
+Redis and SQS. The two pieces that decide whether the system stays responsive under load.
 
-### Tasks to be carried out this week
+### What I did
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Created ElastiCache subnet group with the two private subnets. | 24/05/2026 | 24/05/2026 | [ElastiCache](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/) |
-| 2 | Created Redis cluster `upscale-redis` on `cache.t3.micro`. | 25/05/2026 | 25/05/2026 | - |
-| 3 | Connected to Redis from a test EC2, ran `PING` → got `PONG`. Small win. | 26/05/2026 | 26/05/2026 | - |
-| 4 | Created SQS queue `upscale-job-queue` and a dead-letter queue for failed jobs. | 27/05/2026 | 27/05/2026 | [SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/) |
-| 5 | Sent and received a test message with the AWS CLI so I could see the queue actually working. | 28/05/2026 | 28/05/2026 | - |
-| 6 | Wrote a short Linear comment on `UPS-7` about what Redis and SQS are for in my own words. | 29/05/2026 | 29/05/2026 | - |
-| 7 | Closed `UPS-7`, opened `UPS-8` (ECS cluster + task definitions). | 30/05/2026 | 30/05/2026 | - |
+- Split the work into `UPS-9` (Redis) and `UPS-10` (SQS) with clear owners.
+- Chaired a design session on the queue shape: one main queue plus a dead-letter queue with a redrive after 3 attempts, visibility timeout matched to the p95 upscale time.
+- Reviewed the Redis config PR, pushed back on a single-node setup and asked for multi-AZ.
+- Reviewed the worker PR that consumes SQS, flagged a missing message-delete on failure path.
+- Hands-on: wrote the job message schema (JSON: job_id, s3_input, s3_output, params, submitted_at), the retry policy, and the cache key convention.
 
-### Week 6 Achievements
+### Result
 
-Redis and SQS are both live and reachable from my test EC2. Explaining them in the Linear comment forced me to actually understand them, not just click through the wizard.
+Queue and cache are in place with a schema everyone codes against. DLQ visible on the CloudWatch board so we notice failures early.
 
-### Challenges & Lessons
+### Friction
 
-I could not connect to Redis at first. It turned out my test EC2 was in a different security group and the Redis SG only allowed the ECS SG. Lesson: when a connection times out, first suspect the security group, not the code.
+Visibility timeout was set too low at first, so long jobs got retried while still running. Bumped to 15 minutes and documented why.
 
-### Next Week Plan
+### Next week
 
-Chapter 5.5 second half: ECS cluster with EC2 GPU instances, task definitions, services. Track on `UPS-8`.
+Chapter 5.7. Stand up the ECS cluster and get the first task running.

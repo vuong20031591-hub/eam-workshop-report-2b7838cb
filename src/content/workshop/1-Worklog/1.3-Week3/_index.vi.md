@@ -1,37 +1,33 @@
 ---
-title: "Week 3 Worklog"
+title: "Worklog Tuần 3"
 date: 2024-01-01
 weight: 3
 chapter: false
 pre: " <b> 1.3. </b> "
 ---
 
-## WEEK 3 WORKLOG
+## WORKLOG TUẦN 3
 
-### Week 3 Objectives
+### Trọng tâm
 
-Chương 5.3 Infrastructure, phần 1. Tuần đầu tiên tôi thật sự dựng thứ gì đó trên AWS: một VPC với subnet public/private và các gateway để traffic ra vào. Tôi làm theo workshop từng bước và vẽ tay từng subnet khi tạo xong.
+Mạng. Chốt layout VPC để mọi thứ phía sau (ALB, ECS, EFS, Redis) có chỗ đặt ổn định.
 
-### Tasks to be carried out this week
+### Việc tôi làm
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Đọc hết chương 5.3 phần A, ghi lại mỗi subnet để làm gì. | 03/05/2026 | 03/05/2026 | - |
-| 2 | Tạo `upscale-vpc` CIDR `10.0.0.0/16`. | 04/05/2026 | 04/05/2026 | [VPC](https://docs.aws.amazon.com/vpc/latest/userguide/) |
-| 3 | Tạo 2 public subnet và 2 private subnet ở `1a` và `1b`. | 05/05/2026 | 05/05/2026 | - |
-| 4 | Attach Internet Gateway vào VPC. | 06/05/2026 | 06/05/2026 | - |
-| 5 | Tạo NAT Gateway ở public subnet để task private ra internet được. | 07/05/2026 | 07/05/2026 | - |
-| 6 | Set route table: public → IGW, private → NAT. | 08/05/2026 | 08/05/2026 | - |
-| 7 | Đóng `UPS-3` trên Linear, cập nhật sprint board, nhận `UPS-4` (SG + IAM roles). | 09/05/2026 | 09/05/2026 | - |
+- Chia `UPS-5` (VPC) thành sub-ticket: CIDR plan, subnet, routing, NAT, endpoint.
+- Chủ trì buổi vẽ bảng cho topology, xong ngồi viết lại để nhóm không phải cãi nhau bằng trí nhớ.
+- Review sơ đồ mạng nhóm dựng, phản đối phương án single-AZ cho tiết kiệm.
+- Review PR subnet và route table.
+- Tự làm: chọn CIDR (`10.20.0.0/16`), tách public/private subnet trên hai AZ, chốt một NAT cho đỡ tốn, liệt kê VPC endpoint thực sự cần (S3, ECR, CloudWatch Logs). Viết ADR mạng.
 
-### Week 3 Achievements
+### Kết quả
 
-Network chạy được. VPC và cả 4 subnet hiện đủ trên console. EC2 test ở public subnet ra internet ok; EC2 ở private subnet chỉ ra được qua NAT. Đúng như workshop nói.
+Thiết kế VPC merge thành ADR. Nhóm biết mỗi service sau này thuộc subnet nào, không phải hỏi lại.
 
-### Challenges & Lessons
+### Khó khăn
 
-Lần đầu tôi cấu hình nhầm route table, subnet "private" lại có đường trực tiếp ra IGW — mất luôn ý nghĩa. Bài học: sau mỗi lần đổi route, click vào đọc lại route rồi mới đi tiếp.
+Cân chi phí và dự phòng cho NAT. Trước mắt một NAT, ghi follow-up để thêm cái thứ hai trước khi lên prod.
 
-### Next Week Plan
+### Kế hoạch tuần sau
 
-Hoàn tất chương 5.3 (security group, IAM role) trong `UPS-4`, sau đó bắt đầu chương 5.4 Storage.
+Chương 5.4. Security Group và S3. Tôi sẽ chốt convention bucket và policy.

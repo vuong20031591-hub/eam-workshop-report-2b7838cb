@@ -8,30 +8,26 @@ pre: " <b> 1.10. </b> "
 
 ## WEEK 10 WORKLOG
 
-### Week 10 Objectives
+### Focus
 
-Chapter 5.8 Observability. Send logs from ECS to CloudWatch, build a small dashboard, and add one alarm so I know when the API is having a bad day.
+Cognito for user sign-in and a CloudWatch view that actually tells us when things are wrong.
 
-### Tasks to be carried out this week
+### What I did
 
-| Day | Task | Start Date | Completion Date | Reference Material |
-| --- | --- | --- | --- | --- |
-| 1 | Created CloudWatch log groups `/ecs/upscale-api` and `/ecs/upscale-postgres`. | 21/06/2026 | 21/06/2026 | [CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/) |
-| 2 | Confirmed the ECS task is streaming stdout into the log group. | 22/06/2026 | 22/06/2026 | - |
-| 3 | Built a CloudWatch dashboard with 4 widgets: request count, 5xx rate, CPU, GPU util. | 23/06/2026 | 23/06/2026 | - |
-| 4 | Created one alarm on 5xx rate > 5% for 5 minutes. | 24/06/2026 | 24/06/2026 | - |
-| 5 | Wired the alarm to my email through SNS. | 25/06/2026 | 25/06/2026 | [SNS](https://docs.aws.amazon.com/sns/latest/dg/) |
-| 6 | Broke the app on purpose (killed a task) to see the alarm actually fire. | 26/06/2026 | 26/06/2026 | - |
-| 7 | Closed `UPS-12` on Linear, pulled `UPS-13` (deploy the frontend). | 27/06/2026 | 27/06/2026 | - |
+- Split the work into `UPS-15` (Cognito user pool + Google OAuth) and `UPS-16` (observability).
+- Chaired a design on the auth flow: Cognito user pool, hosted UI, Google as an identity provider, ID token exchanged for a session cookie on the FastAPI side.
+- Reviewed the Cognito PR, tightened the OAuth callback list to prod + local dev only.
+- Reviewed the CloudWatch dashboard PR and cut half the widgets because no one would look at them.
+- Hands-on: wrote the auth flow doc for the team, and picked the alarms that page us (ALB 5xx > 1% for 5 min, SQS DLQ non-empty, GPU utilisation > 90% sustained, ECS service unhealthy).
 
-### Week 10 Achievements
+### Result
 
-I can watch the API from a single tab. The alarm works end to end: kill a task, get an email. This is the first week the project felt like something I could operate, not just build.
+Users can sign in with Google, the API validates tokens, and the dashboard shows the four numbers we actually care about.
 
-### Challenges & Lessons
+### Friction
 
-Logs did not show up at first because the task role did not have `logs:CreateLogStream`. The error hides in the "Stopped reason" of the task. Lesson: check the task events before opening the code.
+Cognito hosted UI CORS mismatch cost a few hours. Wrote a short "callback URL rules" note in the runbook.
 
-### Next Week Plan
+### Next week
 
-Chapter 5.9 Deployment: build the frontend, upload to S3, invalidate CloudFront. Track on `UPS-13`.
+Chapter 5.9 wrap-up. End-to-end deployment rehearsal and demo.
