@@ -6,38 +6,40 @@ chapter: false
 pre: " <b> 7. </b> "
 ---
 
-> Here, you can freely share your personal opinions about your experience participating in the First Cloud AI Journey program. This will help the FCAJ team improve any shortcomings based on the following aspects:
+This is where I write down what I actually thought about the Upscale AI workshop and the First Cloud AI Journey program around it. I want to be honest about both the parts that worked and the parts that could be better, so the FCAJ team has real input for the next cohort.
 
-### Overall Evaluation
+### The workshop itself
 
-**1. Working Environment**  
-The working environment is very friendly and open. FCAJ members are always willing to help whenever I encounter difficulties, even outside working hours. The workspace is tidy and comfortable, helping me focus better. However, I think it would be nice to have more social gatherings or team bonding activities to strengthen relationships.
+The brief was well chosen. Upscale AI is small enough to build solo, but hard enough because it forces you into GPU compute, stateful services (EFS, PostgreSQL, Redis), and an async queue. Pick a stateless app without GPU and you skip the most interesting part of AWS, which is ECS on EC2 with capacity providers. That was the hardest chapter and also the one I got the most out of.
 
-**2. Support from Mentor / Team Admin**  
-The mentor provides very detailed guidance, explains clearly when I don’t understand, and always encourages me to ask questions. The admin team supports administrative tasks, provides necessary documents, and creates favorable conditions for me to work effectively. I especially appreciate that the mentor allows me to try and solve problems myself instead of just giving the answer.
+### Mentor and materials
 
-**3. Relevance of Work to Academic Major**  
-The tasks I was assigned align well with the knowledge I learned at university, while also introducing me to new areas I had never encountered before. This allowed me to both strengthen my foundational knowledge and gain practical skills.
+The mentor let me try first and only stepped in when I was clearly stuck. The first three weeks that annoyed me because it cost time, but by week four I understood why it works. The workshop materials are detailed on networking and ECS, thinner on Cognito and CI/CD. I ended up reading AWS docs directly for those two, which is not a problem, but worth patching in the next revision.
 
-**4. Learning & Skill Development Opportunities**  
-During the internship, I learned many new skills such as using project management tools, teamwork skills, and professional communication in a corporate environment. The mentor also shared valuable real-world experiences that helped me better plan my career path.
+### Fit with what I already knew
 
-**5. Company Culture & Team Spirit**  
-The company culture is very positive: everyone respects each other, works seriously but still keeps things enjoyable. When there are urgent projects, everyone works together and supports one another regardless of their position. This made me feel like a real part of the team, even as an intern.
+Roughly 60% overlapped with what I had done before (Linux, Docker, basic networking) and 40% was new territory: fine-grained IAM, ALB target groups, EFS mount targets, ElastiCache. That ratio is about right. Familiar enough that I did not drown, new enough that I did not coast.
 
-**6. Internship Policies / Benefits**  
-The company provides an internship allowance and offers flexible working hours when needed. In addition, having the opportunity to join internal training sessions is a big plus.
+### What I learned
 
----
+I picked up the habit of writing an architecture proposal before touching the Console, reading the AWS bill line by line to find waste, and cleaning up resources in reverse creation order. On the writing side, keeping a weekly worklog even in slow weeks was more useful than I expected.
 
-### Additional Questions
-- What did you find **most satisfying** during your internship?  
-- What do you think the company **should improve** for future interns?  
-- If recommending to a friend, would you **suggest they intern here**? Why or why not?  
+### Program rhythm
 
----
+FCAJ paced things well: short standups, a mid-program review, a demo at the end. No manufactured deadlines. When I asked for an extra week because Cognito was more work than planned, the mentor said yes without a debate.
 
-### Suggestions & Expectations
-- Do you have any suggestions to improve the internship experience?  
-- Would you like to continue this program in the future?  
-- Any other comments (free sharing):
+### Cost and policy
+
+The AWS credit covered the whole workshop as long as I was careful with NAT Gateway and did not leave EC2 running overnight. I forgot a couple of times and lost about 8 USD I did not need to lose. That was on me, not on the policy.
+
+### A few specific questions
+
+What I was most satisfied with: finishing the program with a system that actually runs, not slides. Typing a URL and watching the image come back upscaled from the backend was the strongest motivation I had.
+
+What I think could improve: the first-week onboarding is thin. I spent about three days figuring out who does what and where the internal docs live. A single "start here" page for new participants would save that time completely.
+
+Would I recommend it to a friend: yes, with the warning that the program expects a lot of self-driven work. It is not a fit for anyone who wants to be walked through every step.
+
+### Suggestions
+
+If it fits the format, I would add a mid-program session with a participant from the previous cohort, so we get the perspective of someone who just went through it. I would also be happy to keep attending FCAJ technical talks after finishing, including as a volunteer helping the next cohort.

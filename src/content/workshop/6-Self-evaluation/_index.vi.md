@@ -6,29 +6,31 @@ chapter: false
 pre: " <b> 6. </b> "
 ---
 
-Ba tháng thực tập trôi qua nhanh hơn em tưởng. Em vào chương trình First Cloud AI Journey với mục tiêu học AWS ở mức đủ để tự dựng được một hệ thống thật, và ra khỏi chương trình với một nền tảng IoT chạy được cho lab ITea. Trong quãng đó em vừa học vừa làm: đọc tài liệu, thử trên tài khoản cá nhân, sai, sửa, hỏi mentor, rồi làm lại. Có tuần chạy đúng kế hoạch, có tuần phải viết lại kiến trúc từ đầu.
+Workshop Upscale AI dài hơn em dự tính. Kế hoạch nói bốn tuần, thực tế mất gần sáu, chủ yếu vì Real-ESRGAN chạy trên GPU behave khác hẳn khi phải share EFS và Redis với phần còn lại của hệ thống thật. Cuối cùng em có một ECS on EC2 setup chạy được end-to-end, một queue sống sót khi worker bị kill, và hiểu rõ vì sao serverless là instinct sai ngay từ đầu.
 
-Về tác phong, em cố gắng nhận việc chủ động, hỏi khi bí thay vì im, và giữ nhịp báo cáo tuần đều đặn. Vẫn còn những chỗ chưa ổn, đặc biệt là kỷ luật giờ giấc trong vài tuần đầu — em ghi nhận và xin đánh giá thẳng ở bảng dưới.
+Trong quãng đó em làm phần lớn qua AWS Console trước rồi mới script lại. Chậm hơn ở giai đoạn đầu, bù lại các mảnh nhớ lâu. Worklog em viết đều mỗi tuần, kể cả tuần chẳng có gì đáng viết.
+
+Để nhìn thẳng vào chỗ em đang đứng, em ghi lại như sau:
 
 | STT | Tiêu chí | Mô tả | Tốt | Khá | Trung bình |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Kiến thức và kỹ năng chuyên môn | Hiểu biết về ngành, áp dụng kiến thức vào thực tế, kỹ năng sử dụng công cụ, chất lượng công việc | ✅ | ☐ | ☐ |
-| 2 | Khả năng học hỏi | Tiếp thu kiến thức mới, học hỏi nhanh | ☐ | ✅ | ☐ |
-| 3 | Chủ động | Tự tìm hiểu, nhận nhiệm vụ mà không chờ chỉ dẫn | ✅ | ☐ | ☐ |
-| 4 | Tinh thần trách nhiệm | Hoàn thành công việc đúng hạn, đảm bảo chất lượng | ✅ | ☐ | ☐ |
-| 5 | Kỷ luật | Tuân thủ giờ giấc, nội quy, quy trình làm việc | ☐ | ☐ | ✅ |
-| 6 | Tính cầu tiến | Sẵn sàng nhận feedback và cải thiện bản thân | ☐ | ✅ | ☐ |
-| 7 | Giao tiếp | Trình bày ý tưởng, báo cáo công việc rõ ràng | ☐ | ✅ | ☐ |
-| 8 | Hợp tác nhóm | Làm việc hiệu quả với đồng nghiệp, tham gia nhóm | ✅ | ☐ | ☐ |
-| 9 | Ứng xử chuyên nghiệp | Tôn trọng đồng nghiệp, đối tác, môi trường làm việc | ✅ | ☐ | ☐ |
-| 10 | Tư duy giải quyết vấn đề | Nhận diện vấn đề, đề xuất giải pháp, sáng tạo | ☐ | ✅ | ☐ |
-| 11 | Đóng góp vào dự án/tổ chức | Hiệu quả công việc, sáng kiến cải tiến, ghi nhận từ team | ✅ | ☐ | ☐ |
-| 12 | Tổng thể | Đánh giá chung về toàn bộ quá trình thực tập | ✅ | ☐ | ☐ |
+| 1 | Kiến thức kỹ thuật | Các dịch vụ AWS cốt lõi, container, áp dụng vào một dự án thật | ✅ | ☐ | ☐ |
+| 2 | Tốc độ học | Tiếp thu dịch vụ mới (ECS, EFS, Cognito) và ghép chúng lại với nhau | ☐ | ✅ | ☐ |
+| 3 | Chủ động | Tự quyết bước tiếp theo mà không chờ checklist | ✅ | ☐ | ☐ |
+| 4 | Trách nhiệm | Làm xong việc đã bắt đầu và dọn dẹp tài nguyên sau đó | ✅ | ☐ | ☐ |
+| 5 | Kỷ luật | Giữ nhịp đều đặn, tắt những gì đã bật | ☐ | ☐ | ✅ |
+| 6 | Cầu tiến | Viết lại kiến trúc khi hướng cũ rõ ràng không chạy | ☐ | ✅ | ☐ |
+| 7 | Viết | Giải thích quyết định trong worklog và proposal | ☐ | ✅ | ☐ |
+| 8 | Làm việc với người khác | Hỏi sớm khi bí, trả lời tử tế khi được hỏi | ✅ | ☐ | ☐ |
+| 9 | Ứng xử chuyên nghiệp | Quản lý credential và tài nguyên chung cẩn thận | ✅ | ☐ | ☐ |
+| 10 | Giải quyết vấn đề | Chẩn đoán lỗi thay vì đoán mò | ☐ | ✅ | ☐ |
+| 11 | Đóng góp cho dự án | Bàn giao một hệ thống chạy được end-to-end | ✅ | ☐ | ☐ |
+| 12 | Tổng thể | Đánh giá chung cho toàn bộ workshop | ✅ | ☐ | ☐ |
 
 ### Những chỗ em muốn cải thiện
 
-Kỷ luật giờ giấc là thứ em phải sửa trước, đặc biệt là giờ vào sáng — có vài buổi em vào trễ và ảnh hưởng đến nhịp đứng standup của team. Em đã đổi giờ ngủ trong tháng cuối và thấy đỡ hơn, nhưng vẫn cần giữ.
+Kỷ luật chi phí là thứ em phải sửa trước. Em quên tắt một NAT Gateway qua cuối tuần và ăn một khoản nhỏ nhưng đáng xấu hổ vào bill. Từ đó em tag mọi thứ ngay ngày đầu và bật budget alarm trước khi tạo tài nguyên đầu tiên.
 
-Tư duy giải quyết vấn đề của em còn hơi tuyến tính: gặp lỗi là đi thẳng vào chi tiết trước khi nhìn tổng thể. Em muốn tập thói quen dừng lại vài phút để phác trước xem vấn đề nằm ở đâu, thay vì mở IDE và sửa ngay.
+Cách debug của em vẫn cắm quá sâu vào stack. Khi một ECS task fail to start, em mở logs trước khi xem IAM và networking, mà đó lại là hai thứ hay hỏng nhất. Em muốn tập thói quen đi từ trên xuống trước khi mở CloudWatch.
 
-Giao tiếp trong họp thì em ổn khi nói về kỹ thuật, nhưng còn lúng túng khi phải trình bày một quyết định với người không cùng chuyên môn. Em sẽ tập viết ngắn hơn và mở đầu bằng kết luận thay vì kể quy trình.
+Viết cho người không cùng chuyên môn vẫn là điểm yếu. Proposal đọc ổn với một kỹ sư khác, kém ổn với người chưa biết target group là gì. Lần tới em muốn mở đầu bằng kết quả, đẩy phần "đi dây" xuống appendix.
