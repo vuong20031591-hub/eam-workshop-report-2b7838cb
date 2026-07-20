@@ -17,7 +17,7 @@ Hoàn thiện `/upscale/standard` chạy LANCZOS bằng Pillow — mục tiêu l
 | Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
 | 1 | Implement `/upscale/standard` dùng `Pillow.Image.resize(LANCZOS)` cho scale 2/3/4. | 14/05/2026 | 14/05/2026 | [Pillow](https://pillow.readthedocs.io/) |
-| 2 | Cài **CloudWatch Agent** trên EC2, ship log `/var/log/upscaler/*.log` vào log group `/upscaler/be/dev`. | 15/05/2026 | 15/05/2026 | [CloudWatch Agent](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html) |
+| 2 | Cài **CloudWatch Agent** trên EC2, ship log `/var/log/upscale/*.log` vào log group `/upscale/be/dev`. | 15/05/2026 | 15/05/2026 | [CloudWatch Agent](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html) |
 | 3 | Cấu hình structured logging (JSON) với `structlog`, mỗi request có `request_id`. | 16/05/2026 | 17/05/2026 | - |
 | 4 | Viết 14 property tests với Hypothesis: kích thước, kênh màu, EXIF orientation. | 18/05/2026 | 19/05/2026 | [Hypothesis](https://hypothesis.readthedocs.io/) |
 | 5 | PSNR test: LANCZOS x4 vs Real-ESRGAN x4 trên bộ 20 ảnh mẫu — Real-ESRGAN cao hơn ~2.4 dB. | 20/05/2026 | 20/05/2026 | - |

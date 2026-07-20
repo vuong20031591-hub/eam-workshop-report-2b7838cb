@@ -16,7 +16,7 @@ pre: " <b> 1.8. </b> "
 
 | Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
-| 1 | Tạo **API Gateway HTTP API** `upscaler-api`, integration `HTTP_PROXY` tới EC2 public DNS (dev). | 19/06/2026 | 19/06/2026 | [API Gateway HTTP API](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html) |
+| 1 | Tạo **API Gateway HTTP API** `upscale-api`, integration `HTTP_PROXY` tới EC2 public DNS (dev). | 19/06/2026 | 19/06/2026 | [API Gateway HTTP API](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html) |
 | 2 | Gắn custom domain `api.upscaler.vuongtech.dev` + ACM cert `ap-southeast-1`. | 20/06/2026 | 20/06/2026 | - |
 | 3 | Bật **throttling** stage-level 10 rps burst 20, ghi log 4XX ra CloudWatch. | 21/06/2026 | 21/06/2026 | - |
 | 4 | Cấu hình CORS trên API Gateway (không xử lý ở FastAPI nữa). | 22/06/2026 | 22/06/2026 | - |

@@ -17,7 +17,7 @@ Generate API documentation from FastAPI's OpenAPI, deploy Redoc to S3+CloudFront
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
 | 1 | Export `openapi.json`, use `redocly` to build static HTML. | 07/07/2026 | 07/07/2026 | [Redoc](https://github.com/Redocly/redoc) |
-| 2 | Deploy docs to `s3://upscaler-docs-dev` + a secondary CloudFront distribution. | 08/07/2026 | 08/07/2026 | - |
+| 2 | Deploy docs to `s3://upscale-docs` + a secondary CloudFront distribution. | 08/07/2026 | 08/07/2026 | - |
 | 3 | Create secret `upscaler/dev/analytics` in **Secrets Manager**, grant IAM read policy to the EC2 role. | 09/07/2026 | 09/07/2026 | [Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/) |
 | 4 | Refactor `APIConfig`: when `USE_SECRETS_MANAGER=true` → call `secretsmanager:GetSecretValue`, cache for 5 minutes. | 10/07/2026 | 11/07/2026 | - |
 | 5 | Enable **AWS WAF v2** WebACL with managed rule `AWSManagedRulesCommonRuleSet` + rate-based rule 2000 req/5min/IP. | 12/07/2026 | 13/07/2026 | [AWS WAF](https://docs.aws.amazon.com/waf/latest/developerguide/) |

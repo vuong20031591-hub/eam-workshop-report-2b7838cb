@@ -16,7 +16,7 @@ Put API Gateway HTTP API in front of EC2 FastAPI with a custom domain and ACM ce
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Create **API Gateway HTTP API** `upscaler-api`, `HTTP_PROXY` integration to the EC2 public DNS (dev). | 19/06/2026 | 19/06/2026 | [API Gateway HTTP API](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html) |
+| 1 | Create **API Gateway HTTP API** `upscale-api`, `HTTP_PROXY` integration to the EC2 public DNS (dev). | 19/06/2026 | 19/06/2026 | [API Gateway HTTP API](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html) |
 | 2 | Attach custom domain `api.upscaler.vuongtech.dev` + ACM cert in `ap-southeast-1`. | 20/06/2026 | 20/06/2026 | - |
 | 3 | Enable stage-level **throttling** 10 rps / burst 20, log 4XX to CloudWatch. | 21/06/2026 | 21/06/2026 | - |
 | 4 | Configure CORS on API Gateway (FastAPI no longer handles it). | 22/06/2026 | 22/06/2026 | - |

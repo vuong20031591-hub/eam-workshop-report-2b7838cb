@@ -18,10 +18,10 @@ This week the attention swings over to FE. Init the `upscale-FE` project with Ta
 | --- | --- | --- | --- | --- |
 | 1 | Init `upscale-FE`: **TanStack Start** (Vite 8) + Tailwind v4 + shadcn/ui + react-dropzone + lucide-react + sonner. | 23/05/2026 | 23/05/2026 | [TanStack Start](https://tanstack.com/start) |
 | 2 | Build `UploadZone`, `ModeToggle`, `ResultCard` (file routes under `src/routes/*`, TanStack Query); call BE via `VITE_API_URL`. | 24/05/2026 | 25/05/2026 | [TanStack Router](https://tanstack.com/router) |
-| 3 | Create **S3 bucket** `upscaler-fe-dev` (enable static website hosting), block public access + OAC. | 26/05/2026 | 26/05/2026 | [CloudFront OAC](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) |
+| 3 | Create **S3 bucket** `upscale-fe` (enable static website hosting), block public access + OAC. | 26/05/2026 | 26/05/2026 | [CloudFront OAC](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) |
 | 4 | Create **CloudFront distribution** in front of S3, default cache policy + a custom one for hashed `/assets/*` (1 year), SPA fallback `403/404 → /index.html`. | 27/05/2026 | 28/05/2026 | [CloudFront](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/) |
 | 5 | Request **ACM certificate** for `upscaler.vuongtech.dev` (must live in `us-east-1` for CloudFront). | 29/05/2026 | 29/05/2026 | [ACM](https://docs.aws.amazon.com/acm/latest/userguide/) |
-| 6 | CI on GitHub Actions: `vite build` → sync `dist/` to `s3://upscaler-fe-dev` → `cloudfront create-invalidation`. | 30/05/2026 | 30/05/2026 | - |
+| 6 | CI on GitHub Actions: `vite build` → sync `dist/` to `s3://upscale-fe` → `cloudfront create-invalidation`. | 30/05/2026 | 30/05/2026 | - |
 | 7 | Deploy preview to CloudFront, TTFB around 85ms from the Singapore edge. | 31/05/2026 | 31/05/2026 | - |
 
 ### Week 5 Achievements

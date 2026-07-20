@@ -20,8 +20,8 @@ Chạy load test 20 concurrent uploads qua API Gateway để tìm bottleneck GPU
 | 2 | Đo p50=6.2s, p90=9.8s, GPU util ~95% (từ CloudWatch custom metric). | 29/06/2026 | 29/06/2026 | - |
 | 3 | Bật `TILE_SIZE=512` cho input >2K, đo lại p90 giảm còn 8.1s, hết OOM. | 30/06/2026 | 01/07/2026 | - |
 | 4 | Serialize AI request qua `asyncio.Lock`, Standard mode chạy song song. | 02/07/2026 | 03/07/2026 | - |
-| 5 | Publish custom metric `Upscaler/GPU/Utilization` bằng CloudWatch Agent + `nvidia-smi`. | 04/07/2026 | 04/07/2026 | - |
-| 6 | Tạo **CloudWatch Dashboard** `upscaler-dev`: API Gateway 4XX/5XX/latency + GPU util + p90. | 05/07/2026 | 05/07/2026 | [CloudWatch Dashboards](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html) |
+| 5 | Publish custom metric `Upscale/GPU/Utilization` bằng CloudWatch Agent + `nvidia-smi`. | 04/07/2026 | 04/07/2026 | - |
+| 6 | Tạo **CloudWatch Dashboard** `upscale-dev`: API Gateway 4XX/5XX/latency + GPU util + p90. | 05/07/2026 | 05/07/2026 | [CloudWatch Dashboards](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html) |
 | 7 | Set **CloudWatch Alarm**: p90 > 12s trong 5 phút → SNS email. | 06/07/2026 | 06/07/2026 | [CloudWatch Alarms](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html) |
 
 ### Kết quả đạt được Tuần 9

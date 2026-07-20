@@ -18,10 +18,10 @@ Tuần này chuyển sự chú ý sang FE. Init dự án `upscale-FE` bằng Tan
 | --- | --- | --- | --- | --- |
 | 1 | Init `upscale-FE`: **TanStack Start** (Vite 8) + Tailwind v4 + shadcn/ui + react-dropzone + lucide-react + sonner. | 23/05/2026 | 23/05/2026 | [TanStack Start](https://tanstack.com/start) |
 | 2 | Build `UploadZone`, `ModeToggle`, `ResultCard` (file routes `src/routes/*`, TanStack Query); gọi BE qua `VITE_API_URL`. | 24/05/2026 | 25/05/2026 | [TanStack Router](https://tanstack.com/router) |
-| 3 | Tạo **S3 bucket** `upscaler-fe-dev` (bật static website hosting), block public access + OAC. | 26/05/2026 | 26/05/2026 | [CloudFront OAC](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) |
+| 3 | Tạo **S3 bucket** `upscale-fe` (bật static website hosting), block public access + OAC. | 26/05/2026 | 26/05/2026 | [CloudFront OAC](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) |
 | 4 | Tạo **CloudFront distribution** trỏ về S3, cache policy default + custom cho `/assets/*` hash (1 năm), SPA fallback `403/404 → /index.html`. | 27/05/2026 | 28/05/2026 | [CloudFront](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/) |
 | 5 | Request **ACM certificate** cho `upscaler.vuongtech.dev` (region `us-east-1` cho CloudFront). | 29/05/2026 | 29/05/2026 | [ACM](https://docs.aws.amazon.com/acm/latest/userguide/) |
-| 6 | CI GitHub Actions build `vite build` → sync `dist/` sang `s3://upscaler-fe-dev` → `cloudfront create-invalidation`. | 30/05/2026 | 30/05/2026 | - |
+| 6 | CI GitHub Actions build `vite build` → sync `dist/` sang `s3://upscale-fe` → `cloudfront create-invalidation`. | 30/05/2026 | 30/05/2026 | - |
 | 7 | Deploy preview lên CloudFront, đo TTFB ~85ms từ Singapore edge. | 31/05/2026 | 31/05/2026 | - |
 
 ### Kết quả đạt được Tuần 5

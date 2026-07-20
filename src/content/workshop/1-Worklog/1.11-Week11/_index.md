@@ -16,11 +16,11 @@ Move from a single EC2 to an Auto Scaling Group with a launch template and user-
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Create **Launch Template** `upscaler-be-lt` (g5.xlarge, IAM role, user-data pulls ECR + `docker run`). | 16/07/2026 | 16/07/2026 | - |
-| 2 | Create **Auto Scaling Group** min=1 max=3, scaling policy targeting `Upscaler/GPU/Utilization = 70%`. | 17/07/2026 | 17/07/2026 | [EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/) |
+| 1 | Create **Launch Template** `upscale-gpu-lt` (g5.xlarge, IAM role, user-data pulls ECR + `docker run`). | 16/07/2026 | 16/07/2026 | - |
+| 2 | Create **Auto Scaling Group** min=1 max=3, scaling policy targeting `Upscale/GPU/Utilization = 70%`. | 17/07/2026 | 17/07/2026 | [EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/) |
 | 3 | Provision an internal **Application Load Balancer**, target group = ASG, health check `/health` every 15s. | 18/07/2026 | 19/07/2026 | [ALB](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/) |
 | 4 | Switch API Gateway integration from EC2 public DNS → **ALB DNS** (VPC Link). | 20/07/2026 | 20/07/2026 | [API Gateway VPC Link](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-private.html) |
-| 5 | Create **SQS** standard queue `upscaler-ai-jobs`, visibility timeout 300s; BE consumes via a polling loop (feature flag OFF for MVP). | 21/07/2026 | 22/07/2026 | [SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/) |
+| 5 | Create **SQS** standard queue `upscale-ai-jobs`, visibility timeout 300s; BE consumes via a polling loop (feature flag OFF for MVP). | 21/07/2026 | 22/07/2026 | [SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/) |
 | 6 | Playwright E2E on staging: upload → progress → download, all green. | 23/07/2026 | 23/07/2026 | [Playwright](https://playwright.dev/) |
 | 7 | Blue/green rollout: attach the new ASG to the ALB, drain the old — zero downtime. | 24/07/2026 | 24/07/2026 | - |
 
