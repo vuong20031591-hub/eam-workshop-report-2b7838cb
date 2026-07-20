@@ -4,13 +4,13 @@ flowchart LR
   CF --> S3FE["S3 Static FE<br/>(W5)"]
   CF --> APIGW["API Gateway HTTP API<br/>(W8) + WAF (W10)"]
   APIGW -->|VPC Link| ALB["Application Load Balancer<br/>(W11)"]
-  ALB --> ASG["Auto Scaling Group<br/>EC2 g5.xlarge GPU<br/>FastAPI + Real-ESRGAN<br/>(W3, W11)"]
-  ASG -->|boto3| S3IO["S3 upscaler-io<br/>weights / tmp / output<br/>(W2, W7)"]
+  ALB --> ASG["Auto Scaling Group<br/>EC2 g4dn.xlarge GPU<br/>FastAPI + Real-ESRGAN<br/>(W3, W11)"]
+  ASG -->|boto3| S3IO["S3 upscale-io<br/>weights / tmp / output<br/>(W2, W7)"]
   ASG --> CWL["CloudWatch Logs / Metrics / Alarms<br/>(W4, W9)"]
   ASG --> XRAY["AWS X-Ray<br/>(W6)"]
   ASG --> SM["Secrets Manager<br/>(W10)"]
-  ASG -.->|future async| SQS["SQS upscaler-ai-jobs<br/>(W11)"]
-  ECR["Amazon ECR<br/>upscaler-be image<br/>(W7)"] --> ASG
+  ASG -.->|future async| SQS["SQS upscale-job-queue<br/>(W11)"]
+  ECR["Amazon ECR<br/>upscale-be image<br/>(W7)"] --> ASG
   IAM["IAM users / roles<br/>Budgets · CloudTrail<br/>(W1)"] -.-> ASG
   IAM -.-> S3IO
   CE["Cost Explorer + Savings Plan<br/>(W12)"] -.-> ASG
