@@ -2,15 +2,16 @@ flowchart LR
   U["Người dùng"] -->|HTTPS| R53["Route 53<br/>(W12)"]
   R53 --> CF["CloudFront + WAF + ACM<br/>(W5, W10)"]
   CF --> S3FE["S3 Static FE<br/>(W5)"]
-  CF --> APIGW["API Gateway HTTP API<br/>(W8) + WAF (W10)"]
-  APIGW -->|VPC Link| ALB["Application Load Balancer<br/>(W11)"]
-  ALB --> ASG["Auto Scaling Group<br/>EC2 g4dn.xlarge GPU<br/>FastAPI + Real-ESRGAN<br/>(W3, W11)"]
-  ASG -->|boto3| S3IO["S3 upscale-io<br/>weights / tmp / output<br/>(W2, W7)"]
-  ASG --> CWL["CloudWatch Logs / Metrics / Alarms<br/>(W4, W9)"]
-  ASG --> XRAY["AWS X-Ray<br/>(W6)"]
-  ASG --> SM["Secrets Manager<br/>(W10)"]
-  ASG -.->|future async| SQS["SQS upscale-job-queue<br/>(W11)"]
-  ECR["Amazon ECR<br/>upscale-be image<br/>(W7)"] --> ASG
-  IAM["IAM users / roles<br/>Budgets · CloudTrail<br/>(W1)"] -.-> ASG
+  U -->|HTTPS| ALB["Application Load Balancer<br/>+ WAF + Cognito OIDC<br/>(W8, W10)"]
+  ALB --> ECS["ECS on EC2 (ASG capacity provider)<br/>g4dn.xlarge GPU · FastAPI + Real-ESRGAN<br/>(W3, W11)"]
+  ECS -->|boto3| S3IO["S3 upscale-io<br/>weights / tmp / output<br/>(W2, W7)"]
+  ECS --> EFS["EFS upscale-efs<br/>weights + pgdata<br/>(W11)"]
+  ECS --> REDIS["ElastiCache Redis<br/>upscale-redis (W11)"]
+  ECS --> CWL["CloudWatch Logs / Metrics / Alarms<br/>(W4, W9)"]
+  ECS --> XRAY["AWS X-Ray<br/>(W6)"]
+  ECS --> SM["Secrets Manager<br/>(W10)"]
+  ECS -.->|async jobs| SQS["SQS upscale-job-queue<br/>(W11)"]
+  ECR["Amazon ECR<br/>upscale-be image<br/>(W7)"] --> ECS
+  IAM["IAM users / roles<br/>Budgets · CloudTrail<br/>(W1)"] -.-> ECS
   IAM -.-> S3IO
-  CE["Cost Explorer + Savings Plan<br/>(W12)"] -.-> ASG
+  CE["Cost Explorer + Savings Plan<br/>(W12)"] -.-> ECS
