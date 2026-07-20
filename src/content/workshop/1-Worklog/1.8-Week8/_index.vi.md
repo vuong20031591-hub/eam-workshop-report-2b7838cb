@@ -1,37 +1,37 @@
 ---
-title: "Nhật ký công việc Tuần 8"
+title: "Week 8 Worklog"
 date: 2024-01-01
 weight: 8
 chapter: false
 pre: " <b> 1.8. </b> "
 ---
 
-## TUẦN 8 - NHẬT KÝ
+## WEEK 8 WORKLOG
 
-### Mục tiêu Tuần 8
+### Week 8 Objectives
 
-Auth week. Mình chốt dùng Cognito (managed, đỡ tự quản JWT), design API contract auth với Quân-Thắng, giao Khiêm provision ALB + WAF + Cognito user pool. Định nghĩa integration test suite để tuần 9 chạy load test có căn cứ.
+Tuần 8 tôi đầu tư vào auth và security baseline. Chốt Cognito thay vì self-managed JWT (ADR-004), viết spec rate limit trong FastAPI, và chốt WAF rule baseline trước khi mở public traffic.
 
-### Các công việc thực hiện trong tuần
+### Tasks to be carried out this week
 
-| Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
+| Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Chốt Cognito over JWT self-managed: ADR-004 — lý do (rotation, MFA, hosted UI); scope: email + Google OIDC. | 15/06/2026 | 15/06/2026 | [Cognito](https://docs.aws.amazon.com/cognito/) |
-| 2 | Design auth contract: FE dùng OIDC hosted UI, callback lưu token, gọi BE với `Authorization: Bearer`; sync với Quân-Thắng. | 16/06/2026 | 16/06/2026 | - |
-| 3 | Review Khiêm: Cognito user pool `upscale-users` + app client + Google identity provider + hosted UI domain. | 17/06/2026 | 17/06/2026 | - |
-| 4 | Review Khiêm: ALB `upscale-alb` HTTPS listener + target group EC2 + WAF rate-limit 100 req/5min/IP. | 18/06/2026 | 19/06/2026 | [ALB + Cognito](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-authenticate-users.html) |
-| 5 | Review PR Thắng: middleware verify JWT Cognito (JWKS cache 24h) + inject `user_id` vào request context. | 20/06/2026 | 20/06/2026 | - |
-| 6 | Review PR Quân: đăng nhập qua hosted UI + lưu token + refresh flow; approve. | 21/06/2026 | 21/06/2026 | - |
-| 7 | Design integration test suite (pytest) + list 20 scenario auth + upscale flow; giao Thắng implement tuần sau. | 21/06/2026 | 21/06/2026 | - |
+| 1 | Viết ADR-004 auth: chọn Cognito User Pool + Google Federation thay vì self-managed JWT; document trade-off. | 15/06/2026 | 15/06/2026 | [Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/) |
+| 2 | Viết spec Cognito setup: User Pool `upscale-users`, App Client, Google IdP; hosted UI domain. | 16/06/2026 | 16/06/2026 | - |
+| 3 | Review PR Cognito provision + FastAPI middleware verify JWT bằng JWKS. | 17/06/2026 | 17/06/2026 | [Cognito JWT Verify](https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html) |
+| 4 | Viết spec rate limit: `slowapi` 30 req/phút/user cho `/upscale/*`; return 429 với `Retry-After`. | 18/06/2026 | 18/06/2026 | [slowapi](https://slowapi.readthedocs.io/) |
+| 5 | Chốt WAF baseline: AWS Managed Rules Common + IP reputation + geo-block; log full request; giao provision. | 19/06/2026 | 19/06/2026 | [AWS WAF](https://docs.aws.amazon.com/waf/latest/developerguide/) |
+| 6 | Review PR FE tích hợp Cognito hosted UI + token refresh flow. | 20/06/2026 | 20/06/2026 | - |
+| 7 | Sprint retro: auth end-to-end, WAF live; note prep load test cho tuần 9. | 21/06/2026 | 21/06/2026 | - |
 
-### Kết quả đạt được Tuần 8
+### Week 8 Achievements
 
-Login flow chạy end-to-end qua Google. ALB làm TLS termination + WAF chặn rate-limit trước khi tới EC2. Token verify server-side đúng chuẩn (audience + issuer). Cả team đồng thuận dùng Cognito thay tự viết auth — decision này save cho project ít nhất 2 tuần công.
+Cognito + Google OAuth chạy end-to-end. WAF chặn được test payload SQLi/XSS ngay lần đầu bật. Rate limit 30 req/phút bảo vệ GPU khỏi bị lạm dụng. ADR-004 giúp giải thích với stakeholder tại sao không tự viết JWT.
 
-### Thách thức & Bài học
+### Challenges & Lessons
 
-Cognito hosted UI custom hạn chế — Quân hỏi có làm login form riêng được không, mình cân nhắc rồi giữ hosted UI vì effort custom quá lớn so với lợi ích. Đây là loại trade-off Lead phải quyết dứt khoát, không để team debate mãi. Rule mình dùng: nếu tự viết mất > 1 tuần và managed service đáp ứng 80% yêu cầu, chọn managed.
+Bài học lớn nhất khi chọn Cognito: rẻ hơn self-managed JWT không phải về tiền, mà về thời gian bảo trì. Tôi từng nghiêng về self-managed vì nghĩ đơn giản hơn, nhưng liệt kê ra checklist (password reset, MFA, refresh token rotation, revoke, audit log) mới thấy Cognito free được toàn bộ. Kỹ năng Lead cần rèn: khi phân vân, list checklist chi tiết thay vì cảm tính.
 
-### Kế hoạch tuần sau
+### Next Week Plan
 
-Load test (k6), tile inference cho ảnh > 4K, CloudWatch dashboard. Review kế hoạch với Khiêm + Thắng.
+Viết spec load test plan bằng k6. Viết spec tile-based inference cho ảnh 8K để tránh OOM GPU.

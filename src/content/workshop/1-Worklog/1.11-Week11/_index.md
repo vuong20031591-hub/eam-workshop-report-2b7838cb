@@ -10,28 +10,28 @@ pre: " <b> 1.11. </b> "
 
 ### Week 11 Objectives
 
-Tuần scale — lớn nhất project. Tôi chia thành 4 track song song: (1) Khiem provision ECS on EC2 + ASG + ALB target group; (2) Khiem set SQS + ElastiCache Redis + EFS; (3) Thang refactor rate limiter dùng Redis (UPS-2) + async worker consume SQS; (4) Quan viết Playwright E2E. Tôi làm coordinator, review daily.
+Migrate BE from a single EC2 to ECS on EC2 + ASG + SQS. My role: lock the detailed architecture, write the worker + autoscale policy spec, and review each PR along the migration path.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Design scale architecture: ECS on EC2 (g4dn.xlarge, ASG 1-4 instance), SQS `upscale-job-queue`, Redis `upscale-redis`, EFS `upscale-efs` cho weights + pgdata. | 13/07/2026 | 13/07/2026 | [ECS Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
-| 2 | Review Khiem: ECS cluster + task definition GPU + ASG capacity provider + scaling policy (target 70% CPU/GPU). | 14/07/2026 | 15/07/2026 | - |
-| 3 | Review Khiem: SQS queue + DLQ + visibility timeout 300s; ElastiCache Redis cluster 1 node cache.t3.small; EFS mount target 2 AZ. | 16/07/2026 | 16/07/2026 | [ElastiCache](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/) |
-| 4 | Review PR Thang UPS-2: rate limiter chuyển từ in-memory sang Redis (`redis-py` + sliding window); tests pass. | 17/07/2026 | 17/07/2026 | - |
-| 5 | Review PR Thang UPS-1: fix memory leak `_progress_store` (cleanup sau `done` + TTL 1h) + async worker consume SQS. | 18/07/2026 | 18/07/2026 | - |
-| 6 | Review PR Quan: Playwright E2E 8 scenario (login, upload, upscale, download, error, mobile) chạy CI xanh. | 19/07/2026 | 19/07/2026 | [Playwright](https://playwright.dev/) |
-| 7 | Load test lại: sustained 60 RPS OK, spike 100 RPS OK — ASG scale từ 1 lên 3 instance trong 4 phút. | 19/07/2026 | 19/07/2026 | - |
+| 1 | Locked the architecture: ALB → API ECS task (2 vCPU) → SQS `upscale-job-queue` → Worker ECS task on GPU (g4dn.xlarge). | 06/07/2026 | 06/07/2026 | - |
+| 2 | Reviewed the ECS cluster + ASG Capacity Provider (min 0, max 4, target 100% utilization) provisioning PR. | 07/07/2026 | 07/07/2026 | [Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
+| 3 | Wrote the worker spec: SQS long-poll 20s, process job, push status to Redis, retry x2, DLQ after 3 failures. | 08/07/2026 | 08/07/2026 | [SQS Long Polling](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html) |
+| 4 | Reviewed the `/upscale/ai` refactor PR: push job to SQS + return `job_id`; worker service consumes. | 09/07/2026 | 09/07/2026 | - |
+| 5 | Locked the autoscale policy: target tracking on `SQSMessagesVisible` = 5 msg/task; scale-in cooldown 300s. | 10/07/2026 | 10/07/2026 | [ECS Target Tracking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-autoscaling-targettracking.html) |
+| 6 | Ran a 100 VU load test: autoscale from 1 → 3 GPU instances in 4 minutes; p95 stayed at 11s. | 11/07/2026 | 11/07/2026 | - |
+| 7 | Sprint retro: ECS migration live; scale-to-0 at idle saves ~40% on the bill versus 24/7 EC2. | 12/07/2026 | 12/07/2026 | - |
 
 ### Week 11 Achievements
 
-Từ 20 RPS lên 60 RPS ổn định. Job dài (> 30s) chuyển sang SQS + async worker, ALB không còn timeout. Rate limiter Redis đúng ngữ nghĩa distributed. UPS-1, UPS-2 close. Playwright chạy CI, mỗi PR bây giờ có xác nhận E2E trước khi merge.
+The system handled a 100 VU burst with smooth autoscaling. Scale-to-0 unlocks meaningful cost savings during off-peak hours. SQS + DLQ mean jobs aren't lost when a worker crashes — with the old single EC2, a crash meant losing the request outright.
 
 ### Challenges & Lessons
 
-EFS latency ban đầu cao hơn EBS ~3x cho weights read → Khiem enable `provisioned-throughput` mode. Đây là loại chi tiết chỉ lộ ra khi load test thật; ADR tôi cập nhật lại note lesson này. Bài học Lead: design đúng lý thuyết chưa đủ, phải đo thật rồi mới ký ADR final. Nếu deploy production luôn thì user sẽ là người test hộ.
+ECS on EC2 is far more complex than Fargate — capacity provider, ASG, task placement all need tuning. But it buys us GPUs. Lesson for the Lead: when picking a stack that's expensive in operational complexity, prepare the runbook and alarms in Week 1, don't wait until a production incident forces the learning.
 
 ### Next Week Plan
 
-Go-live: Route 53 alias `upscale.dev`, cost review + Savings Plan, launch checklist. Sprint retro toàn project.
+Final week: launch checklist, game-day failover, incident post-mortem template, ops hand-off doc.

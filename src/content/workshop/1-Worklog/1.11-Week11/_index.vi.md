@@ -1,37 +1,37 @@
 ---
-title: "Nhật ký công việc Tuần 11"
+title: "Week 11 Worklog"
 date: 2024-01-01
 weight: 11
 chapter: false
 pre: " <b> 1.11. </b> "
 ---
 
-## TUẦN 11 - NHẬT KÝ
+## WEEK 11 WORKLOG
 
-### Mục tiêu Tuần 11
+### Week 11 Objectives
 
-Tuần scale — lớn nhất project. Mình chia thành 4 track song song: (1) Khiêm provision ECS on EC2 + ASG + ALB target group; (2) Khiêm set SQS + ElastiCache Redis + EFS; (3) Thắng refactor rate limiter dùng Redis (UPS-2) + async worker consume SQS; (4) Quân viết Playwright E2E. Mình làm coordinator, review daily.
+Migrate BE từ EC2 đơn sang ECS on EC2 + ASG + SQS. Vai trò tôi: chốt kiến trúc chi tiết, viết spec worker + autoscale policy, review từng PR trong migration path.
 
-### Các công việc thực hiện trong tuần
+### Tasks to be carried out this week
 
-| Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
+| Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Design scale architecture: ECS on EC2 (g4dn.xlarge, ASG 1-4 instance), SQS `upscale-job-queue`, Redis `upscale-redis`, EFS `upscale-efs` cho weights + pgdata. | 13/07/2026 | 13/07/2026 | [ECS Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
-| 2 | Review Khiêm: ECS cluster + task definition GPU + ASG capacity provider + scaling policy (target 70% CPU/GPU). | 14/07/2026 | 15/07/2026 | - |
-| 3 | Review Khiêm: SQS queue + DLQ + visibility timeout 300s; ElastiCache Redis cluster 1 node cache.t3.small; EFS mount target 2 AZ. | 16/07/2026 | 16/07/2026 | [ElastiCache](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/) |
-| 4 | Review PR Thắng UPS-2: rate limiter chuyển từ in-memory sang Redis (`redis-py` + sliding window); tests pass. | 17/07/2026 | 17/07/2026 | - |
-| 5 | Review PR Thắng UPS-1: fix memory leak `_progress_store` (cleanup sau `done` + TTL 1h) + async worker consume SQS. | 18/07/2026 | 18/07/2026 | - |
-| 6 | Review PR Quân: Playwright E2E 8 scenario (login, upload, upscale, download, error, mobile) chạy CI xanh. | 19/07/2026 | 19/07/2026 | [Playwright](https://playwright.dev/) |
-| 7 | Load test lại: sustained 60 RPS OK, spike 100 RPS OK — ASG scale từ 1 lên 3 instance trong 4 phút. | 19/07/2026 | 19/07/2026 | - |
+| 1 | Chốt kiến trúc: ALB → ECS task API (2 vCPU) → SQS `upscale-job-queue` → ECS task Worker GPU (g4dn.xlarge). | 06/07/2026 | 06/07/2026 | - |
+| 2 | Review PR provision ECS cluster + ASG Capacity Provider (min 0, max 4, target 100% utilization). | 07/07/2026 | 07/07/2026 | [Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
+| 3 | Viết spec worker: consume SQS long-poll 20s, xử lý job, push status Redis, retry x2, DLQ sau 3 lần fail. | 08/07/2026 | 08/07/2026 | [SQS Long Polling](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html) |
+| 4 | Review PR refactor `/upscale/ai` push job vào SQS + return `job_id`; worker service consume. | 09/07/2026 | 09/07/2026 | - |
+| 5 | Chốt autoscale policy: target tracking `SQSMessagesVisible` = 5 msg/task; scale-in cooldown 300s. | 10/07/2026 | 10/07/2026 | [ECS Target Tracking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-autoscaling-targettracking.html) |
+| 6 | Chạy load test 100 VU: autoscale từ 1 → 3 GPU instance trong 4 phút; p95 giữ 11s. | 11/07/2026 | 11/07/2026 | - |
+| 7 | Sprint retro: migration ECS live; scale-to-0 lúc 0 traffic tiết kiệm ~40% bill so với EC2 24/7. | 12/07/2026 | 12/07/2026 | - |
 
-### Kết quả đạt được Tuần 11
+### Week 11 Achievements
 
-Từ 20 RPS lên 60 RPS ổn định. Job dài (> 30s) chuyển sang SQS + async worker, ALB không còn timeout. Rate limiter Redis đúng ngữ nghĩa distributed. UPS-1, UPS-2 close. Playwright chạy CI, mỗi PR bây giờ có xác nhận E2E trước khi merge.
+Hệ thống chịu được burst 100 VU với autoscale mượt. Scale-to-0 mở ra khả năng giảm chi phí đáng kể vào giờ thấp điểm. SQS + DLQ đảm bảo không mất job khi worker crash — trước đây EC2 đơn crash là mất luôn request.
 
-### Thách thức & Bài học
+### Challenges & Lessons
 
-EFS latency ban đầu cao hơn EBS ~3x cho weights read → Khiêm enable `provisioned-throughput` mode. Đây là loại chi tiết chỉ lộ ra khi load test thật; ADR mình cập nhật lại note lesson này. Bài học Lead: design đúng lý thuyết chưa đủ, phải đo thật rồi mới ký ADR final. Nếu deploy production luôn thì user sẽ là người test hộ.
+ECS on EC2 phức tạp hơn Fargate rất nhiều — capacity provider, ASG, task placement đều phải chỉnh. Nhưng đổi lại có GPU. Bài học cho Lead: khi chọn tech đắt về operational complexity, phải chuẩn bị runbook và alarm ngay tuần đầu, không để rơi vào tình huống production incident mới học.
 
-### Kế hoạch tuần sau
+### Next Week Plan
 
-Go-live: Route 53 alias `upscale.dev`, cost review + Savings Plan, launch checklist. Sprint retro toàn project.
+Tuần cuối: viết launch checklist, chạy game-day test failover, viết post-mortem template, chuẩn bị hand-off doc cho vận hành.

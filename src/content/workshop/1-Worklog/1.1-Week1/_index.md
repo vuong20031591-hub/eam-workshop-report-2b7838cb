@@ -10,28 +10,28 @@ pre: " <b> 1.1. </b> "
 
 ### Week 1 Objectives
 
-Kickoff tuần đầu là việc của Lead: chốt scope MVP, chia team, dựng khung Linear + repo, và đặt guardrail AWS. Team ba người — Thang (BE core), Khiem (BE + AWS infra), Quan (FE) — nên phần lớn thời gian tôi bỏ vào việc viết brief, ngồi cùng từng người để chốt phạm vi, còn phần code thì để tuần sau khi issue đã rõ.
+In Week 1 I focused on locking the Upscale AI MVP scope, setting up the work-management stack on Linear and GitHub, and putting AWS guardrails in place before any code was written. My role in the project is Project Lead, so this week was about planning and setup — no implementation yet.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Kickoff meeting: chốt MVP (Real-ESRGAN x4 cho AI, LANCZOS cho Standard, CodeFormer face), viết product brief 2 trang. | 17/04/2026 | 17/04/2026 | - |
-| 2 | Tạo Linear workspace, team `UPS`, project **AI Upscaler**; định nghĩa label `BE / FE / Bug / Feature / Task`. | 17/04/2026 | 17/04/2026 | [Linear](https://linear.app/) |
-| 3 | Chia team: Thang (BE core), Khiem (BE + AWS infra), Quan (FE); assign Khiem set AWS account + IAM `upscale-deployer` + Budgets + CloudTrail. | 18/04/2026 | 18/04/2026 | - |
-| 4 | Tạo 2 GitHub repo `upscale-BE` (FastAPI) và `upscale-FE` (TanStack Start), setup branch protection main + PR review bắt buộc. | 18/04/2026 | 19/04/2026 | [GitHub Branch Protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches) |
-| 5 | Draft **API contract v0** (`/upscale/ai`, `/upscale/standard`, `/face/enhance`) — request/response schema, error codes. | 20/04/2026 | 21/04/2026 | - |
-| 6 | Review Khiem confirm: IAM `upscale-deployer` + AdministratorAccess + MFA, region `ap-southeast-1`, Budgets $10/tháng. | 22/04/2026 | 22/04/2026 | [IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) |
-| 7 | Sprint planning tuần 2: tạo issue UPS-* backlog, ưu tiên S3 + FastAPI skeleton, chốt Definition of Done. | 23/04/2026 | 23/04/2026 | - |
+| 1 | Locked the MVP: Real-ESRGAN x4 for the AI lane, LANCZOS for Standard, CodeFormer for faces; wrote a 2-page product brief. | 17/04/2026 | 17/04/2026 | - |
+| 2 | Created the Linear workspace, `UPS` team, **AI Upscaler** project; defined labels `BE / FE / Bug / Feature / Task`. | 17/04/2026 | 17/04/2026 | [Linear](https://linear.app/) |
+| 3 | Built the UPS-* backlog and split work by module (BE core, BE + AWS infra, FE); opened the AWS prerequisite checklist. | 18/04/2026 | 18/04/2026 | - |
+| 4 | Bootstrapped two GitHub repos `upscale-BE` (FastAPI) and `upscale-FE` (TanStack Start), enabled branch protection on main and required PR review. | 18/04/2026 | 19/04/2026 | [GitHub Branch Protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches) |
+| 5 | Drafted **API contract v0** (`/upscale/ai`, `/upscale/standard`, `/face/enhance`) — request/response schemas and error codes. | 20/04/2026 | 21/04/2026 | - |
+| 6 | Reviewed the AWS baseline checklist: IAM user `upscale-deployer` with AdministratorAccess + MFA, region `ap-southeast-1`, $10/month Budgets alert. | 22/04/2026 | 22/04/2026 | [IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) |
+| 7 | Sprint planning for Week 2: prioritised issues, put S3 + FastAPI skeleton first, locked the Definition of Done. | 23/04/2026 | 23/04/2026 | - |
 
 ### Week 1 Achievements
 
-Team hiểu rõ ai làm gì, không ai bị overlap. Linear đã có backlog và label chuẩn. AWS account do Khiem set up xong đúng như brief — tôi chỉ review lại checklist chứ không đụng console. Repo hai bên đều có initial commit, branch protection bật, PR template có sẵn.
+The Linear backlog now has clear labels and priorities, no more ambiguous issues. Both GitHub repos are live with branch protection and PR templates in place. The product brief and API contract v0 act as the source of truth for detailed specs starting next week.
 
 ### Challenges & Lessons
 
-Việc lớn nhất tuần đầu không phải kỹ thuật mà là align scope. Team có xu hướng nhảy vào code ngay, tôi phải kéo lại để viết brief và API contract trước — nếu không thì tuần 3 sẽ thấy FE và BE lệch nhau về response shape. Bài học tôi rút ra là brief phải viết xong trước khi tạo Linear issue, không phải sau. Ngoài ra, giao AWS setup cho Khiem ngay từ đầu tuần cũng đúng — Khiem có kinh nghiệm infra, tôi review checklist là đủ, không cần tự làm.
+The hardest part of Week 1 wasn't technical — it was forcing myself to finish the brief before creating any issue. The common temptation is to jump into code for the feeling of momentum, but if the API contract isn't clear early, by Week 3 FE and BE will disagree on the response shape. Takeaway: a brief is the cheapest alignment tool — 2 hours of writing saves a whole week of arguing.
 
 ### Next Week Plan
 
-Design S3 bucket layout (weights / tmp / output prefix, lifecycle), giao Khiem provision. Ngồi với Thang chốt FastAPI folder layout và bootstrap skeleton (`app/main.py`, `app/core/config.py`). Bắt đầu draft high-level architecture diagram cho UPS-17.
+Write the S3 bucket spec (weights / tmp / output prefixes, lifecycle, encryption) and the FastAPI folder layout spec. Start drafting the high-level architecture diagram for UPS-17.

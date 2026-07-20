@@ -1,37 +1,37 @@
 ---
-title: "Nhật ký công việc Tuần 9"
+title: "Week 9 Worklog"
 date: 2024-01-01
 weight: 9
 chapter: false
 pre: " <b> 1.9. </b> "
 ---
 
-## TUẦN 9 - NHẬT KÝ
+## WEEK 9 WORKLOG
 
-### Mục tiêu Tuần 9
+### Week 9 Objectives
 
-Load test + tile inference + dashboard. Mình design test plan (RPS mục tiêu, ảnh mẫu), giao Thắng implement tile inference cho ảnh > 4K (tránh OOM GPU), review dashboard Khiêm build. Kết quả tuần này là căn cứ để tuần 11 quyết định horizontal scale.
+Tuần 9 focus vào scale: load test bằng k6 để có số thật, và spec tile-based inference cho ảnh 8K để không OOM GPU 16GB.
 
-### Các công việc thực hiện trong tuần
+### Tasks to be carried out this week
 
-| Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
+| Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Design load test plan: k6 script, 3 kịch bản (spike 50 RPS, sustained 20 RPS 30 phút, endurance 5 RPS 4h). | 29/06/2026 | 29/06/2026 | [k6](https://k6.io/docs/) |
-| 2 | Chốt strategy tile inference: cắt ảnh > 4K thành tile 1024×1024 overlap 32px, ghép lại; ADR-005. | 30/06/2026 | 30/06/2026 | - |
-| 3 | Review PR Thắng: `TileProcessor` + unit test seam continuity (không thấy đường ghép). | 01/07/2026 | 02/07/2026 | - |
-| 4 | Review integration test suite Thắng implement từ spec tuần 8: 20/20 pass. | 03/07/2026 | 03/07/2026 | - |
-| 5 | Chạy load test cùng Khiêm: sustained 20 RPS OK, spike 50 RPS thấy 502 sau 3 phút → cần scale ngang. | 04/07/2026 | 04/07/2026 | - |
-| 6 | Review Khiêm: CloudWatch Dashboard `upscale-dev` (ALB 5XX, TargetResponseTime, GPU util, p90 latency) + SNS alarm p90 > 8s. | 05/07/2026 | 05/07/2026 | [CloudWatch Dashboards](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html) |
-| 7 | Retro + roadmap tuần 11: chốt ECS on EC2 + ASG capacity provider + SQS async cho request > 30s. | 05/07/2026 | 05/07/2026 | - |
+| 1 | Viết spec load test plan: k6 script mô phỏng 50 VU trong 10 phút, ramp 5 → 50; scenario upload → poll → download. | 22/06/2026 | 22/06/2026 | [k6](https://k6.io/) |
+| 2 | Review PR k6 script + dashboard Grafana Cloud; chạy baseline 1 instance. | 23/06/2026 | 23/06/2026 | - |
+| 3 | Đọc kết quả baseline: p95 = 9.2s ở 30 VU, fail rate 0%; xác định GPU 16GB OOM ở 4K → cần tile. | 24/06/2026 | 24/06/2026 | - |
+| 4 | Viết spec tile-based inference: chia ảnh 512×512 tile, overlap 32px, blend Gaussian; document trong ADR-005. | 25/06/2026 | 25/06/2026 | [Tiled Inference](https://github.com/xinntao/Real-ESRGAN#--tile) |
+| 5 | Review PR implement tile mode + benchmark: ảnh 4K không OOM, latency +18% (chấp nhận được). | 26/06/2026 | 26/06/2026 | - |
+| 6 | Chốt cache Redis cho job status (thay vì poll DB): TTL 1h, key `job:{uuid}`; giao provision ElastiCache. | 27/06/2026 | 27/06/2026 | [ElastiCache](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/) |
+| 7 | Sprint retro: load test có số thật; team đồng thuận tuần 10 hardening security + tuần 11 auto-scale. | 28/06/2026 | 28/06/2026 | - |
 
-### Kết quả đạt được Tuần 9
+### Week 9 Achievements
 
-Tile inference cho phép xử lý ảnh 8K không OOM (test với 7680×4320). Load test có số thật: 1 instance GPU chịu 20 RPS ổn định, > 30 RPS bắt đầu 502. Dashboard live, alarm SNS bắn ping tới Slack. Số này là input cho quyết định scale ngang tuần 11.
+Có số thật để nói chuyện với stakeholder: 1 instance g4dn.xlarge xử lý được ~30 VU đồng thời với p95 dưới SLO. Tile mode mở khoá ảnh 8K không OOM. ElastiCache Redis thay poll DB, giảm load DB đáng kể.
 
-### Thách thức & Bài học
+### Challenges & Lessons
 
-502 dưới spike là dấu hiệu single-instance chạm trần. Team ban đầu muốn nhảy sang EKS luôn, mình giữ lại — chọn ECS on EC2 vì team chưa có ai quản Kubernetes, chi phí learning quá cao so với lợi ích. Bài học: chọn tech theo năng lực team, không theo hype. Nếu ép EKS lúc này thì tuần 11 sẽ chậm 2 tuần.
+Bài học đo trước rồi mới quyết định: nếu không chạy k6 thật thì team sẽ tranh cãi mãi về capacity. Đo xong thì mọi người đồng ý ngay. Với tile mode, quan trọng nhất là chọn overlap đủ lớn để không thấy seam — 16px thấy đường ghép, 32px thì mượt. Cái này chỉ có test ảnh thật mới biết.
 
-### Kế hoạch tuần sau
+### Next Week Plan
 
-Security hardening: Secrets Manager rotation, WAF managed rules, API docs public. Review Khiêm provision Secrets Manager + rotate DB password.
+Hardening security: Secrets Manager rotation, IAM least privilege audit. Viết spec ECS on EC2 + ASG cho auto-scale.
