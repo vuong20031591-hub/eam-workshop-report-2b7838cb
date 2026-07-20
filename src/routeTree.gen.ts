@@ -9,50 +9,50 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WorkshopSplatRouteImport } from './routes/workshop.$'
+import { Route as SplatRouteImport } from './routes/$'
 
-const WorkshopSplatRoute = WorkshopSplatRouteImport.update({
-  id: '/workshop/$',
-  path: '/workshop/$',
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/workshop/$': typeof WorkshopSplatRoute
+  '/$': typeof SplatRoute
 }
 export interface FileRoutesByTo {
-  '/workshop/$': typeof WorkshopSplatRoute
+  '/$': typeof SplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/workshop/$': typeof WorkshopSplatRoute
+  '/$': typeof SplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/workshop/$'
+  fullPaths: '/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/workshop/$'
-  id: '__root__' | '/workshop/$'
+  to: '/$'
+  id: '__root__' | '/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  WorkshopSplatRoute: typeof WorkshopSplatRoute
+  SplatRoute: typeof SplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/workshop/$': {
-      id: '/workshop/$'
-      path: '/workshop/$'
-      fullPath: '/workshop/$'
-      preLoaderRoute: typeof WorkshopSplatRouteImport
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  WorkshopSplatRoute: WorkshopSplatRoute,
+  SplatRoute: SplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

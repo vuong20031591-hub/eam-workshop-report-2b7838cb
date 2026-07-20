@@ -35,7 +35,7 @@ const searchSchema = z.object({
   lang: fallback(z.string(), "en").default("en"),
 });
 
-export const Route = createFileRoute("/workshop/$")({
+export const Route = createFileRoute("/$")({
   validateSearch: zodValidator(searchSchema),
   loaderDeps: ({ search }) => ({ lang: search.lang }),
   loader: ({ params, deps }) => {
@@ -67,7 +67,7 @@ export const Route = createFileRoute("/workshop/$")({
     <div className="p-8 text-center text-muted-foreground">
       Không tìm thấy trang này.{" "}
       <Link
-        to="/workshop/$"
+        to="/$"
         params={{ _splat: "" }}
         className="text-primary underline"
       >
@@ -180,7 +180,7 @@ function WorkshopPage() {
 
         <nav className="fcaj-nav">
           <Link
-            to="/workshop/$"
+            to="/$"
             params={{ _splat: "" }}
             search={{ lang: locale }}
             className={`fcaj-nav-item fcaj-nav-top ${isRoot ? "is-active" : ""}`}
@@ -214,7 +214,7 @@ function WorkshopPage() {
           </a>
           <LangToggle current={locale} slug={slug} />
           <Link
-            to="/workshop/$"
+            to="/$"
             params={{ _splat: "" }}
             search={{ lang: locale }}
             className="fcaj-foot-link"
@@ -234,7 +234,7 @@ function WorkshopPage() {
       <main className="fcaj-main">
         {!isRoot && (
           <nav className="fcaj-breadcrumb" aria-label="Breadcrumb">
-            <Link to="/workshop/$" params={{ _splat: "" }} search={{ lang: locale }} className="fcaj-breadcrumb-home">
+            <Link to="/$" params={{ _splat: "" }} search={{ lang: locale }} className="fcaj-breadcrumb-home">
               <Home size={14} />
             </Link>
             {breadcrumbs.map((n, i) => (
@@ -243,7 +243,7 @@ function WorkshopPage() {
                 {i === breadcrumbs.length - 1 ? (
                   <span>{n.title}</span>
                 ) : (
-                  <Link to="/workshop/$" params={{ _splat: n.slug }} search={{ lang: locale }}>
+                  <Link to="/$" params={{ _splat: n.slug }} search={{ lang: locale }}>
                     {n.title}
                   </Link>
                 )}
@@ -283,7 +283,7 @@ function WorkshopPage() {
               {currentNode!.children.map((child, idx) => (
                 <Link
                   key={child.slug}
-                  to="/workshop/$"
+                  to="/$"
                   params={{ _splat: child.slug }}
                   search={{ lang: locale }}
                   className="fcaj-num-card"
@@ -322,7 +322,7 @@ function WorkshopPage() {
                 return (
                   <Link
                     key={node.slug}
-                    to="/workshop/$"
+                    to="/$"
                     params={{ _splat: node.slug }}
                     search={{ lang: locale }}
                     className="fcaj-report-card"
@@ -343,7 +343,7 @@ function WorkshopPage() {
 
       {prev && (
         <Link
-          to="/workshop/$"
+          to="/$"
           params={{ _splat: prev.slug }}
           search={{ lang: locale }}
           className="fcaj-fab fcaj-fab-prev"
@@ -354,7 +354,7 @@ function WorkshopPage() {
       )}
       {next && (
         <Link
-          to="/workshop/$"
+          to="/$"
           params={{ _splat: next.slug }}
           search={{ lang: locale }}
           className="fcaj-fab fcaj-fab-next"
@@ -428,7 +428,7 @@ function LangToggle({ current, slug }: { current: Locale; slug: string }) {
   const other: Locale = current === "vi" ? "en" : "vi";
   return (
     <Link
-      to="/workshop/$"
+      to="/$"
       params={{ _splat: slug }}
       search={{ lang: other }}
       className="fcaj-foot-link"
@@ -472,7 +472,7 @@ function SidebarNode({
   return (
     <li className="fcaj-nav-li">
       <Link
-        to="/workshop/$"
+        to="/$"
         params={{ _splat: node.slug }}
         search={{ lang: locale }}
         className={`fcaj-nav-item ${isActive ? "is-active" : ""} ${
