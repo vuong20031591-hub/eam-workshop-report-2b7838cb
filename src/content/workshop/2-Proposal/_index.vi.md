@@ -46,6 +46,7 @@ Không giống các triển khai serverless điển hình, Upscale AI yêu cầu
 #### Lớp Frontend
 | Dịch vụ | Mục đích |
 |---------|---------|
+| Amazon Route 53 | Phân giải DNS + xác thực ACM |
 | Amazon S3 | Hosting React app tĩnh |
 | Amazon CloudFront | CDN toàn cầu với đệm biên |
 | AWS ACM | Chứng chỉ SSL/TLS |
@@ -74,13 +75,13 @@ Không giống các triển khai serverless điển hình, Upscale AI yêu cầu
 | Amazon VPC | Cô lập mạng |
 | AWS IAM | Kiểm soát truy cập dựa trên vai trò |
 | AWS Secrets Manager | Lưu trữ thông tin xác thực |
-| Amazon Cognito | Xác thực người dùng |
+| Amazon Cognito | Xác thực người dùng (dự kiến — chưa có trong workshop) |
 
 #### Lớp Quan sát
 | Dịch vụ | Mục đích |
 |---------|---------|
 | Amazon CloudWatch | Logs, chỉ số, alarms |
-| AWS CodePipeline | Tự động hóa CI/CD |
+| AWS CodePipeline | Tự động hóa CI/CD (dự kiến — chưa có trong workshop) |
 
 ---
 
@@ -90,7 +91,7 @@ Không giống các triển khai serverless điển hình, Upscale AI yêu cầu
 
 | Danh mục | Dịch vụ | Chi phí |
 |---------|---------|--------|
-| Compute | EC2 (t3.large) | $120.00 |
+| Compute | EC2 (g5.xlarge, GPU A10G) | $734.00 |
 | Mạng | NAT Gateway, ALB | $70.00 |
 | Lưu trữ | EFS, S3, ECR | $4.60 |
 | Database | ElastiCache Redis | $15.00 |
@@ -98,7 +99,9 @@ Không giống các triển khai serverless điển hình, Upscale AI yêu cầu
 | Giám sát | CloudWatch | $5.00 |
 | CI/CD | CodePipeline, CodeBuild | $1.12 |
 | Khác | Cognito, IAM, VPC, ACM | $0.00 |
-| **Tổng** | | **~$227.52/tháng** |
+| **Tổng** | | **~$841.52/tháng** |
+
+> Lưu ý: `g5.xlarge` on-demand (~$1.006/giờ) cần thiết cho GPU suy luận Real-ESRGAN. Dùng Spot / Savings Plans khi lên production để giảm chi phí.
 
 ---
 
@@ -111,7 +114,7 @@ Không giống các triển khai serverless điển hình, Upscale AI yêu cầu
 - **Quy tắc WAF**: Giới hạn tốc độ, SQL injection, lọc danh tiếng IP
 
 #### Bảo mật dữ liệu
-- **Mã hóa khi nghỉ**: EFS, S3, RDS (tương lai)
+- **Mã hóa khi nghỉ**: EFS, S3, PostgreSQL-on-ECS
 - **Mã hóa khi truyền**: TLS 1.2+ ở mọi nơi
 - **Quản lý bí mật**: Không hardcode thông tin xác thực
 - **IAM Roles**: Quyền theo task cụ thể
@@ -125,26 +128,32 @@ Không giống các triển khai serverless điển hình, Upscale AI yêu cầu
 
 ### 6. Chiến lược triển khai
 
-#### Giai đoạn 1: Nền tảng
+#### Giai đoạn 1: Chuẩn bị
+Thiết lập tài khoản AWS, CLI, IAM admin user, budgets, cảnh báo chi phí
+
+#### Giai đoạn 2: Nền tảng (Hạ tầng)
 VPC, subnets, security groups, IAM roles
 
-#### Giai đoạn 2: Lớp Dữ liệu
+#### Giai đoạn 3: Lớp Dữ liệu (Lưu trữ)
 S3 buckets, EFS, ECR, Secrets Manager
 
-#### Giai đoạn 3: Ứng dụng
+#### Giai đoạn 4: Ứng dụng
 ECS cluster, task definitions, services
 
-#### Giai đoạn 4: Truy cập
+#### Giai đoạn 5: Truy cập
 ALB, target groups, listeners
 
-#### Giai đoạn 5: Phân phối
+#### Giai đoạn 6: Phân phối
 CloudFront, WAF, ACM
 
-#### Giai đoạn 6: Quan sát
+#### Giai đoạn 7: Quan sát
 CloudWatch logs, alarms, dashboard
 
-#### Giai đoạn 7: Triển khai
+#### Giai đoạn 8: Triển khai
 Build frontend, upload S3, invalidate CloudFront
+
+#### Giai đoạn 9: Dọn dẹp
+Xóa stack theo thứ tự ngược để tránh tài nguyên bỏ rơi và rò rỉ chi phí
 
 ---
 
