@@ -1,29 +1,54 @@
 ---
-title: "Workshop"
-date: 2024-01-01
+title: "Workshop: Deploy Upscale AI on AWS"
+date: 2026-07-18
 weight: 5
 chapter: false
-pre: " <b> 5. </b> "
+pre: "<b>5. </b>"
 ---
 
-# Secure Hybrid Access to S3 using VPC Endpoints
+# Workshop: Deploy Upscale AI on AWS
 
-#### Overview
+A hands-on guide to deploying **Upscale AI** — an AI-powered image upscaling platform — on AWS using the **AWS Management Console**.
 
-AWS PrivateLink lets workloads inside a VPC — or in your on-premises data center — reach AWS services without traffic ever crossing the public Internet. It's the go-to option when you need to keep traffic on a private network, reduce the risk of data exfiltration, and avoid depending on NAT or Internet Gateways.
+### What You Will Build
 
-In this lab you'll build, configure, and test two flavors of VPC endpoint for Amazon S3:
+A production-grade application that uses Real-ESRGAN deep learning models to upscale images, deployed on AWS with container orchestration, GPU-accelerated compute, and a multi-layered security architecture.
 
-+ **Gateway endpoint** — available for S3 and DynamoDB. Traffic from the VPC reaches the endpoint through route tables; there are no ENIs to manage and no hourly cost.
-+ **Interface endpoint** — an ENI-based endpoint with a private IP in your subnet. It works for resources inside the VPC and for callers coming in from on-premises via Site-to-Site VPN or Direct Connect. Clients resolve the service name via DNS to the ENI's IP.
+### Architecture Layers
 
-Which one you pick depends on where the traffic originates: if it stays inside the VPC, a Gateway endpoint is the simple, free option; if it comes from on-premises or a peered VPC, you need an Interface endpoint.
+![Service Architecture](/images/5-Workshop/sodo.jpg)
 
-#### Content
+### Workshop Steps
 
-1. [Workshop overview](5.1-Workshop-overview/)
-2. [Prerequisite](5.2-Prerequiste/)
-3. [Access S3 from VPC](5.3-S3-vpc/)
-4. [Access S3 from On-premises](5.4-S3-onprem/)
-5. [VPC Endpoint Policies (Bonus)](5.5-Policy/)
-6. [Clean up](5.6-Cleanup/)
+| Step | Phase | What Happens |
+|------|-------|-------------|
+| [5.1 - Introduction](5.1-introduction/) | Overview | System design, data flow, component roles |
+| [5.2 - Prerequisites](5.2-prerequisites/) | Setup | AWS account, IAM user, region selection |
+| [5.3 - Infrastructure](5.3-infrastructure/) | Foundation | VPC, subnets, IGW, NAT, route tables, security groups, IAM roles — all networking and permissions |
+| [5.4 - Storage](5.4-storage/) | Data Layer | S3 buckets, EFS filesystem + access points, ECR repository, Secrets Manager |
+| [5.5 - Application](5.5-application/) | Compute Layer | Redis, SQS queues, ECS task definitions, ECS services, auto scaling |
+| [5.6 - Access](5.6-access/) | Traffic Layer | ALB, target groups, health checks, HTTP→HTTPS redirect, listeners |
+| [5.7 - Delivery](5.7-delivery/) | Edge Layer | CloudFront distribution, WAF rules, ACM SSL certificates |
+| [5.8 - Observability](5.8-observability/) | Monitoring | CloudWatch log groups, alarms, dashboard |
+| [5.9 - Deployment](5.9-deployment/) | Go-Live | Build frontend, upload to S3, invalidate CloudFront, verify end-to-end |
+| [5.10 - Cleanup](5.10-cleanup/) | Teardown | Delete all resources in correct order |
+
+### Cost Summary
+
+| Resource | Monthly Cost |
+|----------|-------------|
+| EC2 (t3.large, 24/7) | ~$120 |
+| NAT Gateway | ~$45 |
+| ALB + Target Groups | ~$25 |
+| ElastiCache Redis | ~$15 |
+| CloudFront + WAF | ~$14 |
+| EFS + S3 + ECR | ~$5 |
+| SQS + Secrets Manager | ~$3 |
+| CloudWatch + CodePipeline | ~$6 |
+| **Total** | **~$233/month** |
+
+> Use **Spot Instances** to reduce EC2 cost by 60-70% (~$90/month savings).
+
+### Region
+
+All resources → **ap-southeast-1 (Singapore)** unless noted.

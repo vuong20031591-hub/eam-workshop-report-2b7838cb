@@ -1,63 +1,154 @@
 ---
 title: "Bản đề xuất"
-date: 2024-01-01
+date: 2026-07-18
 weight: 2
 chapter: false
 pre: " <b> 2. </b> "
 ---
 
-# IoT Weather Platform cho phòng lab nghiên cứu
+# Upscale AI — Triển khai nền tảng nâng cấp ảnh AI lên AWS Cloud
+## Giải pháp AWS Container-Based cho nâng cấp ảnh bằng AI
 
-Đây là bản đề xuất em dự tính sẽ triển khai trong kỳ thực tập: một nền tảng giám sát thời tiết thời gian thực chạy trên AWS Serverless, phục vụ nhóm *ITea Lab* tại TP. Hồ Chí Minh.
+---
 
-## 1. Tóm tắt
+### 1. Tóm tắt điều hành
 
-Hệ thống hiện tại của lab gồm khoảng 5 trạm thời tiết dùng Raspberry Pi và cảm biến ESP32, dữ liệu vẫn được thu thập thủ công. Em muốn gom tất cả về một nền tảng chung: dữ liệu đi qua MQTT lên AWS IoT Core, chảy vào S3 data lake, xử lý bằng Glue, rồi hiển thị trên một web app viết bằng TanStack Start. Quyền truy cập giới hạn cho 5 thành viên lab qua Amazon Cognito. Thiết kế tính sẵn cho việc mở rộng lên 10–15 trạm.
+**Upscale AI** là ứng dụng web sử dụng mô hình học sâu (Real-ESRGAN) để nâng cấp ảnh từ độ phân giải thấp lên độ phân giải cao. Người dùng tải ảnh lên qua giao diện web, và quá trình xử lý AI diễn ra bất đồng bộ trên hạ tầng AWS với theo dõi tiến trình thời gian thực.
 
-## 2. Vấn đề đang gặp
+Dự án này triển khai toàn bộ hệ thống lên **AWS Cloud** sử dụng **kiến trúc container-based** trên ECS với EC2 launch type — cung cấp hỗ trợ GPU cho suy luận mô hình AI, lưu trữ liên tục cho trọng số mô hình, và tự động mở rộng quy mô theo nhu cầu.
 
-Với cách làm hiện tại, mỗi trạm phải xuất dữ liệu riêng và ai đó phải ngồi ghép lại bằng tay. Càng nhiều trạm thì càng tốn công, và không ai xem được dữ liệu theo thời gian thực. Các nền tảng thương mại như Thingsboard hay CoreIoT thì làm được, nhưng chi phí và độ phức tạp không hợp với quy mô lab.
+---
 
-Giải pháp em đề xuất là dựng một pipeline serverless riêng cho lab: IoT Core nhận MQTT, S3 lưu raw và processed ở hai bucket, Glue Crawlers và ETL jobs chuyển dữ liệu từ data lake sang bucket phân tích, Lambda và API Gateway lo phần backend còn lại. Front-end là app TanStack Start (React 19 + Vite 8) host trên Amplify, đăng nhập qua Cognito bằng OIDC. Người dùng có thể đăng ký thiết bị mới ngay trên web tương tự như Thingsboard, chỉ khác là quy mô nhỏ và nội bộ.
+### 2. Tổng quan kỹ thuật
 
-Về ROI: chi phí AWS ước tính khoảng 0,66 USD/tháng, cả năm rơi vào 7,92 USD. Phần cứng đã có sẵn từ hệ thống cũ nên không phát sinh thêm. Cái đáng giá hơn là bỏ được thao tác thủ công cho từng trạm, và có sẵn một nguồn dữ liệu chuẩn cho các anh chị làm AI trong lab dùng để huấn luyện mô hình. Thời gian hoàn vốn khoảng 6–12 tháng, tính theo thời gian tiết kiệm được.
+#### Triết lý kiến trúc
 
-## 3. Kiến trúc
+Không giống các triển khai serverless điển hình, Upscale AI yêu cầu **tính toán GPU liên tục** cho suy luận mô hình AI. Ràng buộc này dẫn đến toàn bộ kiến trúc hướng về ECS trên EC2 với các nhóm tự động mở rộng.
 
-Kiến trúc chia rõ hai lớp: lớp thiết bị biên (Raspberry Pi + cảm biến ESP32) và lớp cloud. Raspberry Pi chạy Raspbian, dùng Docker để lọc dữ liệu trước khi gửi lên IoT Core qua MQTT trên Wi-Fi, ước tính khoảng 1 MB mỗi trạm mỗi ngày. IoT Core rule đẩy dữ liệu thô về S3 data lake. Glue Crawlers lập chỉ mục, ETL jobs biến đổi và ghi sang S3 bucket phân tích. Lambda và API Gateway phục vụ các request từ web app. Amplify host giao diện TanStack Start (TanStack Router file routes, TanStack Query, Tailwind v4, shadcn/ui), Cognito lo phần đăng nhập cho 5 người dùng.
+#### Các quyết định thiết kế chính
 
-![IoT Weather Station Architecture](/images/2-Proposal/edge_architecture.jpeg)
+| Quyết định | Lựa chọn | Lý do |
+|-----------|---------|-------|
+| Compute | ECS trên EC2 (không phải Lambda) | Cần GPU cho Real-ESRGAN; tác vụ dài vượt quá Lambda timeout |
+| Database | PostgreSQL trên ECS (không phải RDS) | Tối ưu chi phí; EFS cung cấp lưu trữ liên tục |
+| Caching | Redis trên ElastiCache | Theo dõi tiến trình thời gian thực qua SSE |
+| Job Queue | SQS với DLQ | Xử lý bất đồng bộ; chịu lỗi |
+| Storage | EFS cho trọng số mô hình | Chia sẻ giữa các lần khởi động container; liên tục |
+| CDN | CloudFront + S3 | File tĩnh frontend; phân phối toàn cầu |
+| Security | WAF + Private subnets | Phòng thủ nhiều lớp; quyền tối thiểu |
 
-![IoT Weather Platform Architecture](/images/2-Proposal/platform_architecture.jpeg)
+---
 
-Dịch vụ AWS chính sẽ dùng: IoT Core (ingest MQTT), Lambda (2 hàm chính, kích hoạt Glue job và xử lý phụ), API Gateway (giao tiếp với web app), S3 (2 bucket: raw + processed), Glue (crawlers và ETL), Amplify Hosting (host TanStack Start), Cognito (quản lý user).
+### 3. Kiến trúc dịch vụ
 
-## 4. Triển khai kỹ thuật
+![Sơ đồ kiến trúc](/images/2-Proposal/sodo.jpg)
 
-Em chia dự án thành hai phần — trạm biên và nền tảng cloud — và mỗi phần đi qua bốn giai đoạn: nghiên cứu + vẽ kiến trúc (làm trước kỳ thực tập một tháng), tính chi phí và kiểm tra khả thi (tháng 1), tinh chỉnh kiến trúc để tối ưu chi phí (tháng 2), rồi phát triển, kiểm thử, triển khai (tháng 2–3). Một trong những tinh chỉnh em muốn thử là dùng server functions của TanStack Start để giảm số Lambda handler viết riêng — phần backend gọn hơn thấy rõ.
+#### Lớp Frontend
+| Dịch vụ | Mục đích |
+|---------|---------|
+| Amazon S3 | Hosting React app tĩnh |
+| Amazon CloudFront | CDN toàn cầu với đệm biên |
+| AWS ACM | Chứng chỉ SSL/TLS |
+| AWS WAF | Tường lửa ứng dụng web |
 
-Về mặt hạ tầng cần chuẩn bị: cảm biến đo nhiệt độ, độ ẩm, lượng mưa, tốc độ gió; ESP32 làm vi điều khiển; Raspberry Pi làm gateway. Bên cloud em cần thao tác đủ tốt với Amplify Hosting, Lambda, Glue (ETL), S3, IoT Core (rules) và Cognito (OIDC qua `react-oidc-context`). Toàn bộ phần cấu hình sẽ viết bằng AWS CDK/SDK để dễ tái tạo.
+#### Lớp Ứng dụng
+| Dịch vụ | Mục đích |
+|---------|---------|
+| AWS ECS trên EC2 | Điều phối container với hỗ trợ GPU |
+| Application Load Balancer | Phân phối lưu lượng HTTP/HTTPS |
+| Amazon ECR | Registry Docker images |
+| Auto Scaling Group | Mở rộng instances động |
 
-## 5. Lộ trình
+#### Lớp Dữ liệu
+| Dịch vụ | Mục đích |
+|---------|---------|
+| Amazon S3 | Ảnh tải lên + ảnh đã xử lý |
+| Amazon EFS | Trọng số mô hình + dữ liệu PostgreSQL |
+| PostgreSQL (trên ECS) | Lưu trữ metadata |
+| Amazon ElastiCache Redis | Theo dõi tiến trình + đệm |
+| Amazon SQS | Hàng đợi tác vụ với DLQ |
 
-- Trước thực tập (tháng 0): lên kế hoạch, đánh giá lại các trạm cũ.
-- Tháng 1: học AWS, nâng cấp phần cứng nếu cần.
-- Tháng 2: hoàn thiện kiến trúc, tinh chỉnh chi phí.
-- Tháng 3: triển khai, kiểm thử, chuyển giao cho lab.
-- Sau thực tập: theo dõi và nghiên cứu thêm trong khoảng 1 năm.
+#### Lớp Bảo mật
+| Dịch vụ | Mục đích |
+|---------|---------|
+| Amazon VPC | Cô lập mạng |
+| AWS IAM | Kiểm soát truy cập dựa trên vai trò |
+| AWS Secrets Manager | Lưu trữ thông tin xác thực |
+| Amazon Cognito | Xác thực người dùng |
 
-## 6. Ngân sách
+#### Lớp Quan sát
+| Dịch vụ | Mục đích |
+|---------|---------|
+| Amazon CloudWatch | Logs, chỉ số, alarms |
+| AWS CodePipeline | Tự động hóa CI/CD |
 
-Bản chi tiết xem trên [AWS Pricing Calculator](https://calculator.aws/#/estimate?id=621f38b12a1ef026842ba2ddfe46ff936ed4ab01) hoặc [tệp ước tính ngân sách](../attachments/budget_estimation.pdf).
+---
 
-Chi phí hạ tầng ước tính mỗi tháng: Lambda 0,00 USD (1.000 request, 512 MB); S3 Standard 0,15 USD (6 GB, 2.100 request, 1 GB quét); truyền dữ liệu 0,02 USD (1 GB vào + 1 GB ra); Amplify 0,35 USD (256 MB, request 500 ms); API Gateway 0,01 USD (2.000 request); Glue ETL 0,02 USD (2 DPU); Glue Crawlers 0,07 USD (1 crawler); IoT Core MQTT 0,08 USD (5 thiết bị, 45.000 tin nhắn). Tổng khoảng 0,7 USD/tháng, tương đương 8,40 USD cho 12 tháng. Phần cứng Raspberry Pi 5 và cảm biến khoảng 265 USD, đầu tư một lần.
+### 4. Phân tích chi phí
 
-## 7. Rủi ro và phương án dự phòng
+#### Phân tích chi phí hàng tháng (Môi trường Test)
 
-Ba rủi ro em nhìn thấy trước: mất mạng (ảnh hưởng trung bình, xác suất trung bình), hỏng cảm biến (ảnh hưởng cao, xác suất thấp), và vượt ngân sách (ảnh hưởng trung bình, xác suất thấp).
+| Danh mục | Dịch vụ | Chi phí |
+|---------|---------|--------|
+| Compute | EC2 (t3.large) | $120.00 |
+| Mạng | NAT Gateway, ALB | $70.00 |
+| Lưu trữ | EFS, S3, ECR | $4.60 |
+| Database | ElastiCache Redis | $15.00 |
+| Bảo mật | WAF, Secrets Manager | $11.80 |
+| Giám sát | CloudWatch | $5.00 |
+| CI/CD | CodePipeline, CodeBuild | $1.12 |
+| Khác | Cognito, IAM, VPC, ACM | $0.00 |
+| **Tổng** | | **~$227.52/tháng** |
 
-Cách giảm thiểu tương ứng: khi mất mạng, Raspberry Pi buffer dữ liệu cục bộ bằng Docker rồi gửi lại khi có kết nối; với cảm biến, em sẽ chuẩn linh kiện dự phòng và kiểm tra định kỳ; chi phí thì bật AWS Budget alerts và rà lại dịch vụ khi báo động. Nếu AWS có sự cố kéo dài, lab vẫn có thể quay lại thu thập thủ công; toàn bộ cấu hình lưu bằng CloudFormation nên khôi phục được nhanh.
+---
 
-## 8. Kỳ vọng kết quả
+### 5. Kiến trúc bảo mật
 
-Sau khi triển khai xong, lab sẽ có dashboard thời gian thực thay cho việc gộp file thủ công, và hệ thống sẵn sàng mở rộng lên 10–15 trạm mà không phải thiết kế lại. Sau một năm, dữ liệu tích lũy có thể dùng cho các nghiên cứu AI trong lab, và bản thân kiến trúc cũng tái sử dụng được cho các dự án IoT khác cùng nhóm.
+#### Bảo mật mạng
+- **Cô lập VPC**: Private subnets cho tất cả tài nguyên compute
+- **Security Groups**: Quy tắc inbound quyền tối thiểu
+- **NAT Gateway**: Truy cập internet kiểm soát outbound
+- **Quy tắc WAF**: Giới hạn tốc độ, SQL injection, lọc danh tiếng IP
+
+#### Bảo mật dữ liệu
+- **Mã hóa khi nghỉ**: EFS, S3, RDS (tương lai)
+- **Mã hóa khi truyền**: TLS 1.2+ ở mọi nơi
+- **Quản lý bí mật**: Không hardcode thông tin xác thực
+- **IAM Roles**: Quyền theo task cụ thể
+
+#### Bảo mật ứng dụng
+- **Cognito**: Xác thực dựa trên JWT
+- **CORS**: Xác thực nguồn chặt chẽ
+- **Validate đầu vào**: Validate phía server
+
+---
+
+### 6. Chiến lược triển khai
+
+#### Giai đoạn 1: Nền tảng
+VPC, subnets, security groups, IAM roles
+
+#### Giai đoạn 2: Lớp Dữ liệu
+S3 buckets, EFS, ECR, Secrets Manager
+
+#### Giai đoạn 3: Ứng dụng
+ECS cluster, task definitions, services
+
+#### Giai đoạn 4: Truy cập
+ALB, target groups, listeners
+
+#### Giai đoạn 5: Phân phối
+CloudFront, WAF, ACM
+
+#### Giai đoạn 6: Quan sát
+CloudWatch logs, alarms, dashboard
+
+#### Giai đoạn 7: Triển khai
+Build frontend, upload S3, invalidate CloudFront
+
+---
+
+### 7. Video Demo
+
+- **Link video demo:** [Google Drive](https://drive.google.com/file/d/1lNZM2O4d3lM-bIPDWL6f4gZKBLKFYOcY/view?usp=sharing)
+

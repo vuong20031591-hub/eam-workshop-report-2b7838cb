@@ -1,111 +1,154 @@
 ---
 title: "Proposal"
-date: 2024-01-01
+date: 2026-07-18
 weight: 2
 chapter: false
 pre: " <b> 2. </b> "
 ---
-In this section, you need to summarize the contents of the workshop that you **plan** to conduct.
 
-# IoT Weather Platform for Lab Research
-## A Unified AWS Serverless Solution for Real-Time Weather Monitoring
+# Upscale AI — Deploying an AI Image Upscaling Platform to AWS Cloud
+## A Container-Based AWS Solution for AI-Powered Image Enhancement
+
+---
 
 ### 1. Executive Summary
-The IoT Weather Platform is designed for the ITea Lab team in Ho Chi Minh City to enhance weather data collection and analysis. It supports up to 5 weather stations, with potential scalability to 10-15, utilizing Raspberry Pi edge devices with ESP32 sensors to transmit data via MQTT. The platform leverages AWS Serverless services to deliver real-time monitoring, predictive analytics, and cost efficiency, with access restricted to 5 lab members via Amazon Cognito.
 
-### 2. Problem Statement
-### What’s the Problem?
-Current weather stations require manual data collection, becoming unmanageable with multiple units. There is no centralized system for real-time data or analytics, and third-party platforms are costly and overly complex.
+**Upscale AI** is a web application that uses deep learning models (Real-ESRGAN) to upscale images from low resolution to high resolution. Users upload images through a web interface, and the AI processing happens asynchronously on AWS infrastructure with real-time progress tracking.
 
-### The Solution
-The platform uses AWS IoT Core to ingest MQTT data, AWS Lambda and API Gateway for processing, Amazon S3 for storage (including a data lake), and AWS Glue Crawlers and ETL jobs to extract, transform, and load data from the S3 data lake to another S3 bucket for analysis. AWS Amplify Hosting serves a **TanStack Start** (React 19 + Vite 8) web interface, and Amazon Cognito ensures secure access via OIDC. Similar to Thingsboard and CoreIoT, users can register new devices and manage connections, though this platform operates on a smaller scale and is designed for private use. Key features include real-time dashboards, trend analysis, and low operational costs.
+This project deploys the entire system to **AWS Cloud** using a **container-based architecture** on ECS with EC2 launch type — providing GPU support for AI model inference, persistent storage for model weights, and automatic scaling based on demand.
 
-### Benefits and Return on Investment
-The solution establishes a foundational resource for lab members to develop a larger IoT platform, serving as a study resource, and provides a data foundation for AI enthusiasts for model training or analysis. It reduces manual reporting for each station via a centralized platform, simplifying management and maintenance, and improves data reliability. Monthly costs are $0.66 USD per the AWS Pricing Calculator, with a 12-month total of $7.92 USD. All IoT equipment costs are covered by the existing weather station setup, eliminating additional development expenses. The break-even period of 6-12 months is achieved through significant time savings from reduced manual work.
+---
 
-### 3. Solution Architecture
-The platform employs a serverless AWS architecture to manage data from 5 Raspberry Pi-based stations, scalable to 15. Data is ingested via AWS IoT Core, stored in an S3 data lake, and processed by AWS Glue Crawlers and ETL jobs to transform and load it into another S3 bucket for analysis. Lambda and API Gateway handle additional processing, while Amplify Hosting serves a TanStack Start (React 19) dashboard, secured by Cognito (OIDC). The architecture is detailed below:
+### 2. Technical Overview
 
-![IoT Weather Station Architecture](/images/2-Proposal/edge_architecture.jpeg)
+#### Architecture Philosophy
 
-![IoT Weather Platform Architecture](/images/2-Proposal/platform_architecture.jpeg)
+Unlike typical serverless deployments, Upscale AI requires **persistent GPU compute** for AI model inference. This constraint drives the entire architecture toward ECS on EC2 with auto-scaling groups.
 
-### AWS Services Used
-- **AWS IoT Core**: Ingests MQTT data from 5 stations, scalable to 15.
-- **AWS Lambda**: Processes data and triggers Glue jobs (two functions).
-- **Amazon API Gateway**: Facilitates web app communication.
-- **Amazon S3**: Stores raw data in a data lake and processed outputs (two buckets).
-- **AWS Glue**: Crawlers catalog data, and ETL jobs transform and load it.
-- **AWS Amplify Hosting**: Hosts the TanStack Start (React 19 + Vite 8) web interface.
-- **Amazon Cognito**: Secures access for lab users.
+#### Core Design Decisions
 
-### Component Design
-- **Edge Devices**: Raspberry Pi collects and filters sensor data, sending it to IoT Core.
-- **Data Ingestion**: AWS IoT Core receives MQTT messages from the edge devices.
-- **Data Storage**: Raw data is stored in an S3 data lake; processed data is stored in another S3 bucket.
-- **Data Processing**: AWS Glue Crawlers catalog the data, and ETL jobs transform it for analysis.
-- **Web Interface**: AWS Amplify Hosting serves a TanStack Start (React 19) app — TanStack Router file routes, TanStack Query, Tailwind v4, shadcn/ui — for real-time dashboards and analytics.
-- **User Management**: Amazon Cognito manages user access, allowing up to 5 active accounts.
+| Decision | Choice | Rationale |
+|----------|--------|-----------|
+| Compute | ECS on EC2 (not Lambda) | GPU required for Real-ESRGAN; long-running tasks exceed Lambda timeout |
+| Database | PostgreSQL on ECS (not RDS) | Cost optimization; EFS provides persistence |
+| Caching | Redis on ElastiCache | Real-time progress tracking via SSE |
+| Job Queue | SQS with DLQ | Async processing; fault tolerance |
+| Storage | EFS for model weights | Shared across container restarts; persistent |
+| CDN | CloudFront + S3 | Static frontend assets; global delivery |
+| Security | WAF + Private subnets | Defense in depth; least-privilege access |
 
-### 4. Technical Implementation
-**Implementation Phases**
-This project has two parts—setting up weather edge stations and building the weather platform—each following 4 phases:
-- Build Theory and Draw Architecture: Research Raspberry Pi setup with ESP32 sensors and design the AWS serverless architecture (1 month pre-internship)
-- Calculate Price and Check Practicality: Use AWS Pricing Calculator to estimate costs and adjust if needed (Month 1).
-- Fix Architecture for Cost or Solution Fit: Tweak the design (e.g., use TanStack Start server functions to reduce dedicated Lambda handlers) to stay cost-effective and usable (Month 2).
-- Develop, Test, and Deploy: Code the Raspberry Pi setup, AWS services with CDK/SDK, and TanStack Start app, then test and release to production (Months 2-3).
+---
 
-**Technical Requirements**
-- Weather Edge Station: Sensors (temperature, humidity, rainfall, wind speed), a microcontroller (ESP32), and a Raspberry Pi as the edge device. Raspberry Pi runs Raspbian, handles Docker for filtering, and sends 1 MB/day per station via MQTT over Wi-Fi.
-- Weather Platform: Practical knowledge of AWS Amplify Hosting (hosting TanStack Start), Lambda (minimal — TanStack server functions absorb most backend logic), AWS Glue (ETL), S3 (two buckets), IoT Core (gateway and rules), and Cognito (OIDC, 5 users via `react-oidc-context`). Use AWS CDK/SDK to code interactions (e.g., IoT Core rules to S3). TanStack Start (Vite 8, server functions) reduces Lambda workload for the fullstack web app.
+### 3. Service Architecture
 
-### 5. Timeline & Milestones
-**Project Timeline**
-- Pre-Internship (Month 0): 1 month for planning and old station review.
-- Internship (Months 1-3): 3 months.
-    - Month 1: Study AWS and upgrade hardware.
-    - Month 2: Design and adjust architecture.
-    - Month 3: Implement, test, and launch.
-- Post-Launch: Up to 1 year for research.
+![Service Architecture](/images/2-Proposal/sodo.jpg)
 
-### 6. Budget Estimation
-You can find the budget estimation on the [AWS Pricing Calculator](https://calculator.aws/#/estimate?id=621f38b12a1ef026842ba2ddfe46ff936ed4ab01).  
-Or you can download the [Budget Estimation File](../attachments/budget_estimation.pdf).
+#### Frontend Layer
+| Service | Purpose |
+|---------|---------|
+| Amazon S3 | Static React app hosting |
+| Amazon CloudFront | Global CDN with edge caching |
+| AWS ACM | SSL/TLS certificates |
+| AWS WAF | Web application firewall |
 
-### Infrastructure Costs
-- AWS Services:
-    - AWS Lambda: $0.00/month (1,000 requests, 512 MB storage).
-    - S3 Standard: $0.15/month (6 GB, 2,100 requests, 1 GB scanned).
-    - Data Transfer: $0.02/month (1 GB inbound, 1 GB outbound).
-    - AWS Amplify: $0.35/month (256 MB, 500 ms requests).
-    - Amazon API Gateway: $0.01/month (2,000 requests).
-    - AWS Glue ETL Jobs: $0.02/month (2 DPUs).
-    - AWS Glue Crawlers: $0.07/month (1 crawler).
-    - MQTT (IoT Core): $0.08/month (5 devices, 45,000 messages).
+#### Application Layer
+| Service | Purpose |
+|---------|---------|
+| AWS ECS on EC2 | Container orchestration with GPU support |
+| Application Load Balancer | HTTP/HTTPS traffic distribution |
+| Amazon ECR | Docker image registry |
+| Auto Scaling Group | Dynamic instance scaling |
 
-Total: $0.7/month, $8.40/12 months
+#### Data Layer
+| Service | Purpose |
+|---------|---------|
+| Amazon S3 | User uploads + processed images |
+| Amazon EFS | Model weights + PostgreSQL data |
+| PostgreSQL (on ECS) | Metadata storage |
+| Amazon ElastiCache Redis | Progress tracking + caching |
+| Amazon SQS | Async job queue with DLQ |
 
-- Hardware: $265 one-time (Raspberry Pi 5 and sensors).
+#### Security Layer
+| Service | Purpose |
+|---------|---------|
+| Amazon VPC | Network isolation |
+| AWS IAM | Role-based access control |
+| AWS Secrets Manager | Credential storage |
+| Amazon Cognito | User authentication |
 
-### 7. Risk Assessment
-#### Risk Matrix
-- Network Outages: Medium impact, medium probability.
-- Sensor Failures: High impact, low probability.
-- Cost Overruns: Medium impact, low probability.
+#### Observability Layer
+| Service | Purpose |
+|---------|---------|
+| Amazon CloudWatch | Logs, metrics, alarms |
+| AWS CodePipeline | CI/CD automation |
 
-#### Mitigation Strategies
-- Network: Local storage on Raspberry Pi with Docker.
-- Sensors: Regular checks and spares.
-- Cost: AWS budget alerts and optimization.
+---
 
-#### Contingency Plans
-- Revert to manual methods if AWS fails.
-- Use CloudFormation for cost-related rollbacks.
+### 4. Cost Analysis
 
-### 8. Expected Outcomes
-#### Technical Improvements: 
-Real-time data and analytics replace manual processes.  
-Scalable to 10-15 stations.
-#### Long-term Value
-1-year data foundation for AI research.  
-Reusable for future projects.
+#### Monthly Cost Breakdown (Test Environment)
+
+| Category | Services | Cost |
+|----------|----------|------|
+| Compute | EC2 (t3.large) | $120.00 |
+| Networking | NAT Gateway, ALB | $70.00 |
+| Storage | EFS, S3, ECR | $4.60 |
+| Database | ElastiCache Redis | $15.00 |
+| Security | WAF, Secrets Manager | $11.80 |
+| Monitoring | CloudWatch | $5.00 |
+| CI/CD | CodePipeline, CodeBuild | $1.12 |
+| Other | Cognito, IAM, VPC, ACM | $0.00 |
+| **Total** | | **~$227.52/month** |
+
+---
+
+### 5. Security Architecture
+
+#### Network Security
+- **VPC Isolation**: Private subnets for all compute resources
+- **Security Groups**: Least-privilege inbound rules
+- **NAT Gateway**: Controlled outbound internet access
+- **WAF Rules**: Rate limiting, SQL injection, IP reputation filtering
+
+#### Data Security
+- **Encryption at Rest**: EFS, S3, RDS (future)
+- **Encryption in Transit**: TLS 1.2+ everywhere
+- **Secrets Management**: No hardcoded credentials
+- **IAM Roles**: Task-specific permissions
+
+#### Application Security
+- **Cognito**: JWT-based authentication
+- **CORS**: Strict origin validation
+- **Input Validation**: Server-side request validation
+
+---
+
+### 6. Deployment Strategy
+
+#### Phase 1: Foundation
+VPC, subnets, security groups, IAM roles
+
+#### Phase 2: Data Layer
+S3 buckets, EFS, ECR, Secrets Manager
+
+#### Phase 3: Application
+ECS cluster, task definitions, services
+
+#### Phase 4: Access
+ALB, target groups, listeners
+
+#### Phase 5: Delivery
+CloudFront, WAF, ACM
+
+#### Phase 6: Observability
+CloudWatch logs, alarms, dashboard
+
+#### Phase 7: Deployment
+Frontend build, S3 upload, CloudFront invalidation
+
+---
+
+### 7. Video Demo
+
+- **Demo video link:** [Google Drive](https://drive.google.com/file/d/1lNZM2O4d3lM-bIPDWL6f4gZKBLKFYOcY/view?usp=sharing)
+
