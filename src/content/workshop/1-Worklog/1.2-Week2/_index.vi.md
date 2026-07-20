@@ -34,4 +34,4 @@ Vấn đề rõ nhất là weights hơn 50MB, đẩy vào Git là sai từ đầ
 
 ### Kế hoạch tuần sau
 
-Viết `ModelManager` theo pattern Singleton, lazy-load weights từ S3. Thiết kế endpoint `/upscale/ai` nhận multipart. Chuẩn bị EC2 g5.xlarge làm dev GPU host.
+Viết `ModelManager` theo pattern Singleton, lazy-load weights từ S3. Thiết kế endpoint `/upscale/ai` nhận multipart. Chuẩn bị EC2 g4dn.xlarge làm dev GPU host.

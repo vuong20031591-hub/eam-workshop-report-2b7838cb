@@ -20,7 +20,7 @@ The diagram above maps every AWS service used in the AI Upscaler project to the 
 | --- | --- | --- |
 | IAM · Budgets · CloudTrail | Account guardrails, least-privilege access, audit | [Week 1](1.1-week1/) |
 | Amazon S3 (`upscale-io`) | Weights, temp input, output objects; lifecycle + SSE | [Week 2](1.2-week2/), [Week 7](1.7-week7/) |
-| EC2 g5.xlarge (A10G GPU) | FastAPI + Real-ESRGAN inference host | [Week 3](1.3-week3/), [Week 11](1.11-week11/) |
+| EC2 g4dn.xlarge (T4 GPU) | FastAPI + Real-ESRGAN inference host | [Week 3](1.3-week3/), [Week 11](1.11-week11/) |
 | CloudWatch Logs / Metrics / Alarms | Structured logs, GPU util, p90 alarm | [Week 4](1.4-week4/), [Week 9](1.9-week9/) |
 | S3 + CloudFront + ACM (FE) | Static TanStack Start (SPA) hosting, edge cache, TLS | [Week 5](1.5-week5/) |
 | AWS X-Ray | Distributed tracing (S3 · model · inference) | [Week 6](1.6-week6/) |
