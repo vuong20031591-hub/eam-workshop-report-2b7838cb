@@ -208,6 +208,7 @@ function WorkshopPage() {
           <Search size={16} />
           <input
             type="search"
+            aria-label="Search content"
             placeholder="Search..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
