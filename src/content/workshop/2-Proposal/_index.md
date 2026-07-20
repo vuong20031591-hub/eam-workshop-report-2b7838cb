@@ -91,7 +91,7 @@ Unlike typical serverless deployments, Upscale AI requires **persistent GPU comp
 
 | Category | Services | Cost |
 |----------|----------|------|
-| Compute | EC2 (g5.xlarge, A10G GPU) | $734.00 |
+| Compute | EC2 (t3.large, 24/7) | $120.00 |
 | Networking | NAT Gateway, ALB | $70.00 |
 | Storage | EFS, S3, ECR | $4.60 |
 | Database | ElastiCache Redis | $15.00 |
@@ -99,9 +99,9 @@ Unlike typical serverless deployments, Upscale AI requires **persistent GPU comp
 | Monitoring | CloudWatch | $5.00 |
 | CI/CD | CodePipeline, CodeBuild | $1.12 |
 | Other | Cognito, IAM, VPC, ACM | $0.00 |
-| **Total** | | **~$841.52/month** |
+| **Total** | | **~$227.52/month** |
 
-> Note: `g5.xlarge` on-demand (~$1.006/h) is required for Real-ESRGAN GPU inference. Use Spot / Savings Plans in production to reduce cost.
+> Note: Workshop baseline uses `t3.large` (CPU) for testing. For production GPU inference, switch to `g4dn.xlarge` (NVIDIA T4, ~$379/mo on-demand) and enable **Spot Instances** to cut EC2 cost by 60–70%.
 
 ---
 
