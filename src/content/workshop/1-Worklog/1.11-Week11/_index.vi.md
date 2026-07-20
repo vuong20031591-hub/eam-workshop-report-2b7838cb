@@ -16,11 +16,11 @@ Chuyển từ single EC2 chạy Docker thủ công sang **ECS cluster trên EC2*
 
 | Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
-| 1 | Tạo **Launch Template** `upscale-gpu-lt` (g5.xlarge, ECS-optimized GPU AMI, IAM role có `AmazonEC2ContainerServiceforEC2Role`). | 16/07/2026 | 16/07/2026 | [ECS-optimized AMI](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html) |
+| 1 | Tạo **Launch Template** `upscale-gpu-lt` (g4dn.xlarge, ECS-optimized GPU AMI, IAM role có `AmazonEC2ContainerServiceforEC2Role`). | 16/07/2026 | 16/07/2026 | [ECS-optimized AMI](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html) |
 | 2 | Tạo **ASG** `upscale-gpu-asg` min=1 max=3, target-tracking `Upscale/GPU/Utilization = 70%`, đăng ký làm **ECS capacity provider** cho cluster `upscale-cluster`. | 17/07/2026 | 17/07/2026 | [ECS Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
 | 3 | Provision **EFS** `upscale-efs` với access point cho `/weights` và `/pgdata`; tạo **ElastiCache Redis** `upscale-redis` trong private subnet. | 18/07/2026 | 19/07/2026 | [EFS + ECS](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/efs-volumes.html) |
 | 4 | Đăng ký task definition `upscale-api` (FastAPI, EFS mount weights, Redis endpoint qua Secrets Manager) và `upscale-postgres` (dữ liệu trên EFS); tạo service dùng capacity provider. | 20/07/2026 | 20/07/2026 | [ECS Task Definitions](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html) |
-| 5 | Trỏ **target group** `upscale-api-tg` của ALB về ECS service (dynamic host-port mapping); tạo **SQS** standard queue `upscale-ai-jobs`, visibility timeout 300s; BE consume qua polling loop (feature flag OFF cho MVP). | 21/07/2026 | 22/07/2026 | [SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/) |
+| 5 | Trỏ **target group** `upscale-api-tg` của ALB về ECS service (dynamic host-port mapping); tạo **SQS** standard queue `upscale-job-queue`, visibility timeout 300s; BE consume qua polling loop (feature flag OFF cho MVP). | 21/07/2026 | 22/07/2026 | [SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/) |
 | 6 | Chạy Playwright E2E: upload → progress → download, pass trên staging. | 23/07/2026 | 23/07/2026 | [Playwright](https://playwright.dev/) |
 | 7 | Blue/green rollout qua ECS deployment (rolling `minimumHealthyPercent=100`), drain task set cũ — 0 downtime. | 24/07/2026 | 24/07/2026 | - |
 

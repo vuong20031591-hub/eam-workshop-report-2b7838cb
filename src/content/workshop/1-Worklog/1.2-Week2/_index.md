@@ -34,4 +34,4 @@ The obvious problem is that the weights are over 50MB, and pushing them into Git
 
 ### Next Week Plan
 
-Write `ModelManager` as a Singleton with lazy-loading from S3. Design the `/upscale/ai` endpoint for multipart uploads. Provision an EC2 g5.xlarge as the dev GPU host.
+Write `ModelManager` as a Singleton with lazy-loading from S3. Design the `/upscale/ai` endpoint for multipart uploads. Provision an EC2 g4dn.xlarge as the dev GPU host.

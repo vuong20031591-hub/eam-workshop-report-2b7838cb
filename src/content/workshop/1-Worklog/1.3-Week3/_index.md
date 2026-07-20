@@ -10,13 +10,13 @@ pre: " <b> 1.3. </b> "
 
 ### Week 3 Objectives
 
-First week actually touching a real GPU: launch an EC2 g5.xlarge, attach an IAM role instead of an access key, install NVIDIA drivers and PyTorch CUDA. Once the box is up, write `ModelManager` (Singleton, lazy-load from S3, cache on the EBS volume) and the `/upscale/ai` endpoint that handles multipart uploads and puts the input on S3 under `tmp/`.
+First week actually touching a real GPU: launch an EC2 g4dn.xlarge, attach an IAM role instead of an access key, install NVIDIA drivers and PyTorch CUDA. Once the box is up, write `ModelManager` (Singleton, lazy-load from S3, cache on the EBS volume) and the `/upscale/ai` endpoint that handles multipart uploads and puts the input on S3 under `tmp/`.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Launch **EC2 g5.xlarge** (NVIDIA A10G 24GB, Ubuntu 22.04 Deep Learning AMI), attach EBS gp3 100GB. | 05/05/2026 | 05/05/2026 | [EC2 G5](https://aws.amazon.com/ec2/instance-types/g5/) |
+| 1 | Launch **EC2 g4dn.xlarge** (NVIDIA T4 16GB, Ubuntu 22.04 Deep Learning AMI), attach EBS gp3 100GB. | 05/05/2026 | 05/05/2026 | [EC2 G4](https://aws.amazon.com/ec2/instance-types/g4/) |
 | 2 | Attach **IAM Role** `EC2-Upscale-Role` to the instance (S3 read/write on `upscale-io`) to avoid access keys. | 06/05/2026 | 06/05/2026 | [IAM Roles for EC2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html) |
 | 3 | Install `nvidia-smi`, PyTorch 2.4 + CUDA 12.4, verify FP16 inference. | 07/05/2026 | 08/05/2026 | - |
 | 4 | Write `ModelManager` Singleton: `load()` downloads from S3 → `/opt/weights/`, keeps model in memory. | 09/05/2026 | 10/05/2026 | - |
@@ -30,7 +30,7 @@ The GPU box stayed stable overnight. Model cold-start is around 4.2s including t
 
 ### Challenges & Lessons
 
-The most wallet-painful bit is cost: g5.xlarge runs about $1.006/hour, and 24/7 would be a bill worth explaining. I use AWS Instance Scheduler to stop the box at 22:00 and start it at 08:00, which cuts roughly 60%. Beyond money, the week confirmed two other things: an IAM Role on EC2 is always safer than a hard-coded access key, and presigned URLs keep bucket permissions out of FE entirely.
+The most wallet-painful bit is cost: g4dn.xlarge runs about $0.526/hour, and 24/7 would be a bill worth explaining. I use AWS Instance Scheduler to stop the box at 22:00 and start it at 08:00, which cuts roughly 60%. Beyond money, the week confirmed two other things: an IAM Role on EC2 is always safer than a hard-coded access key, and presigned URLs keep bucket permissions out of FE entirely.
 
 ### Next Week Plan
 
