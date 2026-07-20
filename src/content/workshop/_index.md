@@ -8,7 +8,7 @@ chapter: false
     
 # Internship Report
 
-### Student Information:
+## Student Information:
 &emsp; **Full Name:** Nguyen Tien Vuong
 
 &emsp; **Phone Number:** 0397707745
@@ -29,7 +29,7 @@ chapter: false
 
 ![Your profile picture](/images/avatar.png)
 
-### Report Content
+## Report Content
 
 1.  [Worklog](1-Worklog/)
 2.  [Proposal](2-Proposal/)

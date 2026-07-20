@@ -77,14 +77,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Internship Report — Nguyen Tien Vuong" },
+      {
+        name: "description",
+        content:
+          "Internship report by Nguyen Tien Vuong for the First Cloud AI Journey program at Amazon Web Services Vietnam — worklogs, proposal, blogs, and the Upscale AI workshop.",
+      },
+      { name: "author", content: "Nguyen Tien Vuong" },
+      { property: "og:site_name", content: "Internship Report — Nguyen Tien Vuong" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -92,6 +94,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Nguyen Tien Vuong",
+          jobTitle: "FCAJ Cloud Intern",
+          worksFor: {
+            "@type": "Organization",
+            name: "Amazon Web Services Vietnam",
+          },
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,

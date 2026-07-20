@@ -6,7 +6,7 @@ chapter: false
 ---
 
 # Báo cáo thực tập
-### Thông tin sinh viên:
+## Thông tin sinh viên:
 &emsp; **Họ và tên:** Nguyễn Tiến Vương
 
 &emsp; **Số điện thoại:** 0397707745
@@ -29,7 +29,7 @@ chapter: false
 
 
 
-### Nội dung báo cáo
+## Nội dung báo cáo
 
 1.  [Worklog](1-Worklog/)
 2.  [Proposal](2-Proposal/)
