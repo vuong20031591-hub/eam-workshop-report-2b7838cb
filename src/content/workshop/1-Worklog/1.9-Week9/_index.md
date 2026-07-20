@@ -10,7 +10,7 @@ pre: " <b> 1.9. </b> "
 
 ### Week 9 Objectives
 
-Run a 20-concurrent upload load test through API Gateway to find the GPU bottleneck. Enable tile-based inference (`TILE_SIZE=512`) for inputs bigger than 2K. Build a CloudWatch dashboard that combines API Gateway metrics with the custom Prometheus ones, and wire an alarm to SNS email when p90 crosses the threshold.
+Run a 20-concurrent upload load test through the ALB to find the GPU bottleneck. Enable tile-based inference (`TILE_SIZE=512`) for inputs bigger than 2K. Build a CloudWatch dashboard that combines ALB metrics with the custom Prometheus ones, and wire an alarm to SNS email when p90 crosses the threshold.
 
 ### Tasks to be carried out this week
 
@@ -21,7 +21,7 @@ Run a 20-concurrent upload load test through API Gateway to find the GPU bottlen
 | 3 | Enable `TILE_SIZE=512` for inputs >2K, remeasure — p90 down to 8.1s, no more OOM. | 30/06/2026 | 01/07/2026 | - |
 | 4 | Serialize AI requests through an `asyncio.Lock`, keep Standard mode parallel. | 02/07/2026 | 03/07/2026 | - |
 | 5 | Publish custom metric `Upscale/GPU/Utilization` via CloudWatch Agent + `nvidia-smi`. | 04/07/2026 | 04/07/2026 | - |
-| 6 | Create **CloudWatch Dashboard** `upscale-dev`: API Gateway 4XX/5XX/latency + GPU util + p90. | 05/07/2026 | 05/07/2026 | [CloudWatch Dashboards](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html) |
+| 6 | Create **CloudWatch Dashboard** `upscale-dev`: ALB (HTTPCode_Target_5XX, TargetResponseTime) + GPU util + p90. | 05/07/2026 | 05/07/2026 | [CloudWatch Dashboards](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html) |
 | 7 | Set a **CloudWatch Alarm**: p90 > 12s for 5 minutes → SNS email. | 06/07/2026 | 06/07/2026 | [CloudWatch Alarms](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html) |
 
 ### Week 9 Achievements
