@@ -8,26 +8,14 @@ pre: " <b> 1.3. </b> "
 
 ## WORKLOG TUẦN 3
 
-### Trọng tâm
+Tuần mạng. VPC phải chuẩn, vì ALB, ECS, EFS, Redis đều nằm trong đó và sau này dời cái nào cũng đau.
 
-Mạng. Chốt layout VPC để mọi thứ phía sau (ALB, ECS, EFS, Redis) có chỗ đặt ổn định.
+Tôi chia `UPS-5` thành sub-ticket cho CIDR plan, subnet, routing, NAT, endpoint, rồi chủ trì buổi whiteboard về topology và viết lại ngay hôm sau để không ai cãi nhau bằng trí nhớ. Có người đề xuất single-AZ cho tiết kiệm. Tôi gạt. Hai AZ, không thương lượng.
 
-### Việc tôi làm
+Tự làm thì tôi chọn CIDR (`10.20.0.0/16`), tách public và private subnet trên hai AZ, và chốt một NAT trước để giữ bill vừa phải. VPC endpoint thực sự cần là S3, ECR, CloudWatch Logs, còn lại để sau. Tất cả nhét vào ADR mạng.
 
-- Chia `UPS-5` (VPC) thành sub-ticket: CIDR plan, subnet, routing, NAT, endpoint.
-- Chủ trì buổi vẽ bảng cho topology, xong ngồi viết lại để nhóm không phải cãi nhau bằng trí nhớ.
-- Review sơ đồ mạng nhóm dựng, phản đối phương án single-AZ cho tiết kiệm.
-- Review PR subnet và route table.
-- Tự làm: chọn CIDR (`10.20.0.0/16`), tách public/private subnet trên hai AZ, chốt một NAT cho đỡ tốn, liệt kê VPC endpoint thực sự cần (S3, ECR, CloudWatch Logs). Viết ADR mạng.
+Kết quả: thiết kế VPC merge xong. Khi có service mới, cả nhóm biết luôn nó thuộc subnet nào, không phải hỏi tôi.
 
-### Kết quả
+Điểm tôi chưa yên tâm là một NAT duy nhất. Nó đúng nghĩa là single point of failure. Tôi mở follow-up để thêm cái thứ hai trước khi có traffic thật, rồi đi tiếp.
 
-Thiết kế VPC merge thành ADR. Nhóm biết mỗi service sau này thuộc subnet nào, không phải hỏi lại.
-
-### Khó khăn
-
-Cân chi phí và dự phòng cho NAT. Trước mắt một NAT, ghi follow-up để thêm cái thứ hai trước khi lên prod.
-
-### Kế hoạch tuần sau
-
-Chương 5.4. Security Group và S3. Tôi sẽ chốt convention bucket và policy.
+Tuần sau chương 5.4. Security Group và S3. Tôi sẽ chốt convention bucket và policy.

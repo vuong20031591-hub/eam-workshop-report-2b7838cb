@@ -8,26 +8,14 @@ pre: " <b> 1.4. </b> "
 
 ## WEEK 4 WORKLOG
 
-### Focus
+Security Groups and S3 week. Both look dull on the surface. Both hurt if you get the conventions wrong.
 
-Security Groups and S3. Two things that look boring but bite hard if the conventions are wrong.
+I cut `UPS-6` and `UPS-7` into small tickets per service, then reviewed the SG matrix (who is allowed to talk to whom, on which port). The first draft opened Redis to the internet, so it went back. The S3 PRs were mostly fine, I just made sure block-public-access was on for every bucket by default and did not depend on someone remembering.
 
-### What I did
+On my own I picked the bucket naming (`upscale-<env>-<purpose>` for input, output, artifacts, logs), wrote a lifecycle rule that pushes objects to Glacier after 30 days and deletes log buckets after 90, and produced a shared bucket policy template. Then a short walkthrough with the team so the SG matrix was not just a diagram nobody read.
 
-- Broke `UPS-6` (SG) and `UPS-7` (S3) into small tickets by service.
-- Reviewed the SG matrix (who talks to whom on which port) and rejected the first draft because it opened Redis to the world.
-- Reviewed S3 PRs, made sure every bucket has block-public-access on by default.
-- Hands-on: chose bucket naming `upscale-<env>-<purpose>` (input, output, artifacts, logs), wrote the lifecycle rule (glacier after 30 days, delete after 90 for logs), and produced a shared bucket-policy template.
-- Held a short review with the team to walk through why the SG rules look the way they do.
+By Friday the SG matrix and the S3 conventions were merged, and new buckets started following the template without me babysitting each PR.
 
-### Result
+One small surprise: two people did not realise ALB to ECS still needs an SG rule even inside the VPC. Fair. I added a note about it in the ADR.
 
-SG matrix and S3 conventions merged. New buckets and services now follow the template without me babysitting each PR.
-
-### Friction
-
-Two members were surprised that ALB → ECS still needs an SG rule even inside the VPC. Added a short note in the ADR.
-
-### Next week
-
-Chapter 5.5. EFS for shared model weights and ECR for container images.
+Next week is chapter 5.5. EFS for shared model weights, ECR for container images.

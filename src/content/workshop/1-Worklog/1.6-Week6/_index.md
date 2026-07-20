@@ -8,26 +8,14 @@ pre: " <b> 1.6. </b> "
 
 ## WEEK 6 WORKLOG
 
-### Focus
+Redis and SQS week. These are the pieces that decide whether the system feels responsive when the queue gets long.
 
-Redis and SQS. The two pieces that decide whether the system stays responsive under load.
+`UPS-9` (Redis) and `UPS-10` (SQS) went out with clear owners. Then a design session for the queue shape. We agreed on one main queue plus a dead-letter queue with a redrive after three attempts, and a visibility timeout that tracks the p95 upscale time rather than an arbitrary number. If a worker crashes the message reappears, but a long-running job does not get duplicated behind its own back.
 
-### What I did
+The Redis PR came in as a single-node setup. I pushed back and asked for multi-AZ. It costs more, but a single node is not something I want to explain to anyone at 2am. The worker PR that consumes SQS was fine except for a missing message delete on the failure path, which would have quietly retried forever. Flagged, fixed, merged.
 
-- Split the work into `UPS-9` (Redis) and `UPS-10` (SQS) with clear owners.
-- Chaired a design session on the queue shape: one main queue plus a dead-letter queue with a redrive after 3 attempts, visibility timeout matched to the p95 upscale time.
-- Reviewed the Redis config PR, pushed back on a single-node setup and asked for multi-AZ.
-- Reviewed the worker PR that consumes SQS, flagged a missing message-delete on failure path.
-- Hands-on: wrote the job message schema (JSON: job_id, s3_input, s3_output, params, submitted_at), the retry policy, and the cache key convention.
+On my own I wrote the job message schema (job_id, s3_input, s3_output, params, submitted_at), the retry policy, and the cache key convention so nobody invents their own.
 
-### Result
+The one thing that bit us: I set the visibility timeout too low at first, so long jobs got retried while they were still running. Bumped to 15 minutes and wrote down the reasoning so the next person does not "optimise" it back down.
 
-Queue and cache are in place with a schema everyone codes against. DLQ visible on the CloudWatch board so we notice failures early.
-
-### Friction
-
-Visibility timeout was set too low at first, so long jobs got retried while still running. Bumped to 15 minutes and documented why.
-
-### Next week
-
-Chapter 5.7. Stand up the ECS cluster and get the first task running.
+Next week is chapter 5.7. Stand up the ECS cluster and run the first real task.

@@ -8,26 +8,14 @@ pre: " <b> 1.3. </b> "
 
 ## WEEK 3 WORKLOG
 
-### Focus
+Network week. The VPC has to be right, because ALB, ECS, EFS and Redis all land inside it and moving any of them later is painful.
 
-Network. Lock the VPC layout so everything downstream (ALB, ECS, EFS, Redis) has a stable place to land.
+I broke `UPS-5` into sub-tickets for the CIDR plan, subnets, routing, NAT, and endpoints, then ran a whiteboard session on the topology and wrote it up straight after so nobody was arguing from memory the next day. Someone proposed a single-AZ shortcut to save money. I pushed back. Two AZs, non-negotiable.
 
-### What I did
+Hands-on I picked the CIDR (`10.20.0.0/16`), split public and private subnets across two AZs, and settled on one NAT for now to keep the bill sane. The VPC endpoints we actually need are S3, ECR, and CloudWatch Logs, everything else can wait. All of this went into the network ADR.
 
-- Broke `UPS-5` (VPC) into sub-tickets: CIDR plan, subnets, routing, NAT, endpoints.
-- Ran a whiteboard session on the topology, then wrote it up so the team is not arguing from memory.
-- Reviewed the network diagram the team produced, pushed back on a single-AZ shortcut.
-- Reviewed PRs for subnet and route table changes.
-- Hands-on: chose CIDR (`10.20.0.0/16`), split public/private subnets across two AZs, decided on one NAT to keep cost sane, listed the VPC endpoints we actually need (S3, ECR, CloudWatch Logs). Wrote the network ADR.
+Result: VPC design is merged. When a new service lands, the team knows which subnet it belongs in without asking me.
 
-### Result
+The one thing I am not fully happy with is the single NAT. It is a real single point of failure. I opened a follow-up to add a second one before production traffic, and moved on.
 
-VPC design merged as an ADR. Team knows which subnet each future service belongs in without asking me.
-
-### Friction
-
-Cost vs redundancy on NAT. Went with one NAT for now, noted a follow-up ticket to add a second before production traffic.
-
-### Next week
-
-Chapter 5.4. Security Groups and S3. I will own the bucket and policy conventions.
+Next week is chapter 5.4. Security Groups and S3. I will own the bucket and policy conventions.
