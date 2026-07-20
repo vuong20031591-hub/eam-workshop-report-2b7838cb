@@ -1,25 +1,71 @@
 ---
 title: "Blog 1"
-date: 2024-01-01
+date: 2026-06-11
 weight: 1
 chapter: false
 pre: " <b> 3.1. </b> "
 ---
 
-# Session policies trong Amazon EKS Pod Identity
+# Kiến trúc tổng quan — AI Image Upscaling
 
-Amazon EKS Pod Identity vừa bổ sung session policies, và đây là một cải tiến em nghĩ đội DevOps nào chạy EKS ở quy mô lớn cũng nên để mắt tới. Ý tưởng đơn giản: thay vì phải tạo thêm một IAM role mới mỗi khi cần thu hẹp quyền cho một workload cụ thể, giờ đã có thể đính kèm một inline policy ngay tại association giữa ServiceAccount và IAM role.
+### Tiêu đề bài viết
 
-Cách nó hoạt động cũng dễ hình dung. Quyền hiệu quả của pod là phần giao giữa policy của IAM role và session policy. Nghĩa là session policy chỉ có thể co lại chứ không mở rộng thêm quyền, nên không có rủi ro escalation. Điều này giải quyết đúng bài toán over-permissioning: khi nhiều workload dùng chung một role, mỗi workload có thể bị siết riêng theo nhu cầu thật.
+**Kiến trúc tổng quan — AI Image Upscaling trên AWS**
 
-Tính năng hỗ trợ cả same-account lẫn cross-account (qua IAM role chaining), nên các mô hình multi-account cũng hưởng lợi. Ở cluster lớn, cái được rõ nhất là giảm số IAM role phải quản lý — trước đây rất dễ chạm giới hạn quota IAM khi cứ mỗi workload phải một role riêng để giữ least privilege.
+### Tóm tắt nội dung
 
-Cấu hình thì làm được qua Console, AWS CLI hoặc SDK khi tạo hoặc cập nhật association. Không cần thay đổi kiến trúc, chỉ là một trường mới trong lúc liên kết ServiceAccount với role.
+**Mục tiêu:** Dịch vụ API nâng cấp ảnh bằng AI (Real-ESRGAN) và phương pháp truyền thống (LANCZOS), tối ưu cho GPU để đạt chất lượng cao và hiệu năng tốt.
 
-Trường hợp em thấy hợp nhất là khi một team dùng chung một role cho vài pod: pod này chỉ cần đọc một S3 bucket, pod kia chỉ gọi một vài API cụ thể. Trước đây phải tách role, giờ chỉ cần hai session policy khác nhau trên cùng một role.
+![Sơ đồ kiến trúc AI Image Upscaling](/images/blog1/ai-image-upscaling-architecture.png)
 
-...Hình ảnh...
+### Kiến trúc chính
 
-...Link...
+**Frontend Layer**
+- CDN và hosting tĩnh (CloudFront / Amplify) kết hợp WAF ở rìa để bảo vệ và phân phối nội dung nhanh.
 
-...Hướng dẫn...
+**Backend API Layer**
+- API nhẹ (FastAPI) nhận file, kiểm tra, trả kết quả và metadata.
+- Đặt sau Application Load Balancer để scale linh hoạt.
+
+**AI Processing Layer**
+- Mô hình deep learning chạy trên GPU (SageMaker / EC2 GPU / AMI).
+- Module chuyên biệt cho face-enhancement (GFPGAN) và phục hồi ảnh (CodeFormer).
+
+**Orchestration & Queue**
+- Hàng đợi công việc (SQS) điều phối tác vụ nặng bất đồng bộ.
+- Hỗ trợ retry và cân bằng tải giữa các worker xử lý AI.
+
+**Storage & Cache**
+- Object storage (S3) cho ảnh đầu vào và output.
+- Database (DynamoDB) cho metadata và trạng thái job.
+- Cache (ElastiCache) cho kết quả phổ biến, giảm latency.
+
+**Monitoring & Security**
+- Logging và metrics (CloudWatch) cho vận hành.
+- Secrets management (Secrets Manager) cho credential và API keys.
+
+### Những điểm chính
+
+#### Các quyết định thiết kế chính
+
+- Tách rõ API và workload AI để scale độc lập (API nhiều instance nhỏ, AI scale trên GPU).
+- Queue-driven processing cho tác vụ nặng, làm mềm spike load và tăng độ bền hệ thống.
+- Preload model khi có thể để giảm độ trễ request đầu tiên; vẫn hỗ trợ lazy-load nếu cần.
+- FP16 và tile-based processing giảm tiêu thụ bộ nhớ GPU và xử lý an toàn ảnh lớn.
+- Trả về metadata chi tiết (số mặt, thời gian xử lý, gợi ý chế độ) để frontend hiển thị thông tin hữu ích.
+
+#### Ưu điểm
+
+- Linh hoạt, dễ triển khai trên cloud.
+- Tách trách nhiệm rõ ràng, dễ tối ưu chi phí (scale GPU theo nhu cầu).
+- Cải thiện UX bằng metadata và chế độ xử lý gợi ý.
+
+#### Rủi ro & cải tiến đề xuất
+
+- **Model download / OOM:** cần retry logic, alerting và fallback strategy (tile/precision giảm).
+- **Chi phí GPU cao:** autoscaling theo queue, cân nhắc Spot instances.
+- **Tối ưu latency:** cache kết quả, trả pre-signed URL cho object storage thay vì stream qua API.
+
+### Kết luận
+
+Kiến trúc cân bằng giữa chất lượng ảnh và vận hành — phù hợp cho môi trường cloud, dễ mở rộng và có các điểm cải tiến rõ ràng cho hiệu năng và chi phí.
