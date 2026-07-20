@@ -8,26 +8,16 @@ pre: " <b> 1.9. </b> "
 
 ## WEEK 9 WORKLOG
 
-### Focus
+Edge week. CloudFront goes in front of the ALB, WAF sits on top for the noisy stuff, Route 53 finally gives the app a real domain.
 
-Edge layer. CloudFront in front of the ALB, WAF for basic protection, Route 53 for a real domain.
+I broke the work into `UPS-13` (CloudFront and Route 53) and `UPS-14` (WAF). The design meeting on cache behaviour was the most important part. The static frontend gets cached aggressively, `/api/*` does not get cached at all, and the `Authorization` header is forwarded so authenticated requests still work. Sounds obvious written down, but if you skip that meeting somebody caches the login response for 24 hours and nobody knows why nothing works.
 
-### What I did
+On the WAF PR I cut a rule that was doing the same thing as the managed common rule group. On the Route 53 PR I checked that the apex uses an alias to the CloudFront distribution rather than an A record to an IP that will change.
 
-- Broke the work into `UPS-13` (CloudFront + Route 53) and `UPS-14` (WAF).
-- Chaired a design on cache behaviour: cache the static frontend aggressively, do not cache `/api/*`, forward the `Authorization` header.
-- Reviewed the WAF ruleset PR and cut a redundant rule that overlapped with the managed common rule group.
-- Reviewed the Route 53 PR, made sure the apex uses an alias to the CloudFront distribution.
-- Hands-on: wrote the cache-behaviour spec, chose the WAF managed rule set (Common + Known Bad Inputs + rate-limit 2000 req/5min per IP), and drafted the DNS cut-over plan.
+Hands-on I wrote the cache behaviour spec, picked the managed WAF rules (Common, Known Bad Inputs, and a rate limit of 2000 requests per 5 minutes per IP), and drafted the DNS cut-over plan.
 
-### Result
+By end of week the domain resolves, HTTPS terminates at CloudFront, the ALB sits behind the edge, and WAF is blocking the obvious junk from day one.
 
-Domain resolves, HTTPS terminates at CloudFront, WAF blocks the obvious noise on day one, ALB now sits behind the edge.
+One embarrassing moment: CloudFront cached an early error response from the frontend and served it for a while. Added a short TTL for 4xx and 5xx to the spec so this does not happen in prod.
 
-### Friction
-
-CloudFront cached an early error response for the frontend. Added a short TTL for 4xx/5xx to the spec so this does not happen in prod.
-
-### Next week
-
-Chapter 5.9 continued. Cognito for sign-in, and get the CloudWatch dashboard useful.
+Next week is still chapter 5.9. Cognito for sign-in, and make the CloudWatch dashboard actually useful instead of a wall of graphs.
