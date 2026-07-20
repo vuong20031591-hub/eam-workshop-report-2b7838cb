@@ -6,16 +6,16 @@ chapter: false
 pre: " <b> 2. </b> "
 ---
 
-# Upscale AI — Deploying an AI Image Upscaling Platform to AWS Cloud
+# Upscale AI: Deploying an AI Image Upscaling Platform to AWS Cloud
 ## A Container-Based AWS Solution for AI-Powered Image Enhancement
 
 ---
 
 ### 1. Executive Summary
 
-**Upscale AI** is a web application that uses deep learning models (Real-ESRGAN) to upscale images from low resolution to high resolution. Users upload images through a web interface, and the AI processing happens asynchronously on AWS infrastructure with real-time progress tracking.
+Upscale AI is a web application that uses Real-ESRGAN to increase image resolution. Users upload an image through the web interface, and inference runs asynchronously on AWS with progress reported back in real time.
 
-This project deploys the entire system to **AWS Cloud** using a **container-based architecture** on ECS with EC2 launch type — providing GPU support for AI model inference, persistent storage for model weights, and automatic scaling based on demand.
+The whole system is deployed to AWS using a container-based architecture on ECS with the EC2 launch type. EC2 gives us GPU-capable instances for inference, and EFS keeps the model weights around across container restarts. Auto-scaling handles bursts in demand.
 
 ---
 
@@ -23,7 +23,7 @@ This project deploys the entire system to **AWS Cloud** using a **container-base
 
 #### Architecture Philosophy
 
-Unlike typical serverless deployments, Upscale AI requires **persistent GPU compute** for AI model inference. This constraint drives the entire architecture toward ECS on EC2 with auto-scaling groups.
+Real-ESRGAN inference needs persistent GPU compute, which rules out Lambda and most serverless options. That single constraint is why the compute layer is ECS on EC2 with an auto-scaling group.
 
 #### Core Design Decisions
 
@@ -75,13 +75,13 @@ Unlike typical serverless deployments, Upscale AI requires **persistent GPU comp
 | Amazon VPC | Network isolation |
 | AWS IAM | Role-based access control |
 | AWS Secrets Manager | Credential storage |
-| Amazon Cognito | User authentication (planned — not yet in workshop) |
+| Amazon Cognito | User authentication (planned, not yet in workshop) |
 
 #### Observability Layer
 | Service | Purpose |
 |---------|---------|
 | Amazon CloudWatch | Logs, metrics, alarms |
-| AWS CodePipeline | CI/CD automation (planned — not yet in workshop) |
+| AWS CodePipeline | CI/CD automation (planned, not yet in workshop) |
 
 ---
 
@@ -101,28 +101,20 @@ Unlike typical serverless deployments, Upscale AI requires **persistent GPU comp
 | Other | Cognito, IAM, VPC, ACM | $0.00 |
 | **Total** | | **~$227.52/month** |
 
-> Note: Workshop baseline uses `t3.large` (CPU) for testing. For production GPU inference, switch to `g4dn.xlarge` (NVIDIA T4, ~$379/mo on-demand) and enable **Spot Instances** to cut EC2 cost by 60–70%.
+> Note: the workshop baseline uses `t3.large` (CPU) for testing. For production GPU inference, switch to `g4dn.xlarge` (NVIDIA T4, about $379/mo on-demand) and enable Spot Instances to cut EC2 cost by roughly 60% to 70%.
 
 ---
 
 ### 5. Security Architecture
 
 #### Network Security
-- **VPC Isolation**: Private subnets for all compute resources
-- **Security Groups**: Least-privilege inbound rules
-- **NAT Gateway**: Controlled outbound internet access
-- **WAF Rules**: Rate limiting, SQL injection, IP reputation filtering
+All compute resources sit in private subnets inside a dedicated VPC. Security groups only allow the inbound rules each service actually needs, and a NAT Gateway handles the small amount of outbound traffic those services require. WAF rules on CloudFront cover rate limiting, SQL-injection signatures, and IP reputation filtering.
 
 #### Data Security
-- **Encryption at Rest**: EFS, S3, PostgreSQL-on-ECS
-- **Encryption in Transit**: TLS 1.2+ everywhere
-- **Secrets Management**: No hardcoded credentials
-- **IAM Roles**: Task-specific permissions
+Data is encrypted at rest on EFS, S3, and the PostgreSQL-on-ECS volume, and TLS 1.2+ is required for traffic between services. Credentials live in Secrets Manager rather than in code or task definitions. IAM roles are scoped per ECS task so a compromised container cannot reach resources it does not use.
 
 #### Application Security
-- **Cognito**: JWT-based authentication
-- **CORS**: Strict origin validation
-- **Input Validation**: Server-side request validation
+Cognito issues JWTs that the API validates on every request. CORS is restricted to the CloudFront origin, and request payloads are validated server-side before they reach the queue.
 
 ---
 

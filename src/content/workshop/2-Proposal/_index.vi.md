@@ -6,16 +6,16 @@ chapter: false
 pre: " <b> 2. </b> "
 ---
 
-# Upscale AI — Triển khai nền tảng nâng cấp ảnh AI lên AWS Cloud
+# Upscale AI: Triển khai nền tảng nâng cấp ảnh AI lên AWS Cloud
 ## Giải pháp AWS Container-Based cho nâng cấp ảnh bằng AI
 
 ---
 
 ### 1. Tóm tắt điều hành
 
-**Upscale AI** là ứng dụng web sử dụng mô hình học sâu (Real-ESRGAN) để nâng cấp ảnh từ độ phân giải thấp lên độ phân giải cao. Người dùng tải ảnh lên qua giao diện web, và quá trình xử lý AI diễn ra bất đồng bộ trên hạ tầng AWS với theo dõi tiến trình thời gian thực.
+Upscale AI là ứng dụng web dùng Real-ESRGAN để tăng độ phân giải ảnh. Người dùng upload ảnh qua giao diện web, quá trình inference chạy bất đồng bộ trên AWS và tiến trình được báo về theo thời gian thực.
 
-Dự án này triển khai toàn bộ hệ thống lên **AWS Cloud** sử dụng **kiến trúc container-based** trên ECS với EC2 launch type — cung cấp hỗ trợ GPU cho suy luận mô hình AI, lưu trữ liên tục cho trọng số mô hình, và tự động mở rộng quy mô theo nhu cầu.
+Toàn bộ hệ thống được deploy lên AWS theo kiến trúc container-based, chạy trên ECS với EC2 launch type. EC2 cho phép dùng instance có GPU cho inference, còn EFS giữ lại trọng số mô hình qua các lần restart container. Auto-scaling xử lý phần lưu lượng tăng đột biến.
 
 ---
 
@@ -23,7 +23,7 @@ Dự án này triển khai toàn bộ hệ thống lên **AWS Cloud** sử dụn
 
 #### Triết lý kiến trúc
 
-Không giống các triển khai serverless điển hình, Upscale AI yêu cầu **tính toán GPU liên tục** cho suy luận mô hình AI. Ràng buộc này dẫn đến toàn bộ kiến trúc hướng về ECS trên EC2 với các nhóm tự động mở rộng.
+Inference Real-ESRGAN cần GPU chạy liên tục, nên Lambda và phần lớn lựa chọn serverless bị loại. Chính ràng buộc đó là lý do lớp compute là ECS trên EC2 kèm auto-scaling group.
 
 #### Các quyết định thiết kế chính
 
@@ -75,13 +75,13 @@ Không giống các triển khai serverless điển hình, Upscale AI yêu cầu
 | Amazon VPC | Cô lập mạng |
 | AWS IAM | Kiểm soát truy cập dựa trên vai trò |
 | AWS Secrets Manager | Lưu trữ thông tin xác thực |
-| Amazon Cognito | Xác thực người dùng (dự kiến — chưa có trong workshop) |
+| Amazon Cognito | Xác thực người dùng (dự kiến, chưa có trong workshop) |
 
 #### Lớp Quan sát
 | Dịch vụ | Mục đích |
 |---------|---------|
 | Amazon CloudWatch | Logs, chỉ số, alarms |
-| AWS CodePipeline | Tự động hóa CI/CD (dự kiến — chưa có trong workshop) |
+| AWS CodePipeline | Tự động hóa CI/CD (dự kiến, chưa có trong workshop) |
 
 ---
 
@@ -101,28 +101,20 @@ Không giống các triển khai serverless điển hình, Upscale AI yêu cầu
 | Khác | Cognito, IAM, VPC, ACM | $0.00 |
 | **Tổng** | | **~$227.52/tháng** |
 
-> Lưu ý: Workshop dùng `t3.large` (CPU) làm baseline cho test. Production nếu cần GPU inference: chuyển sang `g4dn.xlarge` (NVIDIA T4, ~$379/tháng on-demand) và bật **Spot Instances** để giảm 60–70% chi phí EC2.
+> Lưu ý: workshop dùng `t3.large` (CPU) làm baseline cho test. Production nếu cần GPU inference, chuyển sang `g4dn.xlarge` (NVIDIA T4, khoảng $379/tháng on-demand) và bật Spot Instances để giảm khoảng 60% đến 70% chi phí EC2.
 
 ---
 
 ### 5. Kiến trúc bảo mật
 
 #### Bảo mật mạng
-- **Cô lập VPC**: Private subnets cho tất cả tài nguyên compute
-- **Security Groups**: Quy tắc inbound quyền tối thiểu
-- **NAT Gateway**: Truy cập internet kiểm soát outbound
-- **Quy tắc WAF**: Giới hạn tốc độ, SQL injection, lọc danh tiếng IP
+Toàn bộ tài nguyên compute nằm trong private subnets thuộc một VPC riêng. Security group chỉ mở đúng inbound mà mỗi service cần, còn NAT Gateway phụ trách phần outbound nhỏ ra ngoài. WAF gắn trên CloudFront xử lý rate limit, chữ ký SQL injection và lọc IP theo reputation.
 
 #### Bảo mật dữ liệu
-- **Mã hóa khi nghỉ**: EFS, S3, PostgreSQL-on-ECS
-- **Mã hóa khi truyền**: TLS 1.2+ ở mọi nơi
-- **Quản lý bí mật**: Không hardcode thông tin xác thực
-- **IAM Roles**: Quyền theo task cụ thể
+Dữ liệu được mã hóa at-rest trên EFS, S3 và volume PostgreSQL-on-ECS; traffic giữa các service bắt buộc TLS 1.2+. Credential được lưu trong Secrets Manager thay vì hardcode trong code hay task definition. IAM role gán theo từng ECS task để một container bị chiếm không với tới được tài nguyên nó không dùng.
 
 #### Bảo mật ứng dụng
-- **Cognito**: Xác thực dựa trên JWT
-- **CORS**: Xác thực nguồn chặt chẽ
-- **Validate đầu vào**: Validate phía server
+Cognito phát hành JWT và API validate token này ở mọi request. CORS chỉ cho phép origin của CloudFront, và payload request được validate ở server-side trước khi đẩy vào queue.
 
 ---
 
