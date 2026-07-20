@@ -1,29 +1,54 @@
 ---
-title: "Workshop"
-date: 2024-01-01
+title: "Workshop: Triển khai Upscale AI trên AWS"
+date: 2026-07-18
 weight: 5
 chapter: false
-pre: " <b> 5. </b> "
+pre: "<b>5. </b>"
 ---
 
-# Truy cập S3 an toàn từ môi trường Hybrid bằng VPC Endpoint
+# Workshop: Triển khai Upscale AI trên AWS
 
-#### Tổng quan
+Hướng dẫn thực hành triển khai **Upscale AI** — nền tảng nâng cấp ảnh bằng AI — trên AWS sử dụng **AWS Management Console**.
 
-AWS PrivateLink giúp workload trong VPC hoặc dưới trung tâm dữ liệu on-premises kết nối tới các dịch vụ AWS mà không phải đi vòng ra Internet công cộng. Đây là lựa chọn phổ biến khi mình cần giữ traffic trong mạng riêng, giảm rủi ro rò rỉ dữ liệu và tránh phụ thuộc vào NAT/Internet Gateway.
+### Bạn sẽ xây dựng gì
 
-Trong bài lab này, mình sẽ dựng, cấu hình và kiểm thử hai loại VPC endpoint để truy cập Amazon S3:
+Ứng dụng production-grade sử dụng mô hình học sâu Real-ESRGAN để nâng cấp ảnh, triển khai trên AWS với điều phối container, compute tăng tốc GPU, và kiến trúc bảo mật nhiều lớp.
 
-+ **Gateway endpoint** — dùng cho S3 và DynamoDB. Traffic từ VPC đi tới endpoint qua route table, không tốn thêm ENI hay chi phí giờ chạy.
-+ **Interface endpoint** — endpoint dựa trên ENI có địa chỉ IP riêng trong subnet, hỗ trợ cả tài nguyên trong VPC lẫn từ on-premises qua Site-to-Site VPN / Direct Connect. Client resolve tên dịch vụ qua DNS về IP của ENI.
+### Các lớp kiến trúc
 
-Việc chọn loại nào phụ thuộc vào nguồn traffic đến từ đâu: cùng VPC thì Gateway đủ dùng và rẻ; on-premises hoặc peered VPC thì cần Interface.
+![Sơ đồ kiến trúc](/images/5-Workshop/sodo.jpg)
 
-#### Nội dung
+### Các bước Workshop
 
-1. [Tổng quan về workshop](5.1-Workshop-overview/)
-2. [Chuẩn bị](5.2-Prerequiste/)
-3. [Truy cập S3 từ VPC](5.3-S3-vpc/)
-4. [Truy cập S3 từ TTDL On-premises](5.4-S3-onprem/)
-5. [VPC Endpoint Policies (làm thêm)](5.5-Policy/)
-6. [Dọn dẹp tài nguyên](5.6-Cleanup/)
+| Bước | Giai đoạn | Nội dung |
+|------|-----------|---------|
+| [5.1 - Giới thiệu](5.1-introduction/) | Tổng quan | Thiết kế hệ thống, luồng dữ liệu, vai trò từng thành phần |
+| [5.2 - Yêu cầu](5.2-prerequisites/) | Thiết lập | Tài khoản AWS, IAM user, chọn vùng |
+| [5.3 - Hạ tầng](5.3-infrastructure/) | Nền tảng | VPC, subnets, IGW, NAT, route tables, security groups, IAM roles — toàn bộ mạng và quyền hạn |
+| [5.4 - Lưu trữ](5.4-storage/) | Lớp dữ liệu | S3 buckets, EFS filesystem + access points, ECR repository, Secrets Manager |
+| [5.5 - Ứng dụng](5.5-application/) | Lớp compute | Redis, hàng đợi SQS, ECS task definitions, ECS services, auto scaling |
+| [5.6 - Truy cập](5.6-access/) | Lớp lưu lượng | ALB, target groups, health checks, chuyển hướng HTTP→HTTPS, listeners |
+| [5.7 - Phân phối](5.7-delivery/) | Lớp biên | CloudFront distribution, quy tắc WAF, chứng chỉ SSL ACM |
+| [5.8 - Giám sát](5.8-observability/) | Theo dõi | CloudWatch log groups, alarms, dashboard |
+| [5.9 - Triển khai](5.9-deployment/) | Go-Live | Build frontend, upload lên S3, invalidation CloudFront, xác minh toàn bộ |
+| [5.10 - Dọn dẹp](5.10-cleanup/) | Tháo dỡ | Xóa tất cả tài nguyên theo đúng thứ tự |
+
+### Tổng chi phí
+
+| Tài nguyên | Chi phí hàng tháng |
+|-----------|-------------------|
+| EC2 (t3.large, 24/7) | ~$120 |
+| NAT Gateway | ~$45 |
+| ALB + Target Groups | ~$25 |
+| ElastiCache Redis | ~$15 |
+| CloudFront + WAF | ~$14 |
+| EFS + S3 + ECR | ~$5 |
+| SQS + Secrets Manager | ~$3 |
+| CloudWatch + CodePipeline | ~$6 |
+| **Tổng cộng** | **~$233/tháng** |
+
+> Sử dụng **Spot Instances** để giảm chi phí EC2 60-70% (~$90/tháng tiết kiệm).
+
+### Vùng triển khai
+
+Tất cả tài nguyên → **ap-southeast-1 (Singapore)** trừ khi có yêu cầu khác.
