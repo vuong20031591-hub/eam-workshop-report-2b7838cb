@@ -10,28 +10,28 @@ pre: " <b> 1.3. </b> "
 
 ### Week 3 Objectives
 
-First week actually touching a real GPU: launch an EC2 g4dn.xlarge, attach an IAM role instead of an access key, install NVIDIA drivers and PyTorch CUDA. Once the box is up, write `ModelManager` (Singleton, lazy-load from S3, cache on the EBS volume) and the `/upscale/ai` endpoint that handles multipart uploads and puts the input on S3 under `tmp/`.
+Tuần này team bắt đầu chạm GPU thật. Vai trò của tôi: design endpoint contract `/upscale/ai`, review Khiem provision EC2 GPU + IAM role, review Thang implement `ModelManager`. Tôi cũng ngồi cùng Thang chốt strategy validate input (size, extension) để tránh crash model sau này.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Launch **EC2 g4dn.xlarge** (NVIDIA T4 16GB, Ubuntu 22.04 Deep Learning AMI), attach EBS gp3 100GB. | 05/05/2026 | 05/05/2026 | [EC2 G4](https://aws.amazon.com/ec2/instance-types/g4/) |
-| 2 | Attach **IAM Role** `EC2-Upscale-Role` to the instance (S3 read/write on `upscale-io`) to avoid access keys. | 06/05/2026 | 06/05/2026 | [IAM Roles for EC2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html) |
-| 3 | Install `nvidia-smi`, PyTorch 2.4 + CUDA 12.4, verify FP16 inference. | 07/05/2026 | 08/05/2026 | - |
-| 4 | Write `ModelManager` Singleton: `load()` downloads from S3 → `/opt/weights/`, keeps model in memory. | 09/05/2026 | 10/05/2026 | - |
-| 5 | Write the validator: max 10MB, extensions `jpg/png/webp`, verified with Pillow. | 11/05/2026 | 11/05/2026 | - |
-| 6 | Endpoint `/upscale/ai` (POST multipart) → upload input `tmp/{uuid}.png` to S3. | 12/05/2026 | 12/05/2026 | - |
-| 7 | End-to-end test: one 1080p image → x4 → return `output/{uuid}.png` as a presigned URL good for 1h. | 13/05/2026 | 13/05/2026 | [S3 Presigned URL](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html) |
+| 1 | Design contract `/upscale/ai`: POST multipart, response `{ job_id, output_url, elapsed_ms }`; viết OpenAPI spec. | 05/05/2026 | 05/05/2026 | [OpenAPI](https://swagger.io/specification/) |
+| 2 | Review Khiem: EC2 g4dn.xlarge (T4 16GB) + Ubuntu 22.04 DLAMI + EBS gp3 100GB + IAM role `EC2-Upscale-Role`. | 06/05/2026 | 06/05/2026 | [EC2 G4](https://aws.amazon.com/ec2/instance-types/g4/) |
+| 3 | Chốt tech decision với Thang: dùng Singleton cho `ModelManager`, lazy-load, cache `/opt/weights/`; document trong ADR. | 07/05/2026 | 08/05/2026 | [ADR](https://adr.github.io/) |
+| 4 | Review PR Thang: `ModelManager.load()` + FP16 inference verify; feedback vòng 1 (thiếu warmup), duyệt vòng 2. | 09/05/2026 | 10/05/2026 | - |
+| 5 | Spec validator: max 10MB, extensions `jpg/png/webp`, Pillow `verify()`; giao Thang implement kèm unit test. | 11/05/2026 | 11/05/2026 | - |
+| 6 | Review PR Thang: endpoint `/upscale/ai` + upload S3 `tmp/{uuid}.png` + presigned URL 1h; approve. | 12/05/2026 | 12/05/2026 | [S3 Presigned URL](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html) |
+| 7 | Chạy end-to-end demo với team: 1080p → 4K, ~5.8s; log metric vào Linear để tuần sau baseline. | 13/05/2026 | 13/05/2026 | - |
 
 ### Week 3 Achievements
 
-The GPU box stayed stable overnight. Model cold-start is around 4.2s including the weight download from S3. `/upscale/ai` runs end to end: a 1080p image goes to 4K in roughly 5.8s. Presigned URLs work, so FE never needs to know the bucket layout.
+Endpoint `/upscale/ai` chạy end-to-end, cold-start ~4.2s, inference ~5.8s cho 1080p. Presigned URL đã tách permission bucket ra khỏi FE — chốt sớm cái này giúp tuần 5 Quan không phải đụng IAM. ADR đầu tiên của project cũng có, sau này review dễ vì có căn cứ.
 
 ### Challenges & Lessons
 
-The most wallet-painful bit is cost: g4dn.xlarge runs about $0.526/hour, and 24/7 would be a bill worth explaining. I use AWS Instance Scheduler to stop the box at 22:00 and start it at 08:00, which cuts roughly 60%. Beyond money, the week confirmed two other things: an IAM Role on EC2 is always safer than a hard-coded access key, and presigned URLs keep bucket permissions out of FE entirely.
+PR đầu tiên của Thang tôi phải reject vòng 1 vì thiếu warmup — cold-start GPU quá dài sẽ làm request đầu timeout. Đây là bài học tôi rút cho việc review: nhìn code không đủ, phải hỏi "chạy lần đầu có gì khác lần thứ hai không". Chi phí g4dn cũng đau đầu, tôi giao Khiem set AWS Instance Scheduler stop 22:00 - start 08:00, giảm ~60%; đây là loại decision Lead phải quyết sớm chứ không để cuối tháng nhìn bill mới hoảng.
 
 ### Next Week Plan
 
-Write `/upscale/standard` running LANCZOS on CPU — no GPU needed. Add an SSE progress stream at `/upscale/ai/stream`. Start the FE bootstrap.
+Design endpoint `/upscale/standard` (LANCZOS, CPU) — spec cho Thang. Design CloudWatch log format (structured JSON) cho Khiem. Ngồi review kế hoạch property tests với Thang.

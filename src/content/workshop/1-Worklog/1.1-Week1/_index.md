@@ -10,28 +10,28 @@ pre: " <b> 1.1. </b> "
 
 ### Week 1 Objectives
 
-Week one was mostly about clearing the ground: open an AWS account and put guardrails in place before touching anything that costs money. Concretely that meant an IAM user `upscale-deployer` with `AdministratorAccess` and MFA, region locked to `ap-southeast-1` (Singapore), AWS Budgets for spend alerts, and CloudTrail for the audit trail. In parallel, spin up two GitHub repos (`upscale-BE` for FastAPI and `upscale-FE` for TanStack Start + React 19) and push the initial commits. MVP scope was locked in the same week: Real-ESRGAN x4 for AI mode, LANCZOS for Standard, with the S3 bucket for input/output pushed to week 2.
+Kickoff tuần đầu là việc của Lead: chốt scope MVP, chia team, dựng khung Linear + repo, và đặt guardrail AWS. Team ba người — Thang (BE core), Khiem (BE + AWS infra), Quan (FE) — nên phần lớn thời gian tôi bỏ vào việc viết brief, ngồi cùng từng người để chốt phạm vi, còn phần code thì để tuần sau khi issue đã rõ.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Sign up for AWS Free Tier, enable **AWS Budgets** with a $10/month alert, turn on **CloudTrail** for `ap-southeast-1`. | 17/04/2026 | 17/04/2026 | [AWS Free Tier](https://aws.amazon.com/free/) |
-| 2 | Create **IAM** user `upscale-deployer` with `AdministratorAccess`, enable console access + MFA, save the account sign-in URL. | 18/04/2026 | 18/04/2026 | [IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) |
-| 3 | Create GitHub repos `upscale-BE`, `upscale-FE`, push initial commit. | 19/04/2026 | 19/04/2026 | [upscale-BE](https://github.com/vuong20031591-hub/upscale-BE), [upscale-FE](https://github.com/vuong20031591-hub/upscale-FE) |
-| 4 | Lock BE stack: Python 3.11 + FastAPI + PyTorch, GPU CUDA FP16, files pushed to **S3** via **boto3**. | 20/04/2026 | 20/04/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
-| 5 | Lock FE stack: **TanStack Start** (React 19 + Vite 8) + TS + Tailwind v4 + shadcn/ui (Radix) + react-hook-form + zod + OIDC (Cognito via `react-oidc-context`); hosted on **S3 + CloudFront** (SPA build). | 21/04/2026 | 21/04/2026 | [TanStack Start](https://tanstack.com/start) |
-| 6 | Draft API contract: `/health`, `/upscale/ai`, `/upscale/standard`, `/metrics` (Prometheus). | 22/04/2026 | 23/04/2026 | - |
-| 7 | Bootstrap Linear project **AI Upscaler**, create epics BE/FE/Infra (AWS)/Docs. | 24/04/2026 | 24/04/2026 | [Linear](https://linear.app/vuongtech/project/ai-upscaler-9cc98aa31b67/overview) |
+| 1 | Kickoff meeting: chốt MVP (Real-ESRGAN x4 cho AI, LANCZOS cho Standard, CodeFormer face), viết product brief 2 trang. | 17/04/2026 | 17/04/2026 | - |
+| 2 | Tạo Linear workspace, team `UPS`, project **AI Upscaler**; định nghĩa label `BE / FE / Bug / Feature / Task`. | 17/04/2026 | 17/04/2026 | [Linear](https://linear.app/) |
+| 3 | Chia team: Thang (BE core), Khiem (BE + AWS infra), Quan (FE); assign Khiem set AWS account + IAM `upscale-deployer` + Budgets + CloudTrail. | 18/04/2026 | 18/04/2026 | - |
+| 4 | Tạo 2 GitHub repo `upscale-BE` (FastAPI) và `upscale-FE` (TanStack Start), setup branch protection main + PR review bắt buộc. | 18/04/2026 | 19/04/2026 | [GitHub Branch Protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches) |
+| 5 | Draft **API contract v0** (`/upscale/ai`, `/upscale/standard`, `/face/enhance`) — request/response schema, error codes. | 20/04/2026 | 21/04/2026 | - |
+| 6 | Review Khiem confirm: IAM `upscale-deployer` + AdministratorAccess + MFA, region `ap-southeast-1`, Budgets $10/tháng. | 22/04/2026 | 22/04/2026 | [IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) |
+| 7 | Sprint planning tuần 2: tạo issue UPS-* backlog, ưu tiên S3 + FastAPI skeleton, chốt Definition of Done. | 23/04/2026 | 23/04/2026 | - |
 
 ### Week 1 Achievements
 
-Both GitHub repos got their initial commits on 17/04/2026. The AWS account is ready to use, `upscale-deployer` has MFA, region is pinned to `ap-southeast-1`, and the Budgets alert already fired once (a test transfer) just to confirm it works. BE settled on a layered layout (`core/`, `models/`, `services/`, `routers/`) and FE uses TanStack Start's file-based routing.
+Team hiểu rõ ai làm gì, không ai bị overlap. Linear đã có backlog và label chuẩn. AWS account do Khiem set up xong đúng như brief — tôi chỉ review lại checklist chứ không đụng console. Repo hai bên đều có initial commit, branch protection bật, PR template có sẵn.
 
 ### Challenges & Lessons
 
-The deployer user gets `AdministratorAccess` on purpose — during a workshop-style build the friction of chasing missing permissions is worse than the risk on a sandbox account, and it comes back off at week 7 when I split roles per service. The rule I stuck to is never sign in as root after day one, always through the IAM sign-in URL with MFA. What I took away: Budgets and CloudTrail should be on from day one, not later. The cost is essentially zero, and in return you sleep better and have evidence when you need to look something up.
+Việc lớn nhất tuần đầu không phải kỹ thuật mà là align scope. Team có xu hướng nhảy vào code ngay, tôi phải kéo lại để viết brief và API contract trước — nếu không thì tuần 3 sẽ thấy FE và BE lệch nhau về response shape. Bài học tôi rút ra là brief phải viết xong trước khi tạo Linear issue, không phải sau. Ngoài ra, giao AWS setup cho Khiem ngay từ đầu tuần cũng đúng — Khiem có kinh nghiệm infra, tôi review checklist là đủ, không cần tự làm.
 
 ### Next Week Plan
 
-Bootstrap the FastAPI skeleton with a `boto3` S3 client. Create the `upscale-io` bucket with versioning and lifecycle rules. Upload `RealESRGAN_x4plus.pth` to S3 and write `ModelManager` so BE can load weights.
+Design S3 bucket layout (weights / tmp / output prefix, lifecycle), giao Khiem provision. Ngồi với Thang chốt FastAPI folder layout và bootstrap skeleton (`app/main.py`, `app/core/config.py`). Bắt đầu draft high-level architecture diagram cho UPS-17.

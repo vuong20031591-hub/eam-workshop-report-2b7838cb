@@ -10,28 +10,28 @@ pre: " <b> 1.11. </b> "
 
 ### Mục tiêu Tuần 11
 
-Chuyển từ single EC2 chạy Docker thủ công sang **ECS cluster trên EC2** với ASG làm capacity provider. Đăng ký task definition cho FastAPI, mount **EFS** cho model weights + dữ liệu Postgres, dựng **ElastiCache Redis** cho job state. ALB từ Tuần 8 giờ forward về target group của ECS service, health check `/health`. Dựng thêm SQS queue cho AI job để chuẩn bị scale bất đồng bộ, dù MVP vẫn để feature flag OFF.
+Tuần scale — lớn nhất project. Mình chia thành 4 track song song: (1) Khiêm provision ECS on EC2 + ASG + ALB target group; (2) Khiêm set SQS + ElastiCache Redis + EFS; (3) Thắng refactor rate limiter dùng Redis (UPS-2) + async worker consume SQS; (4) Quân viết Playwright E2E. Mình làm coordinator, review daily.
 
 ### Các công việc thực hiện trong tuần
 
 | Ngày | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
-| 1 | Tạo **Launch Template** `upscale-gpu-lt` (g4dn.xlarge, ECS-optimized GPU AMI, IAM role có `AmazonEC2ContainerServiceforEC2Role`). | 16/07/2026 | 16/07/2026 | [ECS-optimized AMI](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html) |
-| 2 | Tạo **ASG** `upscale-gpu-asg` min=1 max=3, target-tracking `Upscale/GPU/Utilization = 70%`, đăng ký làm **ECS capacity provider** cho cluster `upscale-cluster`. | 17/07/2026 | 17/07/2026 | [ECS Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
-| 3 | Provision **EFS** `upscale-efs` với access point cho `/weights` và `/pgdata`; tạo **ElastiCache Redis** `upscale-redis` trong private subnet. | 18/07/2026 | 19/07/2026 | [EFS + ECS](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/efs-volumes.html) |
-| 4 | Đăng ký task definition `upscale-api` (FastAPI, EFS mount weights, Redis endpoint qua Secrets Manager) và `upscale-postgres` (dữ liệu trên EFS); tạo service dùng capacity provider. | 20/07/2026 | 20/07/2026 | [ECS Task Definitions](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html) |
-| 5 | Trỏ **target group** `upscale-api-tg` của ALB về ECS service (dynamic host-port mapping); tạo **SQS** standard queue `upscale-job-queue`, visibility timeout 300s; BE consume qua polling loop (feature flag OFF cho MVP). | 21/07/2026 | 22/07/2026 | [SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/) |
-| 6 | Chạy Playwright E2E: upload → progress → download, pass trên staging. | 23/07/2026 | 23/07/2026 | [Playwright](https://playwright.dev/) |
-| 7 | Blue/green rollout qua ECS deployment (rolling `minimumHealthyPercent=100`), drain task set cũ — 0 downtime. | 24/07/2026 | 24/07/2026 | - |
+| 1 | Design scale architecture: ECS on EC2 (g4dn.xlarge, ASG 1-4 instance), SQS `upscale-job-queue`, Redis `upscale-redis`, EFS `upscale-efs` cho weights + pgdata. | 13/07/2026 | 13/07/2026 | [ECS Capacity Providers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html) |
+| 2 | Review Khiêm: ECS cluster + task definition GPU + ASG capacity provider + scaling policy (target 70% CPU/GPU). | 14/07/2026 | 15/07/2026 | - |
+| 3 | Review Khiêm: SQS queue + DLQ + visibility timeout 300s; ElastiCache Redis cluster 1 node cache.t3.small; EFS mount target 2 AZ. | 16/07/2026 | 16/07/2026 | [ElastiCache](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/) |
+| 4 | Review PR Thắng UPS-2: rate limiter chuyển từ in-memory sang Redis (`redis-py` + sliding window); tests pass. | 17/07/2026 | 17/07/2026 | - |
+| 5 | Review PR Thắng UPS-1: fix memory leak `_progress_store` (cleanup sau `done` + TTL 1h) + async worker consume SQS. | 18/07/2026 | 18/07/2026 | - |
+| 6 | Review PR Quân: Playwright E2E 8 scenario (login, upload, upscale, download, error, mobile) chạy CI xanh. | 19/07/2026 | 19/07/2026 | [Playwright](https://playwright.dev/) |
+| 7 | Load test lại: sustained 60 RPS OK, spike 100 RPS OK — ASG scale từ 1 lên 3 instance trong 4 phút. | 19/07/2026 | 19/07/2026 | - |
 
 ### Kết quả đạt được Tuần 11
 
-Kiến trúc production hoàn chỉnh: CloudFront → S3 (FE) và ALB → ECS on EC2 GPU (BE) với EFS cho weights/DB và Redis cho job state. Khi GPU util trên 70% liên tục 3 phút, ECS capacity provider bung ASG lên 2 instance và schedule task thứ hai như thiết kế. 8 kịch bản E2E Playwright pass sạch.
+Từ 20 RPS lên 60 RPS ổn định. Job dài (> 30s) chuyển sang SQS + async worker, ALB không còn timeout. Rate limiter Redis đúng ngữ nghĩa distributed. UPS-1, UPS-2 close. Playwright chạy CI, mỗi PR bây giờ có xác nhận E2E trước khi merge.
 
 ### Thách thức & Bài học
 
-Cold-start GPU instance ban đầu mất tầm 4 phút vì ECS-optimized AMI vẫn phải boot rồi ECR-pull image, capacity provider phản ứng chậm hơn traffic. Mình bake custom AMI có sẵn image kèm weights, kéo cold-start còn khoảng 90 giây. Chuyển weights lên EFS cũng giúp task mới bỏ hẳn bước tải từ S3. Với workload GPU, pre-baked AMI hoặc ECS warm pool gần như là bắt buộc — không có nó thì auto-scaling chỉ là danh nghĩa.
+EFS latency ban đầu cao hơn EBS ~3x cho weights read → Khiêm enable `provisioned-throughput` mode. Đây là loại chi tiết chỉ lộ ra khi load test thật; ADR mình cập nhật lại note lesson này. Bài học Lead: design đúng lý thuyết chưa đủ, phải đo thật rồi mới ký ADR final. Nếu deploy production luôn thì user sẽ là người test hộ.
 
 ### Kế hoạch tuần sau
 
-Publish endpoint production. Review chi phí bằng Cost Explorer. Chuẩn bị demo và báo cáo cuối kỳ.
+Go-live: Route 53 alias `upscale.dev`, cost review + Savings Plan, launch checklist. Sprint retro toàn project.
