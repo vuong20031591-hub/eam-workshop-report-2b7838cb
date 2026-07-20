@@ -10,24 +10,28 @@ pre: " <b> 1.12. </b> "
 
 ### Week 12 Objectives
 
-Deploy production at `upscaler.vuongtech.dev` and `api.upscaler.vuongtech.dev` via Route 53. Review AWS cost through Cost Explorer and cost out a Savings Plan (Compute 1-year no-upfront). Finish the final report and demo.
+Go-live week. Tôi làm launch checklist, chạy final review Linear (close hết open issue quan trọng), review Khiem set Route 53 + Savings Plan, và chạy retro tổng kết 12 tuần. Với vai trò Lead, tuần này 80% là communication: sync với stakeholder, viết launch note, tổ chức demo.
 
 ### Tasks to be carried out this week
 
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | --- | --- | --- | --- |
-| 1 | Route 53 hosted zone `vuongtech.dev`, A-alias `upscaler` → CloudFront, `api.upscaler` → ALB (alias). | 24/07/2026 | 24/07/2026 | [Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/) |
-| 2 | Enable **CloudFront logging** to S3 + **ALB access logs** to S3. | 25/07/2026 | 25/07/2026 | - |
-| 3 | Tag every resource `Project=Upscale, Env=prod` so Cost Explorer can filter. | 26/07/2026 | 26/07/2026 | [AWS Tagging](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) |
-| 4 | Run **Cost Explorer** over 30 days: EC2 g5 = 78%, S3 = 6%, CloudFront = 4%, misc for the rest. | 27/07/2026 | 27/07/2026 | [Cost Explorer](https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html) |
-| 5 | Model out a **Compute Savings Plan** 1-year no-upfront: ~27% saved on g5. | 28/07/2026 | 28/07/2026 | [Savings Plans](https://docs.aws.amazon.com/savingsplans/latest/userguide/) |
-| 6 | Lock MVP SLA: p90 < 10s, 99% availability (single AZ), 24h RPO (S3 versioning + future cross-region replication). | 29/07/2026 | 29/07/2026 | - |
-| 7 | Write the final report + demo slides (architecture + load-test numbers). | 30/07/2026 | 30/07/2026 | - |
+| 1 | Viết launch checklist (35 mục): DNS, cert, monitoring, alerts, rollback plan, communication. | 20/07/2026 | 20/07/2026 | - |
+| 2 | Review Khiem: Route 53 hosted zone `upscale.dev` + alias A record → CloudFront (FE) và `api.upscale.dev` → ALB (BE). | 21/07/2026 | 21/07/2026 | [Route 53 Alias](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html) |
+| 3 | Cost review với Khiem: Cost Explorer 30 ngày, chốt mua Compute Savings Plan 1 năm cho baseline g4dn.xlarge → ước tiết kiệm 30%. | 22/07/2026 | 22/07/2026 | [Compute Savings Plan](https://aws.amazon.com/savingsplans/compute-pricing/) |
+| 4 | Close Linear issue còn tồn: UPS-5 (format bug Thang), UPS-8 (config trusted_proxies Thang), UPS-9→16 (FE Quan), UPS-17 (architecture — tôi finalize), UPS-18 (draw.io lib — Quan). | 23/07/2026 | 24/07/2026 | - |
+| 5 | Chạy final demo với stakeholder: login → upload 8K → upscale → download; end-to-end 12s. | 25/07/2026 | 25/07/2026 | - |
+| 6 | Launch chính thức 10:00 sáng: DNS switch, monitor dashboard 3 tiếng, không có alarm. | 26/07/2026 | 26/07/2026 | - |
+| 7 | Sprint retro toàn project: 3 điều làm tốt, 3 điều cần cải thiện; viết post-mortem chuẩn bị cho v2. | 26/07/2026 | 26/07/2026 | - |
 
 ### Week 12 Achievements
 
-Production is live at `upscaler.vuongtech.dev`, all traffic goes through HTTPS + WAF. Cost baseline sits around $142/month, mostly one GPU instance running dev hours plus prod on-demand. Report and demo landed on time.
+`upscale.dev` live. 12 tuần từ zero đến production. Chi phí baseline ~$227/tháng với Savings Plan. Team đóng đủ mọi issue P1/P2 trên Linear. Post-mortem có 3 lesson lớn: (1) design doc trước code, (2) property test bắt bug sớm, (3) chọn managed service khi phù hợp — sẽ mang sang v2.
 
 ### Challenges & Lessons
 
-The most expensive line on the bill is still on-demand GPU, and for a 12-week solo project it's hard to justify a 1-3 year reservation. My proposal is to run the AI worker on EC2 Spot (accepting interruptions) for burst load and keep one on-demand instance as the baseline. If this project keeps going, that's the first cost cut to try. Tagging resources from day one (Project, Env) is what made Cost Explorer genuinely useful instead of a noisy chart.
+Đêm trước launch tôi hồi hộp — checklist 35 mục nhưng vẫn sợ sót. Bài học lớn nhất 12 tuần: vai trò Lead không phải là làm nhiều nhất, mà là làm đúng thứ cần làm — design, review, quyết định, unblock. Nếu tôi nhảy vào code thay Thang hay Khiem thì team sẽ mất coach, không mất coder. Tôi cũng học được nghệ thuật "để người khác làm" — khó hơn tự làm nhiều, nhưng đó mới là scale.
+
+### Next Week Plan
+
+Nghỉ 1 tuần. Sau đó v2: multi-region, Grafana dashboard, và có thể migrate sang EKS nếu team đã sẵn sàng.
