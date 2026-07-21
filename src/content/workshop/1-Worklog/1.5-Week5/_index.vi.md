@@ -8,14 +8,12 @@ pre: " <b> 1.5. </b> "
 
 ## WORKLOG TUẦN 5
 
-Tuần storage dùng chung. EFS cho model weights mà worker nào cũng cần, ECR cho image mình ship.
+Tuần CloudWatch và AWS CLI. Hai dịch vụ kiểu "cả đời sẽ dùng mỗi ngày". `UPS-5` trên Linear.
 
-Tôi chia `UPS-8` thành dựng EFS, kế hoạch mount, và layout repo ECR. Quyết định đáng bàn là để model weights ở đâu. Nhét vào image là dễ nhất nhưng rebuild lâu và image rất nặng. Để EFS thì worker nào cũng dùng chung được, luôn warm. Chốt EFS cho weights, image chỉ để code. Cảm giác đúng, và đến giờ vẫn ổn.
+CloudWatch trước. Tôi tạo Log Group, đẩy log từ một EC2 lên, dựng metric filter đếm từ `ERROR` trong log stream, và gắn alarm lên trên. Rồi cố tình cho alarm nổ bằng script vòng in lỗi liên tục, xem thông báo đến, thầm hài lòng. Phần dashboard đầu tiên tôi thấy không trực quan lắm. Làm được dashboard thực sự hữu ích khó hơn docs cho thấy.
 
-Phần review: cấu hình EFS access point đầu tiên đặt quyền world-writable, không phù hợp cho mount dùng chung, trả về. PR lifecycle của ECR thì ok sau khi thống nhất giữ 20 tag gần nhất và xoá untagged sau 7 ngày.
+AWS CLI thì tôi thích hơn kỳ vọng. Sau một tuần click console, quay về gõ `aws s3 ls`, `aws ec2 describe-instances`, thêm vài lệnh pipe qua `jq`, cảm giác như về nhà. Tôi lập named profile có MFA và ép mình chỉ dùng CLI trong nửa cuối tuần, để tạo phản xạ.
 
-Tự tay thì tôi viết convention mount (`/mnt/models` trên mọi worker), convention image tag (`<service>:<git-sha>` kèm tag di động `staging` để promote không cần rebuild), và cập nhật runbook.
+Về team, tôi bảo mọi người làm lại một lab cũ hoàn toàn bằng CLI. Hai bạn càm ràm, xong đều thừa nhận đó chính là bài khiến kiến thức bám lại. Cũng mở một doc chung để nhặt các one-liner CLI dùng nhiều hơn một lần. Về sau chắc chắn có ích.
 
-Test mount end-to-end đầu tiên treo cứng, vui được đúng mười phút cho tới lúc tôi nhớ ra ma trận SG từ `UPS-6` chưa có rule NFS. Ghi regression vào SG doc để đừng lặp lại.
-
-Tuần sau chương 5.6. Redis cho cache, SQS cho job queue.
+Tuần sau: DynamoDB và ElastiCache.

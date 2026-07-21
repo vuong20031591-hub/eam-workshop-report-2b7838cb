@@ -8,18 +8,14 @@ pre: " <b> 1.10. </b> "
 
 ## WORKLOG TUẦN 10
 
-Tuần Cognito và CloudWatch. Sign-in không phải tự dựng, và một góc monitoring thật sự báo được khi có vấn đề, chứ không phải "cái gì cũng là đồ thị".
+Tuần deploy. Docker cho mọi thứ, ECS/Fargate làm runtime, S3 để chứa ảnh. Đây là lúc app rời khỏi laptop của tôi. `UPS-10` trên Linear.
 
-`UPS-15` (Cognito user pool + Google OAuth) và `UPS-16` (observability) mở ra. Thiết kế auth đơn giản một khi thống nhất hình dạng: Cognito user pool với hosted UI, Google làm identity provider, ID token đổi lấy session cookie ở FastAPI. Không ai phải đụng vào chuyện lưu password, đúng cái tôi muốn.
+Tôi viết Dockerfile cho cả hai service. File frontend nhẹ và nhàm (`node` build, `nginx` runtime). File backend là chỗ tốn thời gian thật, vì mô hình kéo theo cả tá dependency Python và thứ liên quan CUDA, tôi không muốn image phình lên tám gigabyte vô nghĩa. Multi-stage build, chỉ giữ layer runtime trong image cuối, ra được size chấp nhận được.
 
-PR Cognito tôi siết danh sách callback OAuth chỉ còn prod và local dev. Callback wildcard là loại thứ mà sau này có người chỉ ra mới thấy đáng tiếc.
+Về phía AWS, setup ECS/Fargate gần như bám nguyên tài liệu FCAJ. Task definition cho từng service, một service phía trước từng task, một target group cho mỗi service sau ALB đã dựng trước. Deploy đầu ra được, task lên rồi vài phút sau chết vì container CPU-only bị OOM lúc chạy inference ảnh lớn. Nâng memory, đi tiếp.
 
-PR dashboard CloudWatch nộp lên với khoảng mười hai widget. Tôi cắt nửa, vì dashboard không ai nhìn còn tệ hơn không có dashboard. Cái còn lại là tập nhỏ mình thực sự mở ra mỗi sáng.
+S3 vào cho input và output ảnh. Backend upload lên `upscale-<env>-input`, worker đọc từ đó, ghi sang `upscale-<env>-output`, frontend fetch kết quả theo URL. Bật Block Public Access cả hai bucket, chỉ signed URL đi ra ngoài.
 
-Tự tay tôi viết tài liệu luồng auth cho nhóm để cả team code theo một hợp đồng, và chọn alarm để paging: ALB 5xx > 1% trong 5 phút, DLQ SQS khác rỗng, GPU util > 90% kéo dài, ECS service unhealthy. Thứ dưới ngưỡng đó chỉ là đồ thị, không phải page.
+Về team, một quyết định lớn: GPU worker để tuần sau. Tuần này mục tiêu là chứng minh hình dạng deploy chạy được, không phải bóp hiệu năng.
 
-User đăng nhập được bằng Google, API xác thực token, dashboard chỉ hiện bốn số thực sự cần nhìn.
-
-CORS Cognito hosted UI ngốn vài tiếng. Tôi viết ghi chú ngắn "quy tắc callback URL" vào runbook để không mất chừng đó thời gian mỗi lần.
-
-Tuần sau đóng chương 5.9. Diễn tập deploy end-to-end và buổi demo đầu tiên tử tế.
+Tuần sau: SQS, Redis, và SSE cho tiến trình realtime.

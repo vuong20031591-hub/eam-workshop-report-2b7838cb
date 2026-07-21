@@ -8,14 +8,12 @@ pre: " <b> 1.1. </b> "
 
 ## WORKLOG TUẦN 1
 
-Tuần kickoff. Cả tuần tôi không đụng vào một resource AWS nào, và đó là chủ ý. Là team lead, tôi muốn dự án có hình hài trước khi ai đó mở console.
+Tuần onboarding. Phần lớn thời gian tôi cũng chỉ là một học viên, đi qua chương trình FCAJ cùng cả nhóm. Phần "lead" chỉ nằm bên trên: chạy buổi kickoff, thống nhất cách làm việc, và mở `UPS-1` trên Linear để có chỗ nhét mọi thứ vào.
 
-Phần lớn thời gian là ngồi đọc. Tôi đọc workshop hai lượt từ đầu đến cuối, rồi viết một trang tóm chương 5.1 để cả nhóm có cái cụ thể mà tranh luận, chứ không cãi nhau bằng cảm giác. Xong xuôi thì bê roadmap 12 tuần lên Linear thành các epic, mở `UPS-1` (Planning) và `UPS-2` (Architecture doc) làm hai ticket gốc để mọi thứ khác móc vào.
+Onboarding FCAJ nặng hơn tôi tưởng. Tạo và cấu hình tài khoản AWS, lượn qua Management Console, xem thật kỹ Regions và Availability Zones sẽ dùng (`ap-southeast-1`), bật AWS Budgets với ngưỡng nhỏ để khỏi vô tình đốt tài khoản, và đọc xem các gói AWS Support cover đến đâu. Rồi mấy bài lab đầu tay cho khái niệm bám vào tay chứ đừng trôi trên giấy.
 
-Còn lại là những quyết định nhỏ mà tôi không muốn tuần nào cũng phải bàn lại: region `ap-southeast-1`, prefix `upscale-`, env `dev` và `prod`, Git flow, PR template. Standup 15 phút mỗi sáng, planning thứ Hai, review thứ Sáu. Nhạt, nhưng chốt một lần cho xong.
+Phần tổ chức nhóm tôi để nhạt có chủ đích. Standup 15 phút mỗi sáng, planning thứ Hai, review thứ Sáu. Một region, một prefix (`upscale-`), hai môi trường (`dev`, `prod`), Git flow đơn giản, một PR template. Thà nhai xong một lần còn hơn tuần nào cũng lôi ra bàn.
 
-Tôi cũng vẽ sơ đồ đích (User, CloudFront, ALB, ECS chạy FastAPI và worker CodeFormer, SQS, Redis, S3) và ước tính chi phí sơ bộ để sau này khỏi giật mình.
+Tôi cũng phác sơ hệ thống sẽ trông ra sao, dạng nháp chứ không phải spec. Càng học AWS thì càng phải chỉnh lại.
 
-Thật ra nửa tuần trôi vào việc cắt scope. Workshop có nhiều thứ, ham thì làm hết. Mình không làm hết.
-
-Tuần sau là chương 5.2. Tôi sẽ chủ trì thiết kế IAM và chốt baseline tài khoản.
+Tuần sau là IAM và ngó qua VPC, EC2. Vẫn chủ yếu lab.

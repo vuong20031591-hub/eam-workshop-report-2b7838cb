@@ -8,14 +8,14 @@ pre: " <b> 1.6. </b> "
 
 ## WORKLOG TUẦN 6
 
-Tuần Redis và SQS. Hai mảnh quyết định hệ thống có mượt hay không khi queue bắt đầu dài.
+Tuần DynamoDB và ElastiCache. Tuần học thuần cuối cùng trước khi vào project. `UPS-6` trên Linear.
 
-`UPS-9` (Redis) và `UPS-10` (SQS) chia ra với owner rõ. Sau đó một buổi thiết kế queue. Thống nhất: một main queue kèm DLQ, redrive sau ba lần lỗi, và visibility timeout bám theo p95 thời gian upscale chứ không đặt bừa. Worker crash thì message quay lại, còn job chạy lâu không bị nhân đôi sau lưng chính nó.
+DynamoDB làm reset kha khá giả định của tôi. Quen SQL rồi nên phải ngồi lại với ý "access pattern đi trước, schema rơi ra từ đó", chứ không ngược lại. Tôi làm lab, sau đó thiết kế một bảng đồ chơi cho app "báo cáo thực tập" tự bịa, chỉ để ép mình nghĩ theo partition key + sort key. Nửa cái tôi viết lần đầu là sai. Đúng là điểm cần sai.
 
-PR Redis nộp lên là single-node. Tôi gạt và yêu cầu multi-AZ. Tốn hơn, nhưng single-node không phải thứ tôi muốn giải thích với ai lúc 2 giờ sáng. PR worker consume SQS thì ổn, chỉ thiếu delete message ở nhánh lỗi, chỗ đó sẽ âm thầm retry mãi. Cờ lên, sửa, merge.
+ElastiCache với Redis dễ chịu hơn, phần vì tôi từng dùng Redis. Chạy lab xong, viết một script nhỏ nói chuyện với nó từ EC2 cùng VPC, cache một tính toán chậm, và đo chênh lệch. Con số không quan trọng, cái intuition mới quan trọng.
 
-Tự tay tôi viết schema message (job_id, s3_input, s3_output, params, submitted_at), retry policy, và convention key cache để không ai tự đặt riêng.
+Tôi cũng bắt đầu nghĩ trước. Upscale vài tuần nữa sẽ cần queue và cache khi bước sang phần AWS, nên tôi ghi lại: DynamoDB không hợp để làm queue (dùng SQS), còn Redis khả năng cao đúng cho job-status cache. Nhét vào note project để "tôi tương lai" không phải khám phá lại.
 
-Điểm bị vấp: visibility timeout ban đầu tôi đặt thấp, job dài bị retry trong lúc đang chạy. Nâng lên 15 phút và ghi rõ lý do để lần sau đừng ai "tối ưu" hạ lại.
+Về team, làm retro nhanh cho sáu tuần học. Cái gì bám lại, cái gì chưa, ai muốn làm lại lab nào. Tuần sau đổi tông.
 
-Tuần sau chương 5.7. Dựng ECS cluster và chạy task thật đầu tiên.
+Tuần sau: kickoff dự án Upscale AI.

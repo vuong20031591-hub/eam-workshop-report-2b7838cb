@@ -8,14 +8,14 @@ pre: " <b> 1.6. </b> "
 
 ## WEEK 6 WORKLOG
 
-Redis and SQS week. These are the pieces that decide whether the system feels responsive when the queue gets long.
+DynamoDB and ElastiCache week. Last of the pure-learning weeks before the project kicks off. `UPS-6` on Linear.
 
-`UPS-9` (Redis) and `UPS-10` (SQS) went out with clear owners. Then a design session for the queue shape. We agreed on one main queue plus a dead-letter queue with a redrive after three attempts, and a visibility timeout that tracks the p95 upscale time rather than an arbitrary number. If a worker crashes the message reappears, but a long-running job does not get duplicated behind its own back.
+DynamoDB was the one that reset a few of my assumptions. Coming from a SQL habit, I had to sit with the idea that access patterns come first and the schema falls out of them, not the other way around. I did the lab, then designed a toy table for a made-up "internship reports" app just to force myself to think in partition key + sort key. Half of what I wrote the first pass was wrong. That was the point.
 
-The Redis PR came in as a single-node setup. I pushed back and asked for multi-AZ. It costs more, but a single node is not something I want to explain to anyone at 2am. The worker PR that consumes SQS was fine except for a missing message delete on the failure path, which would have quietly retried forever. Flagged, fixed, merged.
+ElastiCache with Redis was more comfortable, partly because I have used Redis before. I ran the lab, then wrote a small script that talked to it from an EC2 in the same VPC, cached a slow computation, and measured the difference. The number is not important, the intuition is.
 
-On my own I wrote the job message schema (job_id, s3_input, s3_output, params, submitted_at), the retry policy, and the cache key convention so nobody invents their own.
+I also started thinking ahead. Upscale is going to need a queue and a cache once we get to the AWS piece in a few weeks, so I made a note that DynamoDB is not a fit for the queue part (SQS will be), but Redis is likely the right shape for the job-status cache. Wrote it down in the project notes so future-me does not re-discover it.
 
-The one thing that bit us: I set the visibility timeout too low at first, so long jobs got retried while they were still running. Bumped to 15 minutes and wrote down the reasoning so the next person does not "optimise" it back down.
+On the team side, quick retro on the six learning weeks. What stuck, what did not, who wants to redo which lab. Next week the tone changes.
 
-Next week is chapter 5.7. Stand up the ECS cluster and run the first real task.
+Next week: project kickoff for Upscale AI.

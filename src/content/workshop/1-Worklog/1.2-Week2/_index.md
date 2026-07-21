@@ -8,14 +8,12 @@ pre: " <b> 1.2. </b> "
 
 ## WEEK 2 WORKLOG
 
-Account baseline week. The goal was simple: nobody should have a reason to log in as root ever again.
+IAM week, plus a first taste of VPC and EC2. Still learning, still labs. As lead I mostly set the pace, held a short design chat, and reviewed what people had done. `UPS-2` on Linear.
 
-I ran the sprint kickoff and split the work into day-sized tickets under `UPS-3` (baseline) and `UPS-4` (IAM roles). Then a short design session for the IAM model. Nothing fancy: an admin group, a developer group, a service user called `upscale-deployer` for CI, and separate task roles for ECS so each service only gets what it actually needs.
+The IAM labs I did myself. Creating Users, Groups, Roles, Policies, turning MFA on for the root account, then playing with Least Privilege by intentionally denying myself things and watching the error messages. That last part sounds silly but it is the fastest way to actually understand a policy. I also went through the "no long-lived access keys on laptops" lesson the hard way when I nearly committed one, then rotated it and moved on.
 
-PR review is where most of my time went. Two proposals wanted to stick long-lived access keys on developer laptops, both got closed. Two IAM PRs came back for tighter scoping. I also wrote the ADR (root MFA on, no root access keys, least privilege on the groups) and a template for the deployer policy so future services can copy it instead of reinventing one.
+VPC and EC2 was the other half. I did the guided lab, drew the default VPC on paper, then did it again from scratch so I knew what every piece was for. Launching an EC2 instance, SSH-ing in, terminating it. Nothing fancy, but it clears up a lot of assumptions.
 
-End of the week the baseline is done. Root is locked, MFA is enforced, groups exist, `upscale-deployer` has a minimal policy, and the ADR is merged so the reasoning is on record.
+On the team side I wrote a short note on how we will use IAM (admin group, dev group, one service user for CI later, no root access keys ever) and pinned it in the repo. It is not an ADR yet, more of a working agreement. And I nudged people who kept reaching for `AdministratorAccess` in labs. Fine for a sandbox, not a habit I want travelling with us.
 
-The one recurring friction: a teammate kept reaching for `AdministratorAccess`. I explained the reasoning twice. After the second time I put it in the ADR so I do not explain it a third time.
-
-Next week is chapter 5.3 and the VPC. I own the topology decision.
+Next week: IAM Roles for EC2, Cloud9, and hosting a static site on S3.

@@ -8,16 +8,14 @@ pre: " <b> 1.7. </b> "
 
 ## WEEK 7 WORKLOG
 
-ECS on EC2 week. The compute layer where FastAPI and the CodeFormer worker actually run, so most of what we did in the last six weeks was setup for this.
+Project kickoff week. Six weeks of learning behind us, now we actually have to build something. `UPS-7` on Linear.
 
-`UPS-11` broke into the cluster, an ASG with a capacity provider, task definitions for FastAPI and the worker, and service registration. I ran the sizing discussion and we landed on `t3.medium` on-demand for the API and `g4dn.xlarge` spot for the worker. Spot for the worker is a real cost saver as long as we handle interruption properly, and the reasoning went into an ADR so we do not re-debate it every sprint.
+I ran the kickoff session on Monday. We named the project Upscale AI, agreed on the elevator pitch (upload a photo, get a sharper version back with better faces), and I walked the team through a rough end-to-end architecture. Nothing final, more of a straw man to attack. React + Vite + TanStack Router on the frontend, FastAPI on the backend, a worker for the heavy lifting later. Images stay on S3 once we get there.
 
-Review this week: one task definition came in without the EFS mount at `/mnt/models`, which means the worker would boot fine and then crash on the first inference. Sent back. The capacity provider PR was ok but I wanted the spot drain path spelled out, so we added that before merging.
+The rest of the week I split my time between planning and pair-scaffolding. I broke the project down into modules (upload, job orchestration, model inference, results, auth later) and spread them across `UPS-7`'s sub-tasks so ownership was clear. Then I sat with each pair for a bit while they scaffolded their part. I did not write much code myself this week, but I opened the FE and BE repos, put in the CI skeleton, and wired a tiny `/healthz` route on both sides so we had a green build to protect.
 
-On my own I picked the scaling policies (target tracking on CPU for the API, queue depth for the worker), wrote the deploy checklist, and paired on the first end-to-end task run so I could see the whole flow with my own eyes.
+One friction showed up early: two people wanted to over-engineer the folder structure. I asked them to ship a working upload first and refactor later, and left a note in the repo saying so.
 
-Cluster is live, both services registered, and the first upscale job ran end to end from SQS to S3. It is slow, but it works. That is enough for this week.
+End of the week the FE loads, the BE responds, the two talk to each other over CORS, and the CI is green. Small win, but it is a real starting line.
 
-The one real bite: a spot interruption landed in the middle of a job during testing. The worker now catches SIGTERM and re-queues the current message before it goes down. Not glamorous, but the alternative is losing user work.
-
-Next week is chapter 5.8. Put an ALB in front so the API is reachable properly.
+Next week: actual upload flow, front to back.

@@ -8,14 +8,12 @@ pre: " <b> 1.5. </b> "
 
 ## WEEK 5 WORKLOG
 
-Shared storage week. EFS for the model weights every worker needs, ECR for the images we ship.
+CloudWatch and AWS CLI week. Two of those "you will use this every single day forever" services. `UPS-5` on Linear.
 
-I split `UPS-8` into EFS provisioning, the mount plan, and the ECR repo layout. The interesting decision was where model weights should live. Baking them into the image is the obvious option but makes rebuilds slow and images huge. EFS keeps them shared and warm across workers. We went with EFS for the weights and left the image for code only. It felt right and so far it is holding up.
+CloudWatch first. I created a Log Group, sent some logs from an EC2 instance, set up a metric filter that counted the word `ERROR` in the log stream, and wired an alarm on top of it. Then I made the alarm fire on purpose by looping a script that printed errors, watched the notification land, and quietly felt smug. The dashboard piece I found less intuitive at first. Building a useful dashboard is harder than the docs make it look.
 
-PR review this week: the first EFS access point config gave world-writable permissions, which is not what we want on a shared mount, so that went back. The ECR lifecycle policy PR was fine after we agreed to keep the last 20 tagged images and drop untagged ones after 7 days.
+AWS CLI I liked more than I expected. After a week of clicking through the console, dropping into `aws s3 ls`, `aws ec2 describe-instances`, and a couple of piped `jq` queries felt like coming home. I set up a named profile with MFA and moved to only using the CLI for the second half of the week, on purpose, to build the habit.
 
-On my own I wrote the mount convention (`/mnt/models` on every worker), the image tag convention (`<service>:<git-sha>` plus a moving `staging` tag so we can promote without rebuilding), and updated the runbook accordingly.
+On the team side I asked everyone to redo one earlier lab entirely through the CLI. Two people grumbled, both admitted afterwards that it was the exercise that actually made things stick. Also opened a small doc where we collect one-liner CLI snippets we end up using more than once. It is going to be useful later.
 
-The first end-to-end mount test hung, which was fun for about ten minutes until I remembered the SG matrix from `UPS-6` did not have an NFS rule yet. Added a regression note to the SG doc so we do not do that again.
-
-Next week is chapter 5.6. Redis for cache, SQS for the job queue.
+Next week: DynamoDB and ElastiCache.

@@ -8,16 +8,16 @@ pre: " <b> 1.11. </b> "
 
 ## WEEK 11 WORKLOG
 
-Rehearsal week. No new features. The job is to prove the whole thing actually works from an empty account, not to add anything on top.
+Async and realtime week. The synchronous request-response flow works, but a big upscale takes long enough that the frontend was basically staring at a spinner and hoping. Time to fix that. `UPS-11` on Linear.
 
-I turned `UPS-17` into a rehearsal ticket with a checklist the team could tick together, and then I ran a full deploy from scratch into a fresh account, following the runbook line by line. Every place I had to guess or improvise was a place the runbook was wrong. I rewrote those parts as I went.
+I split the work into three pieces: SQS for the job queue, Redis for the per-job progress state, and SSE (server-sent events) so the browser gets progress pushed instead of polling.
 
-After the first end-to-end run I ran a bug triage session and split the findings into "must fix before demo" and "later". Then I reviewed every PR that touched the deploy path this week and blocked anything unrelated. Rehearsal week is not the week to sneak in new work.
+On the backend, `/enhance` no longer runs the models directly. It writes a job onto SQS and returns a job id. A worker process pulls from SQS, runs the pipeline, and updates a Redis key with progress (`queued`, `running:XX%`, `done`, `failed`). A second endpoint streams that key over SSE so the frontend sees the bar move.
 
-Hands-on I wrote the smoke test script (upload, job, poll, download), the demo script, and a short rollback note in case something goes badly wrong on demo day.
+On the frontend, I replaced the spinner with a real progress bar that reads from the SSE stream, plus a small state label so the user knows whether the job is queued behind others or actively running. Small change, huge difference in how the app feels.
 
-End of the week the full stack deploys from an empty account in one sitting, smoke tests pass, and we rehearsed the demo twice. The board is green.
+A couple of things bit me. Visibility timeout on SQS was too low at first, so long jobs got redelivered while they were still running. Bumped it and wrote down the reasoning so nobody "optimises" it back down. Redis TTLs also needed thinking through, because leaking a key per job forever adds up.
 
-The one thing that keeps catching people out is order of operations. EFS mount targets have to exist before the ECS service starts, or tasks crash-loop. The runbook now spells this out in the exact order.
+I also added a dead-letter queue and a simple retry policy of three attempts, because "silent failure into the void" is not a feature.
 
-Next week is chapter 5.10. Cleanup, final report, handover.
+Next week: final testing, technical documentation, and demo.
