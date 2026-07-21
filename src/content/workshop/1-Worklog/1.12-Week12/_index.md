@@ -41,5 +41,5 @@ pre: " <b> 1.12. </b> "
 ### Plan for Next Steps
 
 - Finalise the internship report and submit it for review.
-- Prepare the panel demo separately after Week 12 and gather feedback from mentors.
+- Consolidate feedback from mentors and the team to improve the workflow for future projects.
 - Keep learning advanced AWS services beyond the internship.
