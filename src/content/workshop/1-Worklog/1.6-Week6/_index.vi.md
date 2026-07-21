@@ -39,6 +39,6 @@ pre: " <b> 1.6. </b> "
 
 ### Kế hoạch Tuần tới
 
-- Kickoff dự án Upscale AI với team.
+- Chủ trì buổi khởi động dự án Upscale AI với team.
 - Chốt kiến trúc phác thảo và chia module cho từng người.
 - Dựng CI xanh sớm để bảo vệ cho các tuần sau.

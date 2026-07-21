@@ -22,7 +22,7 @@ Sáu tuần đầu chủ yếu là học và làm lab theo chương trình FCAJ.
 | 4 | RDS + Lightsail | Tạo DB, kết nối app, managed services | UPS-4 |
 | 5 | CloudWatch + AWS CLI | Log, metric, alarm, quản lý bằng CLI | UPS-5 |
 | 6 | DynamoDB + ElastiCache | NoSQL, Redis cache | UPS-6 |
-| 7 | Kickoff Upscale AI | Kiến trúc, scaffold React+Vite+TanStack + FastAPI | UPS-7 |
+| 7 | Khởi động Upscale AI | Kiến trúc, scaffold React+Vite+TanStack + FastAPI | UPS-7 |
 | 8 | Upload ảnh | UI upload, API upload, validate, luồng FE↔BE | UPS-8 |
 | 9 | Real-ESRGAN + CodeFormer | Tích hợp mô hình upscale + phục hồi khuôn mặt | UPS-9 |
 | 10 | Docker + ECS/Fargate + S3 | Image FE/BE, deploy lên AWS, lưu ảnh S3 | UPS-10 |
