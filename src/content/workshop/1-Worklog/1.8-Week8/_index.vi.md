@@ -8,16 +8,16 @@ pre: " <b> 1.8. </b> "
 
 ## WORKLOG TUẦN 8
 
-Tuần ALB. Mục tiêu là đặt Application Load Balancer trước API và làm routing rule rõ ràng, thay vì "mặc định thế nào thì thế".
+Tuần làm luồng upload. Dựng thật đường đi "user thả ảnh, backend nhận" từ đầu đến đuôi. `UPS-8` trên Linear.
 
-`UPS-12` chia thành dựng ALB, target group cho FastAPI, listener rule, và chứng chỉ TLS qua ACM. Một buổi thiết kế ngắn về path routing: `/api/*` sang FastAPI, `/health` cho balancer, còn lại trả 404 để không vô tình lộ ra route mà mình chưa nghĩ tới.
+Phần lớn thời gian tôi làm UI upload phía frontend. Vùng drag-and-drop, file picker phòng khi thiết bị không hỗ trợ drag, thumbnail preview, validate size và MIME, thanh progress khi upload đang chạy. Không cầu kỳ về hình thức, nhưng muốn tương tác đúng cảm giác trước khi gắn thứ gì đó tốn kém đằng sau. Tôi pair vài tiếng với phía backend để chắc endpoint FastAPI `/upload` khớp với frontend về tên field multipart, vì lệch chỗ đó phát hiện sau sẽ mất nửa ngày.
 
-PR ALB tôi yêu cầu hai chỗ. Tắt stickiness, vì job async, không có gì để stick. Nâng idle timeout lên 120 giây để client long-polling không bị cắt giữa chừng. Cấu hình target group phần lớn ổn, tôi chỉ siết health check `/health` với ngưỡng 2/2 để một cú chớp không đá target ra.
+Backend thì endpoint validate file, tạm lưu vào folder local (S3 sẽ vào ở giai đoạn AWS sau này), và trả về job id cho frontend giữ. Tôi giữ validate ở server dù client đã check, vì tin client là cách sớm nhất để phát hiện bug ngoài production.
 
-Tự tay tôi chọn spec health check, request chứng chỉ ACM, viết kế hoạch DNS cho tuần sau, cập nhật deploy checklist.
+Cũng viết một ghi chú ngắn "upload chạy thế nào" trong repo, để người mới vào project trace một request đầu-đến-cuối mà không cần đọc code từ zero.
 
-FastAPI giờ tiếp cận được qua ALB bằng HTTPS. Health check ổn, không có target lấp lửng.
+Về team, có chỗ tôi phải đẩy: có bạn muốn bỏ validate server-side vì "client đã check". Trả PR lại kèm comment.
 
-Nửa ngày tôi không dự trù là validate ACM. Bản ghi DNS vào sai hosted zone, chứng chỉ nằm pending cho tới lúc tôi để ý. Tôi ghi lại đúng luồng validate vào runbook để người sau bắt được trong năm phút chứ không phải năm tiếng.
+Cuối tuần: user chọn ảnh, preview được, bấm upload, backend trả job id. Chưa có AI, nhưng đường ống đã sẵn.
 
-Tuần sau chương 5.9. CloudFront trước ALB, WAF phía trên, Route 53 trỏ về.
+Tuần sau: tích hợp Real-ESRGAN và CodeFormer.
