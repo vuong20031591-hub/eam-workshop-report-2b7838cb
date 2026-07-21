@@ -8,38 +8,38 @@ pre: " <b> 1.12. </b> "
 
 ### Mục Tiêu Tuần 12
 
-- Với vai trò lead, điều phối test cuối end-to-end trên staging với ảnh thật, cả case thường và biên.
-- Chịu trách nhiệm phần demo: script, dry run và trình bày trước hội đồng.
-- Lên kế hoạch và điều phối cleanup AWS, ghi lại bài học 12 tuần cho cả team.
+- Điều phối test chức năng cuối cùng trên toàn bộ module, ưu tiên case ảnh hưởng người dùng.
+- Ổn định ứng dụng: tối ưu hiệu năng backend và trải nghiệm frontend trước buổi tổng kết.
+- Hoàn thiện tài liệu dự án và chuẩn bị demo cho hội đồng thực tập.
 
 ### Các công việc thực hiện trong tuần
 
 | Thứ | Công việc | Bắt đầu | Hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
-| T2 | Viết script test cuối và chia case cho team: ảnh nhỏ, ảnh lớn, có/không mặt, sai định dạng. | 06/07/2026 | 06/07/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
-| T3 | Triage và ưu tiên các bug nhỏ tìm ra khi test, review fix cho hiển thị lỗi, empty state, edge case cancel. | 07/07/2026 | 07/07/2026 | [TanStack Router](https://tanstack.com/router) |
-| T4 | Cùng team chạy hai lần dry run demo, canh thời gian và chuẩn bị slide ngắn dự phòng. | 08/07/2026 | 08/07/2026 | [FCAJ Project](https://000000.awsstudygroup.com/) |
-| T5 | Trực tiếp demo trước hội đồng, ghi feedback tại chỗ cho cả team. | 09/07/2026 | 09/07/2026 | [FCAJ Project](https://000000.awsstudygroup.com/) |
-| T6 | Chịu trách nhiệm kế hoạch cleanup: xoá service ECS không dùng, empty bucket S3 staging, dừng RDS/Redis test. | 10/07/2026 | 10/07/2026 | [AWS Cost Management](https://000007.awsstudygroup.com/) |
+| T2 | Điều phối kiểm thử chức năng toàn bộ module, chia case cho team và tổng hợp checklist nghiệm thu. | 06/07/2026 | 06/07/2026 | Tài liệu dự án |
+| T3 | Triage bug phát hiện trong quá trình test, ưu tiên fix các lỗi ảnh hưởng ổn định và review PR fix. | 07/07/2026 | 07/07/2026 | Tài liệu dự án |
+| T4 | Rà soát hiệu năng backend (thời gian job, queue depth) và trải nghiệm frontend (loading, empty state). | 08/07/2026 | 08/07/2026 | Tài liệu dự án |
+| T5 | Hoàn thiện tài liệu dự án: hướng dẫn triển khai, user guide và runbook vận hành. | 09/07/2026 | 09/07/2026 | Tài liệu dự án |
+| T6 | Rà soát hệ thống lần cuối, chuẩn bị slide + kịch bản demo và tổng kết kết quả 12 tuần cho hội đồng. | 10/07/2026 | 10/07/2026 | Tài liệu dự án |
 
 ### Kết quả đạt được Tuần 12
 
-- Bản demo mình chạy đi đúng luồng, không rơi vào edge case đã fix.
-- Mình nhận feedback cụ thể, ăn thẳng vào phần workshop mình sẽ viết lại.
-- Tài nguyên AWS mình duyệt giữ lại đúng mức tối thiểu, bill sau demo về mức chờ.
-- Có tổng kết 12 tuần và danh sách việc mình muốn team (và bản thân) đào sâu thêm.
+- Hoàn tất kiểm thử chức năng trên tất cả module, các bug quan trọng đều đã đóng trước ngày demo.
+- Backend chạy ổn định hơn sau khi tinh chỉnh, frontend gọn gàng ở loading/empty/error state.
+- Bộ tài liệu dự án, hướng dẫn deploy và user guide đã hoàn thiện cho bàn giao.
+- Buổi demo trước hội đồng diễn ra đúng luồng, feedback được ghi nhận đầy đủ cho phần workshop và tự đánh giá.
 
 ### Khó khăn & Bài học
 
 - **Khó khăn:**
-  - Ngày demo vẫn có một request thỉnh thoảng chậm bất thường, khó tái hiện dưới áp lực thời gian.
+  - Tuần cuối phải cân đối giữa fix bug, tối ưu hiệu năng và hoàn thiện tài liệu trong khi vẫn phải chuẩn bị demo.
 - **Giải pháp:**
-  - Mình demo với ảnh đã warm-up worker, thêm log kỹ để điều tra sau và chặn mọi ý định sửa gấp phút chót từ team.
+  - Ưu tiên các vấn đề ảnh hưởng lớn tới demo, gom các fix nhỏ vào một PR và viết tài liệu song song với việc test.
 - **Bài học:**
-  - Sát demo, vai trò lead là bảo vệ sự ổn định; quyết định "không sửa" cũng là một quyết định mình phải đứng ra chịu.
+  - Test, tối ưu và tài liệu nếu làm đều tay xuyên suốt dự án sẽ giảm áp lực dồn vào tuần cuối; sát demo, giữ ổn định quan trọng hơn thêm tính năng.
 
-### Kế hoạch Tuần tới
+### Kế hoạch tiếp theo
 
-- Viết workshop chi tiết dựa trên những gì đã build.
-- Đóng gói bài học và feedback vào phần tự đánh giá.
-- Chốt trạng thái cleanup và tài liệu cuối kỳ.
+- Hoàn thiện báo cáo thực tập và nộp cho hội đồng review.
+- Trình bày demo, ghi nhận feedback từ mentor và hội đồng.
+- Tiếp tục học các dịch vụ AWS nâng cao sau kỳ thực tập.

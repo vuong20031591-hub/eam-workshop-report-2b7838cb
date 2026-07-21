@@ -8,38 +8,38 @@ pre: " <b> 1.12. </b> "
 
 ### Week 12 Objectives
 
-- As lead, coordinate final end-to-end testing on staging with real photos, covering common and edge cases.
-- Own the demo: script, dry runs, and the presentation in front of the panel.
-- Plan and drive AWS cleanup, and capture 12 weeks of team lessons in a wrap-up note.
+- Coordinate final functional testing across all modules, prioritising user-impacting cases.
+- Stabilise the app: tune backend performance and polish the frontend experience before the review.
+- Finalise project documentation and prepare the demo for the internship panel.
 
 ### Tasks Completed During the Week
 
 | Day | Task | Start | Completion | Reference |
 | --- | --- | --- | --- | --- |
-| Mon | Write the final test script and assign cases to the team: small/large photos, faces or none, wrong types. | 06/07/2026 | 06/07/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
-| Tue | Triage and prioritise small bugs found during testing, review fixes for error display, empty states, cancel cases. | 07/07/2026 | 07/07/2026 | [TanStack Router](https://tanstack.com/router) |
-| Wed | Run two dry-run demos with the team, time them and prep a short deck as a backup. | 08/07/2026 | 08/07/2026 | [FCAJ Project](https://000000.awsstudygroup.com/) |
-| Thu | Present the demo to the panel and capture feedback on the spot for the team. | 09/07/2026 | 09/07/2026 | [FCAJ Project](https://000000.awsstudygroup.com/) |
-| Fri | Own the cleanup plan: remove unused ECS services, empty the staging S3 bucket, stop test RDS/Redis. | 10/07/2026 | 10/07/2026 | [AWS Cost Management](https://000007.awsstudygroup.com/) |
+| Mon | Coordinate functional testing across every module, split cases across the team and produce an acceptance checklist. | 06/07/2026 | 06/07/2026 | Project Documentation |
+| Tue | Triage bugs surfaced during testing, prioritise fixes that impact stability and review the fix PRs. | 07/07/2026 | 07/07/2026 | Project Documentation |
+| Wed | Review backend performance (job latency, queue depth) and the frontend UX (loading, empty states). | 08/07/2026 | 08/07/2026 | Project Documentation |
+| Thu | Finalise project documentation: deployment guide, user guide, and the operations runbook. | 09/07/2026 | 09/07/2026 | Project Documentation |
+| Fri | Do a final system review, prep the demo deck and script, and wrap up the 12-week summary for the panel. | 10/07/2026 | 10/07/2026 | Project Documentation |
 
 ### Week 12 Results
 
-- The demo I ran followed the intended flow and none of the previously fixed edge cases resurfaced.
-- I walked away with concrete feedback that will feed straight into the workshop rewrite.
-- The AWS footprint I approved to keep is minimal, and the post-demo bill returned to baseline.
-- I have a 12-week wrap-up plus a shortlist of things I want the team (and me) to go deeper into.
+- Functional testing was completed across every module, with critical bugs closed before demo day.
+- Backend behaved more predictably after tuning, and the frontend cleaned up loading/empty/error states.
+- Project documentation, deployment guide, and user guide were finalised for handover.
+- The panel demo ran end-to-end without incident, and feedback was captured for the workshop and self-evaluation.
 
 ### Challenges & Lessons Learned
 
 - **Challenge:**
-  - On demo day, one request occasionally ran slow in a way I could not reproduce under pressure.
+  - The final week meant balancing bug fixes, performance tuning, and documentation while still rehearsing the demo.
 - **Solution:**
-  - I demoed with a photo that warmed the worker, added aggressive logging for later investigation, and blocked any last-minute fixes from the team.
+  - Prioritise the issues that most affected the demo, batch small fixes into a single PR, and write docs alongside testing.
 - **Lesson:**
-  - Close to a demo the lead's job is to protect stability; deciding not to fix is also a decision I have to own.
+  - Keeping testing, tuning, and documentation steady throughout the project reduces last-week pressure; close to a demo, stability beats new features.
 
-### Plan for Next Week
+### Plan for Next Steps
 
-- Write the workshop in detail based on what we actually built.
-- Fold lessons and feedback into the self-evaluation section.
-- Finalise cleanup status and the end-of-term documentation.
+- Finalise the internship report and submit it for review.
+- Present the demo and gather feedback from mentors and the panel.
+- Keep learning advanced AWS services beyond the internship.
