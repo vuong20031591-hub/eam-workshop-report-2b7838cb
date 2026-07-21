@@ -6,16 +6,14 @@ chapter: false
 pre: " <b> 1.3. </b> "
 ---
 
-## WORKLOG TUẦN 3
+## WORKLOG TUẦN 3 (04/05/2026 – 06/05/2026)
 
-Tuần 3 xoay quanh IAM Role cho EC2, Cloud9, và lần đầu host trên S3. Toàn lab. `UPS-3` trên Linear.
+Lại một tuần ngắn. IAM Role cho EC2, Cloud9, và lần đầu host static site trên S3 tử tế.
 
-Lab IAM Role cho EC2 là bài khiến instance profile "vào đầu" tôi. Không cần cắm key lên box, instance assume role và SDK tự chạy. Tôi làm lab hai lần, một lần theo hướng dẫn, một lần tự dựng lại từ đầu, vì đúng chỗ trống đó mới lộ ra mình chưa hiểu cái gì.
+Lab IAM Role cho EC2 là bài khiến instance profile "vào đầu" tôi. Không cần cắm access key lên box, instance assume role và SDK tự pick lên. Nghe hiển nhiên khi đã hiểu, nhưng tôi làm lab hai lần, một lần theo hướng dẫn, một lần từ trí nhớ, vì chỗ hụt đó mới lộ ra cái tôi chưa thật sự hiểu. Lượt hai tôi mắc kẹt một hồi vì gõ sai trust policy. Cũng đáng.
 
-Cloud9 dùng được. Tôi mở nó cho lab S3 rồi lại quay về máy mình, nói thật là vậy. Nó tốt khi máy ai đó dở chứng.
+Cloud9 tôi mở chủ yếu vì tò mò. IDE gọn, chạy trên browser, hữu ích khi máy dở chứng, nhưng tôi khá nhanh quay về VS Code. Biết nó có tồn tại là đủ.
 
-Phần lớn thời gian là lab S3 static website. Tạo bucket, upload `index.html`, chỉnh Bucket Policy đến khi public read chịu chạy, và bật Static Website Hosting. Lần đầu quên tắt Block Public Access, ngồi hai chục phút hỏi vì sao vẫn 403. Lỗi đó tôi không lặp lần hai.
-
-Về team, tôi review nhanh mấy ghi chú IAM tuần trước của mọi người, chỉ ra hai chỗ hay đọc sai một statement policy. Không formal, kiểu ngồi ăn trưa và whiteboard.
+Phần lớn thời gian là lab S3 static website. Tạo bucket, upload `index.html`, vật lộn với Bucket Policy cho tới khi public read chịu áp, bật Static Website Hosting. Lần đầu quên tắt Block Public Access, ngồi khoảng hai chục phút nhìn 403 tự hỏi mình quên gì. Lỗi này tôi không lặp lần hai, và giờ tôi hiểu vì sao AWS đặt lớp chặn đó ngay từ đầu.
 
 Tuần sau: RDS và Lightsail.

@@ -6,14 +6,14 @@ chapter: false
 pre: " <b> 1.1. </b> "
 ---
 
-## WORKLOG TUẦN 1
+## WORKLOG TUẦN 1 (17/04/2026 – 24/04/2026)
 
-Tuần onboarding. Phần lớn thời gian tôi cũng chỉ là một học viên, đi qua chương trình FCAJ cùng cả nhóm. Phần "lead" chỉ nằm bên trên: chạy buổi kickoff, thống nhất cách làm việc, và mở `UPS-1` trên Linear để có chỗ nhét mọi thứ vào.
+Tuần đầu tiên ở AWS. Onboarding nặng hơn tôi hình dung, và ý này là tích cực.
 
-Onboarding FCAJ nặng hơn tôi tưởng. Tạo và cấu hình tài khoản AWS, lượn qua Management Console, xem thật kỹ Regions và Availability Zones sẽ dùng (`ap-southeast-1`), bật AWS Budgets với ngưỡng nhỏ để khỏi vô tình đốt tài khoản, và đọc xem các gói AWS Support cover đến đâu. Rồi mấy bài lab đầu tay cho khái niệm bám vào tay chứ đừng trôi trên giấy.
+Tôi đi qua chương trình First Cloud AI Journey (FCAJ) từ đầu đến cuối. Tạo tài khoản AWS, dành hẳn một buổi chiều chậm rãi click quanh Management Console cho tới lúc thôi cảm giác lạc, rồi đọc kỹ về Regions và Availability Zones trước khi chọn bất cứ thứ gì. Region tôi làm việc chính là `ap-southeast-1`, hợp lý khi ngồi ở Việt Nam.
 
-Phần tổ chức nhóm tôi để nhạt có chủ đích. Standup 15 phút mỗi sáng, planning thứ Hai, review thứ Sáu. Một region, một prefix (`upscale-`), hai môi trường (`dev`, `prod`), Git flow đơn giản, một PR template. Thà nhai xong một lần còn hơn tuần nào cũng lôi ra bàn.
+Bật AWS Budgets với hạn mức nhỏ gần như ngay hôm đầu. Mấy câu chuyện kinh dị về bill lỡ tay đủ để tôi làm ngay. Cũng đọc qua các gói AWS Support để hiểu thứ mentor đang trả tiền là gì khi anh ấy nói "mở case đi".
 
-Tôi cũng phác sơ hệ thống sẽ trông ra sao, dạng nháp chứ không phải spec. Càng học AWS thì càng phải chỉnh lại.
+Mấy bài lab đầu tiên chủ yếu để khái niệm bám vào tay chứ không trôi ở dạng slide. Chưa có gì đáng sợ, nhưng đã cảm được khác biệt giữa việc đọc tên một service và đã từng thật sự dùng nó một lần.
 
-Tuần sau là IAM và ngó qua VPC, EC2. Vẫn chủ yếu lab.
+Cuối tuần tôi cảm giác biết ít hơn lúc bắt đầu, mà nghe nói đó là cảm giác bình thường khi mới vào AWS. Tuần sau: IAM, và ngó qua VPC với EC2.
