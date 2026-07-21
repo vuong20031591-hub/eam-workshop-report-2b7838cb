@@ -268,15 +268,33 @@
 .fcaj-prose blockquote { border-left: 4px solid #ff9900; padding-left: 1rem; color: #5b6473; margin: 1rem 0; font-style: italic; }
 .fcaj-prose table {
   width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.25rem 0;
   background: #fff;
   border-radius: 0.75rem;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 14px -8px rgba(0,0,0,0.12);
+  font-size: 0.95rem;
 }
-.fcaj-prose th, .fcaj-prose td { border-bottom: 1px solid #eee; padding: 0.75rem 1rem; text-align: left; }
-.fcaj-prose th { background: #f7f4ef; font-weight: 600; color: #1c2532; }
+.fcaj-prose th, .fcaj-prose td {
+  border-bottom: 1px solid #eef0f3;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: top;
+}
+.fcaj-prose th + th, .fcaj-prose td + td { border-left: 1px solid #eef0f3; }
+.fcaj-prose th {
+  background: #fff7ed;
+  font-weight: 700;
+  color: #1c2532;
+  border-bottom: 2px solid #f59e0b;
+  white-space: nowrap;
+}
+.fcaj-prose tbody tr:nth-child(even) td { background: #fafaf7; }
+.fcaj-prose tbody tr:hover td { background: #fff4e0; }
+.fcaj-prose tbody tr:last-child td { border-bottom: none; }
 .fcaj-prose figure { margin: 1rem 0; }
 .fcaj-prose figcaption { text-align: center; font-size: 0.875rem; color: #5b6473; margin-top: 0.5rem; }
 .fcaj-prose strong { color: #1c2532; }
