@@ -8,14 +8,14 @@ pre: " <b> 1.12. </b> "
 
 ## WORKLOG TUẦN 12
 
-Tuần cuối. Cleanup, báo cáo cuối, bàn giao. Mục tiêu là đóng kỳ thực tập với tài khoản gọn và kiến thức nằm ở chỗ người sau tìm ra được.
+Tuần cuối. Test cuối, tài liệu, và demo. `UPS-12` trên Linear.
 
-Tôi chia `UPS-18` thành cleanup, report, và handover. Cleanup chạy theo chương 5.10 ngược thứ tự: CloudFront, WAF, ALB, ECS, EFS, Redis, SQS, S3, VPC, IAM. Ngược là quan trọng. Xoá VPC trước là một nửa resource khác không chịu đi cho tới khi mình fix xong đám dependency vừa làm hỏng. Tôi chỉ giữ lại những artefact cần, là log export, repo IaC, và doc site.
+Tôi chạy app qua một lượt end-to-end tử tế trên browser sạch và tài khoản sạch: đăng ký, upload, chờ job, tải kết quả. Mỗi chỗ tôi khựng lại đều ghi thành bug, kể cả khi app vẫn chạy, vì "chạy được nhưng tôi phải dừng lại nghĩ" là bug UX tôi muốn bắt trước demo chứ không phải trong lúc demo. Phần lớn là sửa chữ, và một bug thật: job fail không clear key Redis.
 
-Sau đó tôi ngồi đọc kỹ trang billing để chắc chắn không còn cái gì âm thầm chạy. Phần này nhàm và bỏ qua là tốn tiền thật.
+Tôi chủ trì buổi triage và chia thành "phải fix trước demo" và "để sau nếu còn thời gian". Đống phải-fix nhỏ hơn tôi lo, một bất ngờ dễ chịu cho một chiều thứ Sáu.
 
-Tôi chủ trì retrospective với nhóm. Cái gì work, cái gì giữ, cái gì bỏ. Tự tay tôi viết báo cáo thực tập cuối, cập nhật doc site để người mới dựng lại stack từ đầu được nếu đọc theo thứ tự, và làm slide bàn giao ngắn.
+Phần tài liệu, tôi cập nhật README để người mới clone repo, đọc theo thứ tự, và dựng được local stack mà không phải hỏi ai. Cũng viết ghi chú kiến trúc ngắn giải thích vì sao có các mảnh, không chỉ nó là gì, vì "vì sao" là cái người ta quên trước tiên.
 
-Tài khoản sạch, bill hôm sau về gần bằng không, báo cáo nộp xong, doc site cập nhật, retrospective note chia sẻ. Kỳ thực tập đóng.
+Buổi demo diễn ra ổn. Không hoàn hảo, nhưng app làm đúng cái nó cần làm trước những người chưa từng thấy nó, và câu hỏi sau đó là về sản phẩm, không phải "sao nó crash". Tôi tính là thắng.
 
-Nếu làm lại, cleanup thủ công không phải cách hay. Dễ sót và chậm. Lần sau nên Terraform toàn bộ stack để cleanup chỉ còn một câu lệnh chứ không phải một checklist. Tôi ghi vào retrospective như khuyến nghị đầu tiên cho khoá sau.
+Đóng kỳ thực tập. Nếu làm lại tôi sẽ đẩy phần async lên sớm hơn, vì đó là thay đổi khiến app cảm giác thật sự có sức sống. Ghi vào báo cáo cuối như khuyến nghị duy nhất tôi sẵn sàng đứng ra bảo vệ.
