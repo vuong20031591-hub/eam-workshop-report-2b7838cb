@@ -6,14 +6,14 @@ chapter: false
 pre: " <b> 1.2. </b> "
 ---
 
-## WEEK 2 WORKLOG
+## WEEK 2 WORKLOG (27/04/2026 – 29/04/2026)
 
-IAM week, plus a first taste of VPC and EC2. Still learning, still labs. As lead I mostly set the pace, held a short design chat, and reviewed what people had done. `UPS-2` on Linear.
+Short week (only three working days) but a dense one. IAM in the first half, VPC and EC2 in the second.
 
-The IAM labs I did myself. Creating Users, Groups, Roles, Policies, turning MFA on for the root account, then playing with Least Privilege by intentionally denying myself things and watching the error messages. That last part sounds silly but it is the fastest way to actually understand a policy. I also went through the "no long-lived access keys on laptops" lesson the hard way when I nearly committed one, then rotated it and moved on.
+I spent the first day and a half on IAM. Created Users, Groups, Roles, and Policies by hand, turned on MFA for the root account and then locked the root credentials in a place I would not accidentally touch again. The Least Privilege lab was the one that stuck with me. I wrote a policy, denied myself something on purpose, then read the error message until I understood exactly which line caused it. Sounds slow, but I learned more from that than from any diagram.
 
-VPC and EC2 was the other half. I did the guided lab, drew the default VPC on paper, then did it again from scratch so I knew what every piece was for. Launching an EC2 instance, SSH-ing in, terminating it. Nothing fancy, but it clears up a lot of assumptions.
+I nearly committed a long-lived access key to a personal repo while playing around. Caught it, rotated the key, and now I understand why the guides keep hammering that point.
 
-On the team side I wrote a short note on how we will use IAM (admin group, dev group, one service user for CI later, no root access keys ever) and pinned it in the repo. It is not an ADR yet, more of a working agreement. And I nudged people who kept reaching for `AdministratorAccess` in labs. Fine for a sandbox, not a habit I want travelling with us.
+VPC and EC2 was the other half. I did the guided lab, drew the default VPC on paper, then rebuilt one from scratch to see if I actually knew what each piece was for (I did not, entirely). Launched a small EC2 instance, SSH-ed in, ran a couple of commands, terminated it. Nothing exciting on its own, but a lot of my assumptions about "the cloud" quietly got corrected in that hour.
 
-Next week: IAM Roles for EC2, Cloud9, and hosting a static site on S3.
+Next week: IAM Roles for EC2, Cloud9, and my first go at hosting a static site on S3.

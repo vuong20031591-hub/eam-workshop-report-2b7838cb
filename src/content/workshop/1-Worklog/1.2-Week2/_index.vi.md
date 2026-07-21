@@ -6,14 +6,14 @@ chapter: false
 pre: " <b> 1.2. </b> "
 ---
 
-## WORKLOG TUẦN 2
+## WORKLOG TUẦN 2 (27/04/2026 – 29/04/2026)
 
-Tuần IAM, kèm chạm nhẹ VPC và EC2. Vẫn học, vẫn lab. Vai lead tuần này chủ yếu là giữ nhịp, họp thiết kế ngắn một buổi, và review lại việc mọi người làm. `UPS-2` trên Linear.
+Tuần ngắn (chỉ ba ngày làm việc) nhưng đặc. Nửa đầu là IAM, nửa sau VPC và EC2.
 
-Phần lab IAM tôi tự làm hết. Tạo User, Group, Role, Policy, bật MFA cho tài khoản root, rồi nghịch Least Privilege bằng cách cố tình deny chính mình rồi đọc thông báo lỗi. Nghe hơi ngớ ngẩn nhưng đó là cách hiểu policy nhanh nhất. Bài học "không cắm access key dài hạn lên máy" thì tôi học kiểu suýt commit access key lên repo, rotate ngay và đi tiếp.
+Ngày rưỡi đầu tôi ngồi với IAM. Tự tay tạo User, Group, Role, Policy, bật MFA cho tài khoản root rồi cất credential root vào chỗ mà tôi sẽ không vô tình đụng lại. Lab Least Privilege là bài đọng lại nhất. Tôi viết một policy, cố tình deny chính mình một thứ, rồi đọc thông báo lỗi tới khi hiểu chính xác dòng nào gây ra. Nghe chậm, nhưng tôi học được từ đó nhiều hơn bất cứ sơ đồ nào.
 
-Nửa còn lại là VPC và EC2. Tôi làm lab theo hướng dẫn, vẽ lại default VPC ra giấy, rồi dựng lại từ đầu để biết mỗi mảnh dùng làm gì. Chạy một EC2 instance, SSH vào, terminate. Không gì to tát, nhưng dẹp được rất nhiều giả định sai.
+Tôi suýt commit một access key dài hạn lên repo cá nhân trong lúc nghịch. Bắt kịp, rotate key, và giờ tôi hiểu vì sao guide cứ nhấn mãi điểm đó.
 
-Về team, tôi viết một ghi chú ngắn cách nhóm sẽ dùng IAM (group admin, group dev, một service user cho CI sau này, không bao giờ dùng root access key) và ghim trong repo. Chưa phải ADR, mới là working agreement. Có bạn hay với tay tới `AdministratorAccess` trong lab, tôi nhắc lại. Sandbox thì được, thói quen mang theo thì không.
+VPC và EC2 là nửa còn lại. Tôi làm lab theo hướng dẫn, vẽ default VPC ra giấy, rồi dựng lại từ đầu để xem mình có thật sự biết mỗi mảnh làm gì không (chưa, không hoàn toàn). Bật một EC2 nhỏ, SSH vào, gõ vài lệnh, terminate. Không có gì hào nhoáng, nhưng khá nhiều giả định của tôi về "cloud" được lặng lẽ chỉnh lại trong giờ đồng hồ đó.
 
-Tuần sau: IAM Role cho EC2, Cloud9, và host static site trên S3.
+Tuần sau: IAM Role cho EC2, Cloud9, và lần đầu host static site trên S3.
