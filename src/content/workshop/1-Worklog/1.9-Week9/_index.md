@@ -8,34 +8,34 @@ pre: " <b> 1.9. </b> "
 
 ### Week 9 Objectives
 
-- Wire Real-ESRGAN for upscaling and CodeFormer for face restoration into one pipeline.
-- Wrap the pipeline behind enhance(image, params) so the rest of the backend does not care which model ran.
-- Have a small internal eval set to measure quality and catch regressions early.
+- As lead, steer the ML pair toward one pipeline that combines Real-ESRGAN and CodeFormer instead of two parallel efforts.
+- Lock the enhance(image, params) contract so the rest of the backend stays decoupled from model choice.
+- Set up a small internal eval set so regressions get caught in review, not in demo.
 
 ### Tasks Completed During the Week
 
 | Day | Task | Start | Completion | Reference |
 | --- | --- | --- | --- | --- |
-| Mon | Install and run Real-ESRGAN locally on several photos and compare against the originals. | 15/06/2026 | 15/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) |
-| Tue | Install CodeFormer and try different fidelity weights on face photos. | 16/06/2026 | 16/06/2026 | [CodeFormer](https://github.com/sczhou/CodeFormer) |
-| Wed | Wrap both models behind enhance(image, params) with knobs for upscale factor and face restore. | 17/06/2026 | 17/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
-| Thu | Build a 20-image eval set and a script that runs the pipeline and dumps outputs to a folder. | 18/06/2026 | 18/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
-| Fri | Time everything on CPU and commit to CPU-in-dev, GPU-on-AWS as the plan. | 19/06/2026 | 19/06/2026 | [Amazon EC2 GPU](https://000004.awsstudygroup.com/) |
+| Mon | Review the Real-ESRGAN spike, compare outputs against originals with the ML owner. | 15/06/2026 | 15/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) |
+| Tue | Pair on CodeFormer fidelity weights on face photos and pick sensible defaults together. | 16/06/2026 | 16/06/2026 | [CodeFormer](https://github.com/sczhou/CodeFormer) |
+| Wed | Design and sign off the enhance(image, params) interface with upscale factor and face-restore knobs. | 17/06/2026 | 17/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| Thu | Curate the 20-image eval set myself and review the runner script that dumps outputs to a folder. | 18/06/2026 | 18/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| Fri | Run CPU timings with the team and make the call: CPU-in-dev, GPU-on-AWS, written into project notes. | 19/06/2026 | 19/06/2026 | [Amazon EC2 GPU](https://000004.awsstudygroup.com/) |
 
 ### Week 9 Results
 
-- The pipeline runs end to end on the test images and outputs are clearly better than inputs.
-- enhance() has a tight interface, ready to be packaged into a worker next week.
-- The small eval set immediately caught a default someone flipped by accident.
+- The pipeline runs end to end on the test images and outputs are visibly better than inputs.
+- enhance() has a tight interface everyone agreed on, ready to be packaged into a worker next week.
+- The eval set I curated caught a default flipped by accident the day after we set it up.
 
 ### Challenges & Lessons Learned
 
 - **Challenge:**
-  - CPU is slow enough that a single request would time out under the current setup.
+  - CPU is slow enough that a single request would time out, and the team wanted to jump on GPU immediately.
 - **Solution:**
-  - Accept CPU in dev to avoid burning money, push the GPU switch to the AWS phase, and write that call into project notes.
+  - I chose to accept CPU in dev to avoid burning money, pushed the GPU switch to the AWS phase, and wrote the call into project notes.
 - **Lesson:**
-  - Some trade-offs are worth locking in writing early instead of re-arguing every week.
+  - A lead's job is sometimes to lock a trade-off in writing so the team stops re-arguing it every standup.
 
 ### Plan for Next Week
 

@@ -8,37 +8,37 @@ pre: " <b> 1.7. </b> "
 
 ### Week 7 Objectives
 
-- Open the Upscale AI project with a kickoff that agrees on goal and scope.
-- Lock a first architecture slice: TanStack Start, FastAPI, a separate worker, S3 when we reach the AWS phase.
-- Scaffold FE and BE and get them talking over CORS.
+- As team lead, run the project opening session so everyone agrees on Upscale AI's goal and MVP scope.
+- Lock a first architecture slice (TanStack Start, FastAPI, a separate worker, S3 for the AWS phase) and capture it as a short ADR in the repo.
+- Assign scaffolding work per person with a clear definition of done so we don't relitigate it next week.
 
 ### Tasks Completed During the Week
 
 | Day | Task | Start | Completion | Reference |
 | --- | --- | --- | --- | --- |
-| Mon | Run the kickoff, agree on a one-line pitch and MVP scope. | 01/06/2026 | 01/06/2026 | [FCAJ Project](https://000000.awsstudygroup.com/) |
-| Tue | Sketch the end-to-end architecture on a whiteboard, split modules by owner. | 02/06/2026 | 02/06/2026 | [TanStack Router](https://tanstack.com/router) |
-| Wed | Init the TanStack + Vite frontend repo with a minimal route and layout. | 03/06/2026 | 03/06/2026 | [TanStack Router](https://tanstack.com/router) |
-| Thu | Init the FastAPI backend repo, add /healthz and a router/service folder layout. | 04/06/2026 | 04/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
-| Fri | Wire CI skeletons on both sides, have FE call BE across CORS and log by hand to confirm. | 05/06/2026 | 05/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| Mon | Facilitate the opening session, lock the one-line pitch and MVP scope with the team. | 01/06/2026 | 01/06/2026 | [FCAJ Project](https://000000.awsstudygroup.com/) |
+| Tue | Whiteboard the end-to-end architecture, split modules by owner and open the tickets on Linear. | 02/06/2026 | 02/06/2026 | [TanStack Router](https://tanstack.com/router) |
+| Wed | Review the TanStack + Vite frontend scaffold from the FE owner, feedback on routes and layout. | 03/06/2026 | 03/06/2026 | [TanStack Router](https://tanstack.com/router) |
+| Thu | Agree with the BE owner on the FastAPI router/service layout and set /healthz as the sanity check. | 04/06/2026 | 04/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| Fri | Approve the CI skeleton PRs and pair with the team to debug CORS until FE calls BE successfully. | 05/06/2026 | 05/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
 
 ### Week 7 Results
 
-- The team agreed on a straw-man architecture and ownership is visible on Linear.
-- FE loads, BE returns 200, CORS works, and CI is green on both repos.
-- An architecture note lives in the repo for anyone joining later.
+- The team settled on a straw-man architecture and each person owns a slice on Linear without needing reminders.
+- FE loads, BE returns 200, CORS is open, and CI is green on both repos by the end of the opening week.
+- The first ADR sits in the repo, short enough for a new joiner to grasp why we picked this stack.
 
 ### Challenges & Lessons Learned
 
 - **Challenge:**
-  - Two people wanted to over-engineer the folder structure in the first week, an easy way to lose days to bikeshedding.
+  - A couple of teammates wanted to over-engineer the folder structure day one, and I had to balance listening with keeping pace.
 - **Solution:**
-  - Set the rule out loud: ship a working upload first, refactor with evidence, and drop that rule into the README.
+  - I set the rule "ship a working upload first, refactor with evidence", wrote it into the README and closed the discussion.
 - **Lesson:**
-  - In week one of a project, a green CI beats a beautiful folder tree on paper.
+  - A lead's job in week one is to protect momentum; sometimes that means locking a "good enough" call instead of chasing perfect.
 
 ### Plan for Next Week
 
-- Build the real upload flow from FE to BE.
-- Lock the multipart field names and a shared response schema.
-- Validate on both FE and BE so we never fully trust the client.
+- Coordinate the team to ship the real upload flow from FE to BE.
+- Lock multipart field names and the shared response schema together.
+- Require both FE and BE validation before I approve any PR.
