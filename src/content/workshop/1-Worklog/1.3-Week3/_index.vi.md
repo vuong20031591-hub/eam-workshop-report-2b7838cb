@@ -8,14 +8,14 @@ pre: " <b> 1.3. </b> "
 
 ## WORKLOG TUẦN 3
 
-Tuần mạng. VPC phải chuẩn, vì ALB, ECS, EFS, Redis đều nằm trong đó và sau này dời cái nào cũng đau.
+Tuần 3 xoay quanh IAM Role cho EC2, Cloud9, và lần đầu host trên S3. Toàn lab. `UPS-3` trên Linear.
 
-Tôi chia `UPS-5` thành sub-ticket cho CIDR plan, subnet, routing, NAT, endpoint, rồi chủ trì buổi whiteboard về topology và viết lại ngay hôm sau để không ai cãi nhau bằng trí nhớ. Có người đề xuất single-AZ cho tiết kiệm. Tôi gạt. Hai AZ, không thương lượng.
+Lab IAM Role cho EC2 là bài khiến instance profile "vào đầu" tôi. Không cần cắm key lên box, instance assume role và SDK tự chạy. Tôi làm lab hai lần, một lần theo hướng dẫn, một lần tự dựng lại từ đầu, vì đúng chỗ trống đó mới lộ ra mình chưa hiểu cái gì.
 
-Tự làm thì tôi chọn CIDR (`10.20.0.0/16`), tách public và private subnet trên hai AZ, và chốt một NAT trước để giữ bill vừa phải. VPC endpoint thực sự cần là S3, ECR, CloudWatch Logs, còn lại để sau. Tất cả nhét vào ADR mạng.
+Cloud9 dùng được. Tôi mở nó cho lab S3 rồi lại quay về máy mình, nói thật là vậy. Nó tốt khi máy ai đó dở chứng.
 
-Kết quả: thiết kế VPC merge xong. Khi có service mới, cả nhóm biết luôn nó thuộc subnet nào, không phải hỏi tôi.
+Phần lớn thời gian là lab S3 static website. Tạo bucket, upload `index.html`, chỉnh Bucket Policy đến khi public read chịu chạy, và bật Static Website Hosting. Lần đầu quên tắt Block Public Access, ngồi hai chục phút hỏi vì sao vẫn 403. Lỗi đó tôi không lặp lần hai.
 
-Điểm tôi chưa yên tâm là một NAT duy nhất. Nó đúng nghĩa là single point of failure. Tôi mở follow-up để thêm cái thứ hai trước khi có traffic thật, rồi đi tiếp.
+Về team, tôi review nhanh mấy ghi chú IAM tuần trước của mọi người, chỉ ra hai chỗ hay đọc sai một statement policy. Không formal, kiểu ngồi ăn trưa và whiteboard.
 
-Tuần sau chương 5.4. Security Group và S3. Tôi sẽ chốt convention bucket và policy.
+Tuần sau: RDS và Lightsail.
