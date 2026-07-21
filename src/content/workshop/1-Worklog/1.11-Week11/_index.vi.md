@@ -8,37 +8,37 @@ pre: " <b> 1.11. </b> "
 
 ### Mục Tiêu Tuần 11
 
-- Triển khai Amazon SQS để xử lý ảnh bất đồng bộ.
-- Tích hợp Redis cache và Server-Sent Events (SSE) cho tiến độ real-time.
-- Test và tối ưu luồng xử lý bất đồng bộ.
+- Đẩy job từ BE sang worker qua SQS, không chạy inference trong request nữa.
+- Dùng Redis giữ trạng thái job và tiến độ để BE trả nhanh không đợi.
+- Đẩy progress về FE bằng SSE để user thấy thanh chạy thật.
 
 ### Các công việc thực hiện trong tuần
 
 | Thứ | Công việc | Bắt đầu | Hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
-| T2 | Triển khai Amazon SQS để xử lý yêu cầu nâng cấp ảnh bất đồng bộ. | 29/06/2026 | 29/06/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/) |
-| T3 | Hoàn thiện tích hợp SQS và kiểm tra luồng xử lý message. | 30/06/2026 | 30/06/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/) |
-| T4 | Tích hợp Redis để cache các kết quả xử lý được truy cập thường xuyên. | 01/07/2026 | 01/07/2026 | [Redis Docs](https://redis.io/docs/) |
-| T5 | Triển khai Server-Sent Events (SSE) để cung cấp tiến độ xử lý real-time. | 02/07/2026 | 02/07/2026 | [MDN - Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) |
-| T6 | Test luồng bất đồng bộ và tối ưu hiệu năng tổng thể. | 03/07/2026 | 03/07/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/); [Redis Docs](https://redis.io/docs/) |
+| T2 | Tạo SQS queue upscale-jobs, gắn dead-letter queue và visibility timeout hợp lý. | 29/06/2026 | 29/06/2026 | [Amazon SQS](https://000018.awsstudygroup.com/) |
+| T3 | Sửa BE để enqueue job và trả job id ngay, không đợi worker. | 30/06/2026 | 30/06/2026 | [Amazon SQS](https://000018.awsstudygroup.com/) |
+| T4 | Worker nhận message, chạy enhance(), upload output lên S3, cập nhật status vào Redis. | 01/07/2026 | 01/07/2026 | [Amazon ElastiCache](https://000016.awsstudygroup.com/) |
+| T5 | Endpoint SSE /jobs/{id}/events đọc Redis và stream progress ra FE. | 02/07/2026 | 02/07/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| T6 | Xử lý retry, timeout và job dead: đưa vào DLQ, log rõ ràng, cho FE hiển thị lỗi thân thiện. | 03/07/2026 | 03/07/2026 | [Amazon SQS](https://000018.awsstudygroup.com/) |
 
 ### Kết quả đạt được Tuần 11
 
-- Tích hợp Amazon SQS để xử lý yêu cầu bất đồng bộ.
-- Bổ sung cache Redis giúp giảm xử lý trùng lặp và cải thiện thời gian phản hồi.
-- Triển khai SSE để người dùng theo dõi tiến độ xử lý theo thời gian thực.
+- Request upload trả trong dưới 200ms, không còn phụ thuộc thời gian inference.
+- FE có progress mượt qua SSE, thay hẳn cho polling cũ.
+- Job hỏng rơi vào DLQ, có thể replay tay, không mất dấu.
 
 ### Khó khăn & Bài học
 
 - **Khó khăn:**
-  - Điều phối giữa SQS, worker, Redis và luồng SSE mà vẫn đảm bảo trạng thái nhất quán.
+  - SSE qua ALB rớt kết nối định kỳ do idle timeout mặc định, user thấy progress khựng.
 - **Giải pháp:**
-  - Định nghĩa rõ các trạng thái job, dùng Redis làm nơi lưu state chung và stream tiến độ qua SSE.
+  - Nâng idle timeout của ALB và gửi comment SSE heartbeat mỗi 15s để giữ kết nối.
 - **Bài học:**
-  - Kiến trúc bất đồng bộ scale tốt hơn nhưng cần xử lý state và lỗi cẩn thận.
+  - Long-lived connection qua load balancer cần cả hai đầu đồng thuận, không chỉ code app.
 
 ### Kế hoạch Tuần tới
 
-- Kiểm thử chức năng và sửa các bug còn lại.
-- Tối ưu hiệu năng backend và trải nghiệm frontend.
-- Hoàn thiện tài liệu và chuẩn bị demo.
+- Final testing end-to-end với ảnh thật của người dùng thử.
+- Chuẩn bị demo, script kịch bản và bản dự phòng.
+- Cleanup tài nguyên tuần sau để không đốt tiền sau demo.

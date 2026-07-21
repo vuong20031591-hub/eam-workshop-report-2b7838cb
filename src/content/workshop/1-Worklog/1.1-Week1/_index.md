@@ -8,39 +8,39 @@ pre: " <b> 1.1. </b> "
 
 ### Week 1 Objectives
 
-- Get familiar with AWS: create an account, learn the basic Console interface.
-- Understand Regions, Availability Zones, and the AWS Free Tier model.
-- Configure Budgets and cost notifications to control expenses from day one.
-- Explore Billing Dashboard and AWS Support to prepare for later labs.
+- Get a fresh AWS account running and stop feeling lost inside the Management Console.
+- Understand why ap-southeast-1 makes sense as a base Region and what Free Tier actually covers.
+- Configure AWS Budgets with email alerts on day one so learning does not leave surprise charges.
+- Walk through the Billing Dashboard and the Support tiers so I know where to look later.
 
 ### Tasks Completed During the Week
 
-| Day | Task | Start | Completion | Reference Material |
+| Day | Task | Start | Completion | Reference |
 | --- | --- | --- | --- | --- |
-| Mon | Create an AWS account, complete identity verification, and explore the AWS Management Console interface. | 17/04/2026 | 17/04/2026 | [AWS Account Setup](https://000001.awsstudygroup.com/) |
-| Tue | Learn about AWS Regions, Availability Zones, AWS Free Tier, and basic account settings. | 21/04/2026 | 21/04/2026 | [AWS Basics](https://000001.awsstudygroup.com/) |
-| Wed | Configure AWS Budgets, create a monthly budget, and set up email notifications for cost alerts. | 22/04/2026 | 22/04/2026 | [AWS Budgets](https://000007.awsstudygroup.com/) |
-| Thu | Explore the AWS Billing Dashboard, analyze estimated costs, and understand AWS pricing models. | 23/04/2026 | 23/04/2026 | [AWS Billing](https://000007.awsstudygroup.com/) |
-| Fri | Learn AWS Support plans, create a sample support case, and review troubleshooting resources. | 24/04/2026 | 24/04/2026 | [AWS Support](https://000009.awsstudygroup.com/) |
+| Mon | Register the AWS account, verify identity, take the first steps in the Console. | 20/04/2026 | 20/04/2026 | [AWS Account Setup](https://000001.awsstudygroup.com/) |
+| Tue | Read up on Regions, Availability Zones and Free Tier; pick a working Region. | 21/04/2026 | 21/04/2026 | [AWS Basics](https://000001.awsstudygroup.com/) |
+| Wed | Create a small monthly Budget with threshold email alerts. | 22/04/2026 | 22/04/2026 | [AWS Budgets](https://000007.awsstudygroup.com/) |
+| Thu | Explore the Billing Dashboard and read pricing pages for services I plan to use. | 23/04/2026 | 23/04/2026 | [AWS Billing](https://000007.awsstudygroup.com/) |
+| Fri | Compare Support tiers and open a practice support case. | 24/04/2026 | 24/04/2026 | [AWS Support](https://000009.awsstudygroup.com/) |
 
-### Week 1 Achievements
+### Week 1 Results
 
-- Successfully created and verified an AWS account, ready to use the Console.
-- Understood the Region/AZ model and the free-tier services available.
-- Set up Budgets with email alerts to avoid unexpected charges.
-- Got familiar with the Billing Dashboard and AWS Support workflow.
+- Account is up, MFA on the root user, root credentials tucked away out of daily reach.
+- Comfortable choosing a Region by latency and price rather than clicking whichever loads first.
+- Budget and email alert live, and a simulated overrun actually delivered mail.
+- Rough mental map of Billing and Support so I know where to go when something breaks.
 
 ### Challenges & Lessons Learned
 
 - **Challenge:**
-  - Many new concepts appear at once (Region, AZ, Free Tier, Budgets), which is confusing on the first day.
+  - The first day drops too many new names at once and everything sounds familiar without actually sticking.
 - **Solution:**
-  - Follow the awsstudygroup labs step by step, take notes on each service and its purpose.
+  - Follow the awsstudygroup series in order and note two lines per service: what it is, when I would use it.
 - **Lesson:**
-  - Setting up Budgets and cost alerts should be done first — before touching any paid service.
+  - The first thing to do in a new account is set a Budget, not poke at services.
 
 ### Plan for Next Week
 
-- Dive deeper into IAM (Users, Groups, Policies, Roles).
-- Practice VPC, subnets, route tables, and Internet Gateway.
-- Launch the first EC2 instance and connect via SSH.
+- IAM in detail: Users, Groups, Policies, Roles and least-privilege habits.
+- Rebuild a VPC by hand to actually understand subnets, route tables and the IGW.
+- Spin up a small EC2, SSH in, terminate it myself.

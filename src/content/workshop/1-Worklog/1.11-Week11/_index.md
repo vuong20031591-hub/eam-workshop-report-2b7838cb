@@ -8,37 +8,37 @@ pre: " <b> 1.11. </b> "
 
 ### Week 11 Objectives
 
-- Implement Amazon SQS for asynchronous image processing.
-- Integrate Redis caching and Server-Sent Events (SSE) for real-time progress.
-- Test and optimize the asynchronous workflow.
+- Move jobs from BE to worker through SQS so inference no longer runs inside a request.
+- Use Redis to hold job state and progress so the BE returns quickly without waiting.
+- Push progress to the FE with SSE so the user sees a real progress bar.
 
 ### Tasks Completed During the Week
 
-| Day | Task | Start | Completion | Reference Material |
+| Day | Task | Start | Completion | Reference |
 | --- | --- | --- | --- | --- |
-| Mon | Implement Amazon SQS to process image enhancement requests asynchronously. | 29/06/2026 | 29/06/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/) |
-| Tue | Complete SQS integration and verify message processing workflow. | 30/06/2026 | 30/06/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/) |
-| Wed | Integrate Redis for caching frequently accessed processing results. | 01/07/2026 | 01/07/2026 | [Redis Docs](https://redis.io/docs/) |
-| Thu | Implement Server-Sent Events (SSE) to provide real-time processing progress. | 02/07/2026 | 02/07/2026 | [MDN - Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) |
-| Fri | Test the asynchronous workflow and optimize overall system performance. | 03/07/2026 | 03/07/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/); [Redis Docs](https://redis.io/docs/) |
+| Mon | Create the upscale-jobs SQS queue with a dead-letter queue and a sensible visibility timeout. | 29/06/2026 | 29/06/2026 | [Amazon SQS](https://000018.awsstudygroup.com/) |
+| Tue | Change the BE to enqueue the job and return the job id immediately instead of waiting on the worker. | 30/06/2026 | 30/06/2026 | [Amazon SQS](https://000018.awsstudygroup.com/) |
+| Wed | The worker consumes messages, runs enhance(), uploads outputs to S3 and writes status to Redis. | 01/07/2026 | 01/07/2026 | [Amazon ElastiCache](https://000016.awsstudygroup.com/) |
+| Thu | Add an SSE endpoint /jobs/{id}/events that reads Redis and streams progress to the FE. | 02/07/2026 | 02/07/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| Fri | Handle retries, timeouts and dead jobs: DLQ, clear logs, and a friendly FE error message. | 03/07/2026 | 03/07/2026 | [Amazon SQS](https://000018.awsstudygroup.com/) |
 
-### Week 11 Achievements
+### Week 11 Results
 
-- Integrated Amazon SQS to handle image processing requests asynchronously.
-- Added Redis caching to reduce redundant processing and improve response time.
-- Implemented SSE so users can track processing progress in real time.
+- The upload request returns under 200 ms, no longer tied to inference time.
+- FE progress is smooth over SSE, fully replacing the polling loop.
+- Broken jobs land in the DLQ, can be replayed by hand, and no work goes missing.
 
 ### Challenges & Lessons Learned
 
 - **Challenge:**
-  - Coordinating SQS, worker, Redis, and SSE stream while keeping state consistent.
+  - SSE through the ALB dropped periodically because of the default idle timeout, so the user saw progress stall.
 - **Solution:**
-  - Define clear job states, use Redis as the shared state store, and stream progress via SSE.
+  - Raise the ALB idle timeout and send an SSE comment heartbeat every 15 seconds to keep the connection alive.
 - **Lesson:**
-  - Asynchronous architectures scale better but need careful state and error handling.
+  - Long-lived connections through a load balancer need both sides to agree, not just app code.
 
 ### Plan for Next Week
 
-- Perform functional testing and fix remaining bugs.
-- Optimize backend performance and frontend UX.
-- Finalize documentation and prepare the demo.
+- Final end-to-end testing with real photos from a few test users.
+- Prepare the demo: script, running order, and a fallback.
+- Clean up resources next week so the demo does not keep burning money.

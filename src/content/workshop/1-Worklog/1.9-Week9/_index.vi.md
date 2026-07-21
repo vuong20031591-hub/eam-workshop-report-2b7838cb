@@ -8,37 +8,37 @@ pre: " <b> 1.9. </b> "
 
 ### Mục Tiêu Tuần 9
 
-- Nghiên cứu và tích hợp mô hình AI Real-ESRGAN và CodeFormer.
-- Xây dựng pipeline inference AI và tối ưu hiệu năng.
-- Kiểm thử kết quả nâng cấp ảnh trên nhiều ảnh test.
+- Ghép Real-ESRGAN cho upscaling và CodeFormer cho face restore vào một pipeline.
+- Bọc pipeline sau một hàm enhance(image, params) để phần backend không cần biết chi tiết mô hình.
+- Có bộ eval nội bộ để đo chất lượng và bắt regression sớm.
 
 ### Các công việc thực hiện trong tuần
 
 | Thứ | Công việc | Bắt đầu | Hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
-| T2 | Nghiên cứu Real-ESRGAN và CodeFormer, chuẩn bị môi trường inference AI. | 15/06/2026 | 15/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN); [CodeFormer](https://github.com/sczhou/CodeFormer) |
-| T3 | Tích hợp Real-ESRGAN vào pipeline xử lý ảnh của backend. | 16/06/2026 | 16/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) |
-| T4 | Tích hợp CodeFormer cho phục hồi khuôn mặt và tối ưu luồng inference. | 17/06/2026 | 17/06/2026 | [CodeFormer](https://github.com/sczhou/CodeFormer) |
-| T5 | Debug quá trình xử lý AI, tối ưu hiệu năng model và cải thiện chất lượng ảnh. | 18/06/2026 | 18/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN); [CodeFormer](https://github.com/sczhou/CodeFormer) |
-| T6 | Kiểm thử kết quả nâng cấp ảnh trên nhiều ảnh test. | 19/06/2026 | 19/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN); [CodeFormer](https://github.com/sczhou/CodeFormer) |
+| T2 | Cài và chạy Real-ESRGAN local trên vài ảnh, so kết quả với ảnh gốc. | 15/06/2026 | 15/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) |
+| T3 | Cài CodeFormer, thử fidelity weight khác nhau trên ảnh có khuôn mặt. | 16/06/2026 | 16/06/2026 | [CodeFormer](https://github.com/sczhou/CodeFormer) |
+| T4 | Bọc cả hai mô hình sau enhance(image, params), đặt sẵn knob cho upscale factor và face restore. | 17/06/2026 | 17/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| T5 | Tạo bộ eval 20 ảnh đủ loại và script chạy pipeline dump kết quả ra folder. | 18/06/2026 | 18/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| T6 | Đo thời gian trên CPU, chốt CPU cho dev và GPU cho giai đoạn AWS. | 19/06/2026 | 19/06/2026 | [Amazon EC2 GPU](https://000004.awsstudygroup.com/) |
 
 ### Kết quả đạt được Tuần 9
 
-- Tích hợp thành công Real-ESRGAN và CodeFormer vào pipeline backend.
-- Cải thiện rõ chất lượng nâng cấp ảnh và phục hồi khuôn mặt.
-- Kiểm chứng chất lượng đầu ra trên nhiều loại ảnh khác nhau.
+- Pipeline chạy end-to-end trên ảnh test, output rõ ràng tốt hơn input.
+- Hàm enhance() có interface gọn để tuần sau đóng gói vào worker.
+- Bộ eval nhỏ giúp phát hiện ngay lần đầu khi có ai đó chỉnh sai default.
 
 ### Khó khăn & Bài học
 
 - **Khó khăn:**
-  - Cấu hình môi trường AI (Python/PyTorch/CUDA) và hiệu năng inference.
+  - CPU chậm đến mức một request có thể timeout với setup hiện tại.
 - **Giải pháp:**
-  - Pin phiên bản dependency, dùng GPU khi có, và benchmark trên ảnh đại diện.
+  - Chấp nhận CPU cho dev để không đốt tiền, dời việc chuyển GPU sang khi vào AWS, ghi thẳng quyết định vào project notes.
 - **Bài học:**
-  - Môi trường AI ổn định và benchmark nhất quán là yếu tố then chốt cho pipeline inference tin cậy.
+  - Có những trade-off nên chốt sớm bằng chữ trong repo hơn là tranh cãi lại mỗi tuần.
 
 ### Kế hoạch Tuần tới
 
-- Containerize frontend và backend bằng Docker.
-- Triển khai ứng dụng lên Amazon ECS/Fargate.
-- Xác minh hệ thống end-to-end sau khi deploy.
+- Dockerize FE, BE và worker.
+- Đưa lên ECS Fargate + S3 cho môi trường staging.
+- Chuẩn bị plan chuyển pipeline sang GPU khi cần.

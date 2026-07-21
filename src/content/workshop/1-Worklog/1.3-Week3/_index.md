@@ -8,38 +8,38 @@ pre: " <b> 1.3. </b> "
 
 ### Week 3 Objectives
 
-- Use IAM Roles to allow EC2 to access AWS services securely, without hardcoded keys.
-- Get familiar with AWS Cloud9 as a browser-based development environment.
-- Deploy a Static Website on Amazon S3 and verify public accessibility.
+- Attach an IAM Role to EC2 in place of an access key and verify the SDK picks it up.
+- Try Cloud9 to see whether it earns a slot next to VS Code.
+- Ship a static site on S3 with just enough public access, not a wide-open bucket.
 
 ### Tasks Completed During the Week
 
-| Day | Task | Start | Completion | Reference Material |
+| Day | Task | Start | Completion | Reference |
 | --- | --- | --- | --- | --- |
-| Mon | Learn IAM Roles for EC2 and attach an IAM Role to an EC2 instance for secure service access. | 01/05/2026 | 01/05/2026 | [IAM Roles for EC2](https://000048.awsstudygroup.com/) |
-| Tue | Create an AWS Cloud9 environment and explore the cloud-based development workspace. | 04/05/2026 | 04/05/2026 | [AWS Cloud9](https://000049.awsstudygroup.com/) |
-| Wed | Practice coding, running commands, and managing files in AWS Cloud9. | 05/05/2026 | 05/05/2026 | [Cloud9 Usage](https://000049.awsstudygroup.com/) |
-| Thu | Create an Amazon S3 bucket, configure Static Website Hosting, and upload website files. | 06/05/2026 | 06/05/2026 | [S3 Static Website](https://000057.awsstudygroup.com/) |
-| Fri | Test website accessibility, configure bucket permissions, and verify successful deployment. | 07/05/2026 | 07/05/2026 | [S3 Permissions](https://000057.awsstudygroup.com/) |
+| Mon | Create an IAM Role for EC2 with a minimal policy, attach via an instance profile. | 04/05/2026 | 04/05/2026 | [IAM Roles for EC2](https://000005.awsstudygroup.com/) |
+| Tue | Run the AWS CLI on the instance and confirm credentials come from the role. | 05/05/2026 | 05/05/2026 | [IAM Roles for EC2](https://000005.awsstudygroup.com/) |
+| Wed | Open Cloud9 and write a small Python script that reads from S3. | 06/05/2026 | 06/05/2026 | [AWS Cloud9](https://000006.awsstudygroup.com/) |
+| Thu | Create an S3 website bucket, upload index.html and assets, enable Static Website Hosting. | 07/05/2026 | 07/05/2026 | [S3 Static Website](https://000010.awsstudygroup.com/) |
+| Fri | Write a minimal public-read Bucket Policy and disable the right layer of Block Public Access. | 08/05/2026 | 08/05/2026 | [S3 Static Website](https://000010.awsstudygroup.com/) |
 
-### Week 3 Achievements
+### Week 3 Results
 
-- Attached an IAM Role to an EC2 instance, allowing it to access AWS services without embedding credentials.
-- Set up an AWS Cloud9 environment and practiced coding directly in the browser.
-- Successfully deployed a Static Website on S3 with public access.
-- Understood Bucket Policy and Public Access Block for S3 hosting.
+- The EC2 uses a role instead of a key, so credentials no longer sit on disk.
+- Cloud9 works, but I still lean on VS Code for real work.
+- Static site has a URL and opens with the content I expected.
+- Now I understand why Block Public Access exists and when disabling it is defensible.
 
 ### Challenges & Lessons Learned
 
 - **Challenge:**
-  - Configuring an S3 bucket for public static hosting requires disabling Block Public Access and writing a proper Bucket Policy — easy to mis-configure security.
+  - The bucket kept returning 403 even after the policy was in place; I forgot Block Public Access was still on at the account layer.
 - **Solution:**
-  - Follow the awsstudygroup lab exactly, only open the permissions strictly required for the static site, and re-check the Bucket Policy after deploying.
+  - Separate the layers, account, bucket and object, then flip one at a time and re-test.
 - **Lesson:**
-  - S3 is powerful but sensitive to permissions — always double-check the settings before making a bucket public.
+  - AWS default guardrails are usually on my side; disabling one needs a reason, not habit.
 
 ### Plan for Next Week
 
-- Continue with S3 topics: versioning, lifecycle, and encryption.
-- Explore CloudFront to deliver a static website through a CDN.
-- Start integrating AWS services into a small end-to-end demo.
+- RDS: bring up a small Postgres and reach it from an EC2 in the same VPC.
+- Try Lightsail to see how the experience differs from EC2.
+- Read up on backups and snapshots ahead of time.

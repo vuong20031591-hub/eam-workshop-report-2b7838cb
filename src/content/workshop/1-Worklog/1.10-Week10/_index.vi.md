@@ -8,37 +8,37 @@ pre: " <b> 1.10. </b> "
 
 ### Mục Tiêu Tuần 10
 
-- Containerize frontend và backend bằng Docker.
-- Triển khai container lên Amazon ECS/Fargate.
-- Cấu hình network và xác minh hệ thống sau khi deploy.
+- Đóng gói FE, BE và worker vào Docker image sạch, không phụ thuộc máy dev.
+- Đưa staging lên ECS Fargate và cho ảnh chạy qua S3 thay vì filesystem.
+- Có domain staging để team dùng chung, không ai phải chạy local để review.
 
 ### Các công việc thực hiện trong tuần
 
 | Thứ | Công việc | Bắt đầu | Hoàn thành | Tài liệu tham khảo |
 | --- | --- | --- | --- | --- |
-| T2 | Tạo cấu hình Docker cho service frontend. | 22/06/2026 | 22/06/2026 | [Docker Docs](https://docs.docker.com/) |
-| T3 | Containerize FastAPI backend và kiểm tra chạy Docker. | 23/06/2026 | 23/06/2026 | [Docker Docs](https://docs.docker.com/) |
-| T4 | Triển khai container frontend và backend lên Amazon ECS/Fargate. | 24/06/2026 | 24/06/2026 | [Amazon ECS](https://docs.aws.amazon.com/ecs/) |
-| T5 | Tiếp tục triển khai ECS, cấu hình network và service. | 25/06/2026 | 25/06/2026 | [Amazon ECS](https://docs.aws.amazon.com/ecs/) |
-| T6 | Xác minh hệ thống đã deploy, test luồng end-to-end và sửa các lỗi triển khai. | 26/06/2026 | 26/06/2026 | [Amazon ECS](https://docs.aws.amazon.com/ecs/) |
+| T2 | Viết Dockerfile multi-stage cho FE (Vite build) và BE (FastAPI + uvicorn). | 22/06/2026 | 22/06/2026 | [Amazon ECS](https://000017.awsstudygroup.com/) |
+| T3 | Tách worker inference thành image riêng, cắm entrypoint gọn. | 23/06/2026 | 23/06/2026 | [Amazon ECS](https://000017.awsstudygroup.com/) |
+| T4 | Push image lên ECR, dựng task definition và service trên ECS Fargate. | 24/06/2026 | 24/06/2026 | [Amazon ECR](https://000017.awsstudygroup.com/) |
+| T5 | Đổi backend từ lưu tạm sang S3, ký presigned URL cho FE upload trực tiếp. | 25/06/2026 | 25/06/2026 | [Amazon S3](https://000010.awsstudygroup.com/) |
+| T6 | Đặt ALB trước service, cắm domain staging, bật HTTPS bằng ACM. | 26/06/2026 | 26/06/2026 | [Application Load Balancer](https://000017.awsstudygroup.com/) |
 
 ### Kết quả đạt được Tuần 10
 
-- Build thành công Docker image cho cả frontend và backend.
-- Triển khai ứng dụng lên Amazon ECS/Fargate.
-- Kiểm chứng toàn bộ luồng end-to-end trên môi trường cloud.
+- Ba image build được trên CI, chạy giống hệt trên máy dev và trên Fargate.
+- Ảnh không còn nằm trên container, S3 giữ vai trò storage duy nhất.
+- Staging có URL HTTPS ổn định, team review không cần dựng local.
 
 ### Khó khăn & Bài học
 
 - **Khó khăn:**
-  - Cấu hình network, security group và IAM role cho service ECS/Fargate.
+  - Presigned URL đầu tiên bị 403 vì CORS trên bucket không cho phép method PUT từ origin của FE.
 - **Giải pháp:**
-  - Bám theo reference architecture của AWS và cấp quyền tối thiểu cho từng service.
+  - Đọc kỹ AccessControl và CORS của S3, cấu hình đúng AllowedMethods và AllowedOrigins.
 - **Bài học:**
-  - Orchestrate container rất mạnh nhưng đòi hỏi cấu hình network và security cẩn thận.
+  - S3 có nhiều lớp chính sách chồng lên nhau, bug 403 thường không ở nơi mình đoán đầu tiên.
 
 ### Kế hoạch Tuần tới
 
-- Triển khai Amazon SQS để xử lý ảnh bất đồng bộ.
-- Tích hợp Redis cho cache và SSE cho tiến độ real-time.
-- Test và tối ưu luồng xử lý bất đồng bộ.
+- SQS cho hàng đợi job giữa BE và worker.
+- Redis cho trạng thái job và progress tạm.
+- SSE để đẩy tiến độ về FE thay vì polling.

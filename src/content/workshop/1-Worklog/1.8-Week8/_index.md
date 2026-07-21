@@ -8,37 +8,37 @@ pre: " <b> 1.8. </b> "
 
 ### Week 8 Objectives
 
-- Build the image upload UI and integrate the upload API on the frontend.
-- Develop backend APIs for image upload and storage management.
-- Perform integration testing and fix upload workflow issues.
+- Ship a real upload flow: user drops a photo, sees preview, sees progress, gets back a job id.
+- A FastAPI /upload endpoint that validates the file and returns a stable job id.
+- A 'how upload works' note short enough for a newcomer to read once and get it.
 
 ### Tasks Completed During the Week
 
-| Day | Task | Start | Completion | Reference Material |
+| Day | Task | Start | Completion | Reference |
 | --- | --- | --- | --- | --- |
-| Mon | Develop the image upload interface and configure file validation on the frontend. | 08/06/2026 | 08/06/2026 | [TanStack Router](https://tanstack.com/router) |
-| Tue | Implement API integration for image upload and display processing status. | 09/06/2026 | 09/06/2026 | [TanStack Router](https://tanstack.com/router); [FastAPI](https://fastapi.tiangolo.com/) |
-| Wed | Develop backend APIs for image upload and storage management. | 10/06/2026 | 10/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
-| Thu | Implement image management, error handling, and request validation. | 11/06/2026 | 11/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
-| Fri | Perform integration testing and fix upload workflow issues. | 12/06/2026 | 12/06/2026 | [TanStack Router](https://tanstack.com/router); [FastAPI](https://fastapi.tiangolo.com/) |
+| Mon | Build the dropzone with file picker, thumbnail preview and an in-flight progress bar. | 08/06/2026 | 08/06/2026 | [TanStack Router](https://tanstack.com/router) |
+| Tue | Validate size and MIME client-side and disable the submit button on failure. | 09/06/2026 | 09/06/2026 | [TanStack Router](https://tanstack.com/router) |
+| Wed | FastAPI /upload accepts multipart, re-validates size and MIME, and stores the file temporarily. | 10/06/2026 | 10/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| Thu | Agree on multipart field names between FE and BE and put them in the doc. | 11/06/2026 | 11/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| Fri | End-to-end tests with a large photo, mid-flight cancel, retry, and a wrong file type. | 12/06/2026 | 12/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
 
-### Week 8 Achievements
+### Week 8 Results
 
-- Completed the image upload interface with client-side validation.
-- Backend upload and storage management APIs work end-to-end with the frontend.
-- Fixed key issues in the upload workflow through integration testing.
+- Pick photo, preview, upload, watch progress, get a job id, all working end to end.
+- Server-side validation caught cases that a tweaked DOM slipped past on the client.
+- The upload doc lets a new teammate trace a request end to end in about ten minutes.
 
 ### Challenges & Lessons Learned
 
 - **Challenge:**
-  - Handling large image uploads and validating file type/size consistently on both sides.
+  - One teammate wanted to skip server-side validation because 'the client already checks' — a fast path to a production bug.
 - **Solution:**
-  - Apply strict validation on the frontend and re-validate on the backend, plus clear error messaging.
+  - Returned the PR with a curl command that bypasses client checks and kept the server-side rule.
 - **Lesson:**
-  - Duplicating validation on both frontend and backend improves security and UX.
+  - Trusting the client is the fastest way to find a bug after users find it first.
 
 ### Plan for Next Week
 
-- Integrate Real-ESRGAN and CodeFormer AI models into the backend.
-- Optimize inference pipeline and validate output quality.
-- Test AI enhancement results across multiple image types.
+- Wire Real-ESRGAN and CodeFormer behind a single enhance() function.
+- Prepare a small eval set to catch regressions early.
+- Lock the CPU-in-dev, GPU-on-AWS decision and record it in project notes.
