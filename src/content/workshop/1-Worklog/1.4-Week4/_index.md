@@ -8,14 +8,14 @@ pre: " <b> 1.4. </b> "
 
 ## WEEK 4 WORKLOG
 
-Security Groups and S3 week. Both look dull on the surface. Both hurt if you get the conventions wrong.
+Managed database week. RDS and Lightsail labs. Still learning, still following the FCAJ path. `UPS-4` on Linear.
 
-I cut `UPS-6` and `UPS-7` into small tickets per service, then reviewed the SG matrix (who is allowed to talk to whom, on which port). The first draft opened Redis to the internet, so it went back. The S3 PRs were mostly fine, I just made sure block-public-access was on for every bucket by default and did not depend on someone remembering.
+RDS was the first time I really felt what "managed" means. Pick an engine, click through, and you get a Postgres you did not have to babysit. I ran the lab with a small `db.t3.micro`, connected from an EC2 in the same VPC with a security group rule I had to open on purpose, and ran a couple of queries. Then I broke the connection intentionally by removing the SG rule and re-added it, because I wanted to see the exact error message so I would recognise it later.
 
-On my own I picked the bucket naming (`upscale-<env>-<purpose>` for input, output, artifacts, logs), wrote a lifecycle rule that pushes objects to Glacier after 30 days and deletes log buckets after 90, and produced a shared bucket policy template. Then a short walkthrough with the team so the SG matrix was not just a diagram nobody read.
+Lightsail was the fun surprise of the week. It is basically AWS trying to be a friendly VPS, and for a sample app it takes almost no time. I would not use it for the project, but I get why it exists.
 
-By Friday the SG matrix and the S3 conventions were merged, and new buckets started following the template without me babysitting each PR.
+I also spent a bit of time reading how a real app would talk to a managed DB, things like parameter groups, backups, snapshots, and the difference between multi-AZ and read replica. We are not going to use RDS for Upscale, but it is background I want in my head before the project starts.
 
-One small surprise: two people did not realise ALB to ECS still needs an SG rule even inside the VPC. Fair. I added a note about it in the ADR.
+On the team side, one short sync on Friday to check that everyone had actually done both labs. Two people were behind, so I paired with them for an hour. Better to catch it now than at week 7.
 
-Next week is chapter 5.5. EFS for shared model weights, ECR for container images.
+Next week: CloudWatch and AWS CLI.
