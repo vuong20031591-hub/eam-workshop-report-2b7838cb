@@ -19,11 +19,13 @@ chapter: false
 
 
 
-&emsp; **Công ty thực tập:** Amazon Web Services Việt Nam
+&emsp; **Lớp:** 22DTHH2
 
-&emsp; **Vị trí thực tập:** FCAJ Cloud Intern
+&emsp; **Công ty thực tập:** Công ty TNHH Amazon Web Services Việt Nam
 
-&emsp; **Thời gian thực tập:** Từ ngày 17/04/2026 đến ngày 30/07/2026
+&emsp; **Vị trí thực tập:** Workforce Bootcamp - First Cloud AI Journey
+
+&emsp; **Thời gian thực tập:** Từ ngày 18/04/2026 đến ngày 30/07/2026
 
 ![Ảnh đại diện của bạn](/images/avatar.png)
 
