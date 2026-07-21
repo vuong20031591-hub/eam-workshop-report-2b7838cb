@@ -8,14 +8,14 @@ pre: " <b> 1.12. </b> "
 
 ## WEEK 12 WORKLOG
 
-Last week. Cleanup, final report, handover. The goal is to close the internship with the account tidy and the knowledge in a place the next person can find.
+Last week. Final testing, documentation, and the demo. `UPS-12` on Linear.
 
-I split `UPS-18` into cleanup, report, and handover. Cleanup ran against chapter 5.10 in reverse order: CloudFront, WAF, ALB, ECS, EFS, Redis, SQS, S3, VPC, IAM. Reverse is important. Delete the VPC first and half the other resources refuse to go until you fix the dependencies you just broke. I kept only the artefacts we want to retain, which is the exported logs, the IaC repo, and the doc site.
+I ran the app through a proper end-to-end pass on a fresh browser and a fresh account: sign up, upload, wait for the job, download the result. Wrote down every place I hesitated as a bug, even if the app worked, because "worked, but I paused" is a UX bug I want caught before the demo, not during. Most of them turned out to be small copy fixes and one real bug where a failed job never cleared its Redis key.
 
-After that I read the billing page carefully to confirm nothing is quietly still running. This part is boring and skipping it costs real money.
+I chaired a triage on the findings and split them into "must fix before demo" and "nice to have later". The must-fix pile was smaller than I feared, which was a nice surprise for a Friday.
 
-I chaired the retrospective with the team. What worked, what to keep, what to drop next time. Hands-on I wrote the final internship report, updated the doc site so a new joiner can rebuild the stack from scratch by reading it in order, and put together a short handover deck.
+On the documentation side I updated the README so someone new can clone the repo, follow the steps in order, and get a running local stack without asking anyone. Also wrote a short architecture note explaining why the pieces exist, not just what they are, because the "why" is what people forget first.
 
-Account is clean, the bill drops to near zero the next day, the report is in, the doc site is up to date, retrospective notes are shared. Internship closed.
+Demo day itself went fine. Not spotless, but the app did the thing it is supposed to do in front of people who had not seen it before, and the questions afterwards were about product, not about "why did it crash". I take that as a win.
 
-If I did this again, manual cleanup would not be the way. It is error-prone and slow. Next time the stack should be Terraform end to end so cleanup is a single command instead of a checklist. That went into the retrospective as the top recommendation for the next cohort.
+End of the internship. If I did it again I would start the async plumbing earlier, because that was the change that made the app feel real. Wrote that into the final report as the one recommendation I would actually stand behind.
