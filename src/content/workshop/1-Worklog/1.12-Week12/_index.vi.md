@@ -41,5 +41,5 @@ pre: " <b> 1.12. </b> "
 ### Kế hoạch tiếp theo
 
 - Hoàn thiện báo cáo thực tập và nộp cho hội đồng review.
-- Chuẩn bị demo trước hội đồng sau tuần 12 và ghi nhận feedback từ mentor.
+- Tổng hợp feedback từ mentor và team để cải thiện quy trình cho các dự án sau.
 - Tiếp tục học các dịch vụ AWS nâng cao sau kỳ thực tập.
