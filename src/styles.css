@@ -266,7 +266,8 @@
   box-shadow: 0 0 0 4px #ff9900, 0 10px 30px -10px rgba(0,0,0,0.2);
 }
 .fcaj-prose blockquote { border-left: 4px solid #ff9900; padding-left: 1rem; color: #5b6473; margin: 1rem 0; font-style: italic; }
-.fcaj-prose table {
+.fcaj-prose table,
+.fcaj-section-intro table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -278,23 +279,29 @@
   box-shadow: 0 4px 14px -8px rgba(0,0,0,0.12);
   font-size: 0.95rem;
 }
-.fcaj-prose th, .fcaj-prose td {
+.fcaj-prose th, .fcaj-prose td,
+.fcaj-section-intro th, .fcaj-section-intro td {
   border-bottom: 1px solid #eef0f3;
   padding: 0.75rem 1rem;
   text-align: left;
   vertical-align: top;
 }
-.fcaj-prose th + th, .fcaj-prose td + td { border-left: 1px solid #eef0f3; }
-.fcaj-prose th {
+.fcaj-prose th + th, .fcaj-prose td + td,
+.fcaj-section-intro th + th, .fcaj-section-intro td + td { border-left: 1px solid #eef0f3; }
+.fcaj-prose th,
+.fcaj-section-intro th {
   background: #fff7ed;
   font-weight: 700;
   color: #1c2532;
   border-bottom: 2px solid #f59e0b;
   white-space: nowrap;
 }
-.fcaj-prose tbody tr:nth-child(even) td { background: #fafaf7; }
-.fcaj-prose tbody tr:hover td { background: #fff4e0; }
-.fcaj-prose tbody tr:last-child td { border-bottom: none; }
+.fcaj-prose tbody tr:nth-child(even) td,
+.fcaj-section-intro tbody tr:nth-child(even) td { background: #fafaf7; }
+.fcaj-prose tbody tr:hover td,
+.fcaj-section-intro tbody tr:hover td { background: #fff4e0; }
+.fcaj-prose tbody tr:last-child td,
+.fcaj-section-intro tbody tr:last-child td { border-bottom: none; }
 .fcaj-prose figure { margin: 1rem 0; }
 .fcaj-prose figcaption { text-align: center; font-size: 0.875rem; color: #5b6473; margin-top: 0.5rem; }
 .fcaj-prose strong { color: #1c2532; }
