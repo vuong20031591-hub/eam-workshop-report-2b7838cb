@@ -8,14 +8,14 @@ pre: " <b> 1.3. </b> "
 
 ## WEEK 3 WORKLOG
 
-Network week. The VPC has to be right, because ALB, ECS, EFS and Redis all land inside it and moving any of them later is painful.
+Week 3 was IAM Roles for EC2, Cloud9, and a first go at hosting on S3. All labs. `UPS-3` on Linear.
 
-I broke `UPS-5` into sub-tickets for the CIDR plan, subnets, routing, NAT, and endpoints, then ran a whiteboard session on the topology and wrote it up straight after so nobody was arguing from memory the next day. Someone proposed a single-AZ shortcut to save money. I pushed back. Two AZs, non-negotiable.
+The IAM Role for EC2 lab is the one that finally made instance profiles click for me. Instead of putting keys on the box, the instance assumes a role and the SDK just works. I did the lab twice, once following the steps and once from memory, because that gap is where you find out what you did not actually understand.
 
-Hands-on I picked the CIDR (`10.20.0.0/16`), split public and private subnets across two AZs, and settled on one NAT for now to keep the bill sane. The VPC endpoints we actually need are S3, ECR, and CloudWatch Logs, everything else can wait. All of this went into the network ADR.
+Cloud9 was fine. I used it for the S3 lab and then went back to my laptop, honestly. It is a nice fallback when someone's machine is not cooperating.
 
-Result: VPC design is merged. When a new service lands, the team knows which subnet it belongs in without asking me.
+Most of my time went into the S3 static website lab. Creating a bucket, uploading an `index.html`, working through Bucket Policy until public read actually took effect, and turning on Static Website Hosting. First try I forgot to disable Block Public Access and spent twenty minutes wondering why 403s were coming back. That is a mistake I will not make twice.
 
-The one thing I am not fully happy with is the single NAT. It is a real single point of failure. I opened a follow-up to add a second one before production traffic, and moved on.
+On the team side I ran a short review of everyone's IAM notes from the week before and pointed out the two most common misreadings of a policy statement. Nothing formal, more of a lunch chat with a whiteboard.
 
-Next week is chapter 5.4. Security Groups and S3. I will own the bucket and policy conventions.
+Next week: RDS and Lightsail.
