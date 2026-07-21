@@ -8,37 +8,37 @@ pre: " <b> 1.7. </b> "
 
 ### Week 7 Objectives
 
-- Analyze project requirements and design the overall system architecture.
-- Initialize the TanStack frontend and FastAPI backend projects.
-- Establish frontend–backend communication and verify initial integration.
+- Open the Upscale AI project with a kickoff that agrees on goal and scope.
+- Lock a first architecture slice: TanStack Start, FastAPI, a separate worker, S3 when we reach the AWS phase.
+- Scaffold FE and BE and get them talking over CORS.
 
 ### Tasks Completed During the Week
 
-| Day | Task | Start | Completion | Reference Material |
+| Day | Task | Start | Completion | Reference |
 | --- | --- | --- | --- | --- |
-| Mon | Analyze project requirements, identify functional features, and review the overall system architecture. | 01/06/2026 | 01/06/2026 | [TanStack Router](https://tanstack.com/router); [FastAPI](https://fastapi.tiangolo.com/) |
-| Tue | Design the system architecture and define communication between TanStack frontend, FastAPI backend, AI services, and AWS. | 02/06/2026 | 02/06/2026 | [TanStack Router](https://tanstack.com/router); [FastAPI](https://fastapi.tiangolo.com/) |
-| Wed | Initialize the TanStack frontend project and configure routing, layouts, and project structure. | 03/06/2026 | 03/06/2026 | [TanStack Router](https://tanstack.com/router) |
-| Thu | Initialize the FastAPI backend project, configure dependencies, and create the basic REST API structure. | 04/06/2026 | 04/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
-| Fri | Connect the frontend and backend, verify API communication, and resolve initial integration issues. | 05/06/2026 | 05/06/2026 | [TanStack Router](https://tanstack.com/router); [FastAPI](https://fastapi.tiangolo.com/) |
+| Mon | Run the kickoff, agree on a one-line pitch and MVP scope. | 01/06/2026 | 01/06/2026 | [FCAJ Project](https://000000.awsstudygroup.com/) |
+| Tue | Sketch the end-to-end architecture on a whiteboard, split modules by owner. | 02/06/2026 | 02/06/2026 | [TanStack Router](https://tanstack.com/router) |
+| Wed | Init the TanStack + Vite frontend repo with a minimal route and layout. | 03/06/2026 | 03/06/2026 | [TanStack Router](https://tanstack.com/router) |
+| Thu | Init the FastAPI backend repo, add /healthz and a router/service folder layout. | 04/06/2026 | 04/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| Fri | Wire CI skeletons on both sides, have FE call BE across CORS and log by hand to confirm. | 05/06/2026 | 05/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
 
-### Week 7 Achievements
+### Week 7 Results
 
-- Defined the overall system architecture for the image enhancement project.
-- Initialized both TanStack frontend and FastAPI backend projects successfully.
-- Verified basic API communication between frontend and backend.
+- The team agreed on a straw-man architecture and ownership is visible on Linear.
+- FE loads, BE returns 200, CORS works, and CI is green on both repos.
+- An architecture note lives in the repo for anyone joining later.
 
 ### Challenges & Lessons Learned
 
 - **Challenge:**
-  - Aligning the data contract between the TanStack frontend and FastAPI backend from day one.
+  - Two people wanted to over-engineer the folder structure in the first week, an easy way to lose days to bikeshedding.
 - **Solution:**
-  - Define shared request/response schemas early and test with a minimal end-to-end endpoint.
+  - Set the rule out loud: ship a working upload first, refactor with evidence, and drop that rule into the README.
 - **Lesson:**
-  - Investing time in architecture and interface design at the start reduces rework later.
+  - In week one of a project, a green CI beats a beautiful folder tree on paper.
 
 ### Plan for Next Week
 
-- Build the image upload UI and integrate with backend upload APIs.
-- Implement file validation and upload workflow.
-- Perform initial integration testing for the upload flow.
+- Build the real upload flow from FE to BE.
+- Lock the multipart field names and a shared response schema.
+- Validate on both FE and BE so we never fully trust the client.
