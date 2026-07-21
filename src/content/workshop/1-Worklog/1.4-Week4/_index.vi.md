@@ -8,14 +8,14 @@ pre: " <b> 1.4. </b> "
 
 ## WORKLOG TUẦN 4
 
-Tuần Security Group và S3. Nhìn ngoài nhàm, làm sai convention là rất đau.
+Tuần managed database. Lab RDS và Lightsail. Vẫn đang học, vẫn đi theo FCAJ. `UPS-4` trên Linear.
 
-Tôi chia `UPS-6` và `UPS-7` thành ticket nhỏ theo service, rồi review ma trận SG (ai được nói chuyện với ai, port nào). Bản đầu tiên mở Redis ra Internet, trả về. PR S3 phần lớn ổn, tôi chỉ đảm bảo mọi bucket đều bật block-public-access mặc định, không phụ thuộc vào việc ai đó nhớ bật.
+RDS là lần đầu tôi thật sự cảm được nghĩa của chữ "managed". Chọn engine, click qua vài bước, và có ngay một Postgres không phải tự lo. Tôi chạy lab với `db.t3.micro` nhỏ, kết nối từ EC2 cùng VPC bằng một SG rule cố ý mở, chạy vài query. Sau đó cố tình xoá SG rule để phá kết nối rồi mở lại, chỉ để nhìn đúng thông báo lỗi và sau này nhận ra ngay.
 
-Tự tay thì tôi chọn convention tên bucket (`upscale-<env>-<purpose>` cho input, output, artifacts, logs), viết lifecycle rule (đẩy sang Glacier sau 30 ngày, xoá log bucket sau 90 ngày), và làm template bucket policy dùng chung. Sau đó review ngắn với nhóm để ma trận SG không phải là sơ đồ không ai đọc.
+Lightsail là bất ngờ vui của tuần. Nó gần như AWS cố tỏ ra thân thiện kiểu VPS, và dựng app mẫu nhanh khủng khiếp. Không dùng cho project được, nhưng hiểu vì sao nó tồn tại.
 
-Đến thứ Sáu, ma trận SG và convention S3 đã merge, bucket và service mới bắt đầu tự theo template mà không cần tôi bám từng PR.
+Tôi cũng đọc thêm cách một app thật nói chuyện với managed DB, kiểu parameter group, backup, snapshot, và khác biệt multi-AZ với read replica. Upscale sẽ không dùng RDS, nhưng đây là background tôi muốn có sẵn trong đầu trước khi vào project.
 
-Một bất ngờ nhỏ: hai bạn không nhận ra ALB gọi ECS trong cùng VPC vẫn phải có SG rule. Cũng dễ hiểu. Tôi ghi thêm một dòng vào ADR.
+Về team, một buổi sync ngắn thứ Sáu để chắc mọi người đã làm cả hai lab. Hai bạn trễ, tôi pair một tiếng. Bắt bây giờ vẫn hơn để lộ vào tuần 7.
 
-Tuần sau chương 5.5. EFS cho model weights dùng chung, ECR cho container image.
+Tuần sau: CloudWatch và AWS CLI.
