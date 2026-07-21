@@ -8,16 +8,14 @@ pre: " <b> 1.9. </b> "
 
 ## WEEK 9 WORKLOG
 
-Edge week. CloudFront goes in front of the ALB, WAF sits on top for the noisy stuff, Route 53 finally gives the app a real domain.
+Model integration week. Wiring Real-ESRGAN and CodeFormer into the backend so an uploaded photo actually comes back sharper. `UPS-9` on Linear.
 
-I broke the work into `UPS-13` (CloudFront and Route 53) and `UPS-14` (WAF). The design meeting on cache behaviour was the most important part. The static frontend gets cached aggressively, `/api/*` does not get cached at all, and the `Authorization` header is forwarded so authenticated requests still work. Sounds obvious written down, but if you skip that meeting somebody caches the login response for 24 hours and nobody knows why nothing works.
+I did the research half. Real-ESRGAN handles the general upscaling, CodeFormer is stronger on faces, and running them one after the other is a reasonable pipeline for our use case. I set up both locally, ran them on a small test set, and eyeballed the outputs to check they were doing what the papers claim. Some of the marketing shots are cherry-picked, so it was worth confirming on our own images.
 
-On the WAF PR I cut a rule that was doing the same thing as the managed common rule group. On the Route 53 PR I checked that the apex uses an alias to the CloudFront distribution rather than an A record to an IP that will change.
+On the integration side I paired with the person owning the inference module. We wrapped both models behind a single `enhance(image)` function so the rest of the backend does not care which model ran, and added a params object for the knobs that matter (upscale factor, face restore on/off, fidelity weight for CodeFormer).
 
-Hands-on I wrote the cache behaviour spec, picked the managed WAF rules (Common, Known Bad Inputs, and a rate limit of 2000 requests per 5 minutes per IP), and drafted the DNS cut-over plan.
+The awkward part of the week was performance. Running both models on CPU is painfully slow, slow enough that a single request would time out over the current setup. We agreed to keep it CPU for now in dev, and to move to GPU only when we get to the AWS phase. I wrote that decision into the project notes so it does not become an argument later.
 
-By end of week the domain resolves, HTTPS terminates at CloudFront, the ALB sits behind the edge, and WAF is blocking the obvious junk from day one.
+I also put together a small internal eval set (twenty photos of different sizes, some with faces, some without) and a script that runs the pipeline on all of them and dumps the outputs into a folder. It is not a benchmark, but it catches regressions.
 
-One embarrassing moment: CloudFront cached an early error response from the frontend and served it for a while. Added a short TTL for 4xx and 5xx to the spec so this does not happen in prod.
-
-Next week is still chapter 5.9. Cognito for sign-in, and make the CloudWatch dashboard actually useful instead of a wall of graphs.
+Next week: dockerize everything and get it running on ECS/Fargate with S3.
