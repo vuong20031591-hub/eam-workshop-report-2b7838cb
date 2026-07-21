@@ -8,14 +8,12 @@ pre: " <b> 1.1. </b> "
 
 ## WEEK 1 WORKLOG
 
-Kickoff week. I did not write any AWS resource this week, and that was on purpose. As team lead I wanted the project to have a shape before anyone opened the console.
+Onboarding week. Most of the week I was just a student, going through the FCAJ program along with everyone else. The lead part was small on top of that: run the kickoff, agree on how we work, and get `UPS-1` open on Linear so there is a place to put things.
 
-Most of the week was reading. I went through the workshop start to finish twice, then wrote a one-page summary of chapter 5.1 so the team had something concrete to argue with instead of vibes. Once we had that, I put the 12-week roadmap onto Linear as epics and opened `UPS-1` (Planning) and `UPS-2` (Architecture doc) as the tickets everything else would hang off.
+The FCAJ onboarding itself was denser than I expected. Setting up the AWS account, poking around the Management Console, learning which Regions and Availability Zones we would actually use (`ap-southeast-1`), turning on AWS Budgets with a small monthly cap so we would not accidentally cook the account, and reading through what AWS Support tiers cover. Then the first hands-on labs to make the concepts stick instead of staying abstract.
 
-The rest was small decisions I did not want to have every week: region `ap-southeast-1`, prefix `upscale-`, env names `dev` and `prod`, a Git flow, a PR template. Standup is fifteen minutes each morning, planning Monday, review Friday. Boring, but I would rather set it once.
+The team-side stuff I kept boring on purpose. Fifteen-minute standup each morning, planning on Monday, review on Friday. One region, one naming prefix (`upscale-`), two environments (`dev`, `prod`). A simple Git flow and a PR template. I would rather chew through those decisions once than argue about them every week.
 
-I also drew the target diagram (User, CloudFront, ALB, ECS running FastAPI and the CodeFormer worker, SQS, Redis, S3) and put together a rough cost baseline so we would not be surprised later.
+I also did a first pass at what the project might look like end to end and wrote it up as a rough sketch, not a spec. It will change once we know AWS better.
 
-Honestly, half the week went to cutting things out of scope. The workshop covers a lot and it is tempting to try all of it. We are not going to.
-
-Next week is chapter 5.2. I will chair the IAM design and get the account baseline nailed down.
+Next week is IAM plus a first look at VPC and EC2. Still mostly labs.
