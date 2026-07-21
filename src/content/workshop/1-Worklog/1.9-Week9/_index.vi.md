@@ -8,16 +8,14 @@ pre: " <b> 1.9. </b> "
 
 ## WORKLOG TUẦN 9
 
-Tuần lớp edge. CloudFront đặt trước ALB, WAF ngồi trên chặn ồn ào, Route 53 để app có domain thật.
+Tuần tích hợp mô hình. Ghép Real-ESRGAN và CodeFormer vào backend để ảnh upload thật sự quay lại nét hơn. `UPS-9` trên Linear.
 
-Tôi chia việc thành `UPS-13` (CloudFront + Route 53) và `UPS-14` (WAF). Buổi thiết kế cache mới là phần quan trọng nhất. Frontend tĩnh cache mạnh, `/api/*` không cache, header `Authorization` phải được forward để request có auth vẫn chạy. Viết ra thì hiển nhiên, nhưng bỏ qua buổi đó là có người cache nhầm response login 24 tiếng, không ai hiểu vì sao chẳng có gì hoạt động.
+Tôi làm phần nghiên cứu. Real-ESRGAN lo upscale tổng thể, CodeFormer mạnh phần khuôn mặt, chạy nối tiếp là pipeline hợp lý cho use case của mình. Setup cả hai ở máy local, chạy trên tập ảnh test nhỏ, và mắt thường kiểm xem có đúng như paper nói không. Ảnh marketing của họ chọn lọc kỹ, nên phải chạy trên ảnh của mình để chắc.
 
-PR WAF tôi cắt một rule làm trùng việc của managed common rule group. PR Route 53 tôi kiểm apex dùng alias trỏ CloudFront, không phải A record vào một IP sẽ thay đổi.
+Phần integration tôi pair với bạn phụ trách module inference. Bọc cả hai mô hình sau một hàm `enhance(image)` để phần còn lại của backend không cần biết mô hình nào chạy, và thêm object params cho các knob quan trọng (hệ số upscale, bật/tắt face restore, fidelity weight cho CodeFormer).
 
-Tự tay tôi viết spec cache behavior, chọn WAF managed rule (Common, Known Bad Inputs, và rate limit 2000 request mỗi 5 phút mỗi IP), soạn kế hoạch chuyển DNS.
+Phần khó chịu của tuần là hiệu năng. Chạy cả hai mô hình trên CPU chậm đau lòng, chậm đến mức một request sẽ timeout với setup hiện tại. Thống nhất giữ CPU trong môi trường dev, chuyển sang GPU ở giai đoạn AWS. Ghi quyết định vào project notes để sau khỏi tranh cãi lại.
 
-Cuối tuần domain resolve được, HTTPS kết thúc ở CloudFront, ALB nằm gọn sau edge, WAF chặn nhiễu rõ ràng ngay ngày đầu.
+Cũng làm một bộ eval nội bộ nhỏ (hai chục ảnh đủ kích thước, có ảnh mặt có ảnh không) kèm script chạy pipeline trên toàn bộ và đổ output ra folder. Không phải benchmark, nhưng bắt được regression.
 
-Có một pha ngượng: CloudFront cache nhầm response lỗi ban đầu của frontend và phục vụ nó một lúc. Tôi thêm TTL ngắn cho 4xx và 5xx vào spec để lên prod không lặp lại.
-
-Tuần sau vẫn chương 5.9. Cognito cho đăng nhập, và ép CloudWatch dashboard thật sự có ích chứ không phải một bức tường đồ thị.
+Tuần sau: dockerize và đưa lên ECS/Fargate cùng S3.
