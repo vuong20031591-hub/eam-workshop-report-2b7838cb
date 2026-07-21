@@ -8,18 +8,14 @@ pre: " <b> 1.10. </b> "
 
 ## WEEK 10 WORKLOG
 
-Cognito and CloudWatch week. Sign-in that we do not have to build ourselves, and a monitoring view that tells us when something is actually wrong instead of "everything is a graph".
+Deployment week. Docker for everything, ECS/Fargate for the runtime, S3 for the images. This is where the app finally leaves my laptop. `UPS-10` on Linear.
 
-`UPS-15` (Cognito user pool + Google OAuth) and `UPS-16` (observability) went out. The auth design was straightforward once we agreed on the shape: Cognito user pool with the hosted UI, Google as an identity provider, ID token exchanged for a session cookie on the FastAPI side. Nobody has to touch password handling, which is exactly what I want.
+I wrote the Dockerfiles for both services. The frontend one is small and boring (`node` build, `nginx` runtime). The backend one is where I spent real time, because the models bring a stack of Python and CUDA-ish dependencies with them and I did not want the image to end up eight gigabytes for no reason. Multi-stage build, only the runtime layer in the final image, and it landed in a size I can live with.
 
-On the Cognito PR I tightened the OAuth callback list down to prod and local dev only. Wildcard callbacks are the kind of thing you regret when someone points out you can log in from anywhere.
+On the AWS side I did the ECS/Fargate setup pretty much straight from the FCAJ material. Task definition for each service, a service in front of each task, one target group per service behind the ALB from the earlier chapter. First deploy went out, tasks came up, then died a few minutes later because the CPU-only container was OOM-killed during a large image inference. Bumped the memory and moved on.
 
-The CloudWatch dashboard PR came in with about twelve widgets. I cut half of them, because a dashboard nobody looks at is worse than no dashboard. What is left is the small set we actually check every morning.
+S3 came in for input and output images. The backend now uploads to `upscale-<env>-input`, the worker reads from there, writes to `upscale-<env>-output`, and the frontend fetches the result by URL. Set Block Public Access on both buckets and only signed URLs go out.
 
-Hands-on I wrote the auth flow doc for the team so everyone codes against the same contract, and picked the alarms that page us: ALB 5xx over 1% for five minutes, SQS DLQ non-empty, GPU utilisation over 90% sustained, ECS service unhealthy. Anything below that is a graph, not a page.
+On the team side, one big call: we agreed that GPU workers wait until next week. This week is proving the deployment shape works, not squeezing performance.
 
-Users can sign in with Google now, the API validates tokens, and the dashboard shows the four numbers we actually care about.
-
-Cognito hosted UI CORS ate a few hours. I wrote a short "callback URL rules" note in the runbook so I stop losing that time each time.
-
-Next week is chapter 5.9 wrap-up. End-to-end deployment rehearsal and the first proper demo.
+Next week: SQS, Redis, and SSE for realtime progress.
