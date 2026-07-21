@@ -6,14 +6,41 @@ chapter: false
 pre: " <b> 1.2. </b> "
 ---
 
-## WORKLOG TUẦN 2 (27/04/2026 – 29/04/2026)
+### Mục Tiêu Tuần 2
 
-Tuần ngắn (chỉ ba ngày làm việc) nhưng đặc. Nửa đầu là IAM, nửa sau VPC và EC2.
+- Nắm vững AWS IAM: Users, Groups, Policies và Roles.
+- Áp dụng nguyên tắc least privilege khi cấp quyền.
+- Xây dựng mạng VPC cơ bản với subnets, route tables và Internet Gateway.
+- Khởi tạo và kết nối được EC2 instance qua SSH.
 
-Ngày rưỡi đầu tôi ngồi với IAM. Tự tay tạo User, Group, Role, Policy, bật MFA cho tài khoản root rồi cất credential root vào chỗ mà tôi sẽ không vô tình đụng lại. Lab Least Privilege là bài đọng lại nhất. Tôi viết một policy, cố tình deny chính mình một thứ, rồi đọc thông báo lỗi tới khi hiểu chính xác dòng nào gây ra. Nghe chậm, nhưng tôi học được từ đó nhiều hơn bất cứ sơ đồ nào.
+### Các công việc thực hiện trong tuần
 
-Tôi suýt commit một access key dài hạn lên repo cá nhân trong lúc nghịch. Bắt kịp, rotate key, và giờ tôi hiểu vì sao guide cứ nhấn mãi điểm đó.
+| Thứ | Công việc | Bắt đầu | Hoàn thành | Tài liệu tham khảo |
+| --- | --- | --- | --- | --- |
+| T2 | Tìm hiểu AWS Identity and Access Management (IAM), bao gồm Users, Groups, Policies và Roles. | 24/04/2026 | 24/04/2026 | [IAM](https://000002.awsstudygroup.com/) |
+| T3 | Tạo IAM users và groups, gán quyền và áp dụng nguyên tắc least privilege. | 27/04/2026 | 27/04/2026 | [IAM Users & Groups](https://000002.awsstudygroup.com/) |
+| T4 | Xây dựng Virtual Private Cloud (VPC), cấu hình subnets, route tables và Internet Gateway. | 28/04/2026 | 28/04/2026 | [VPC](https://000003.awsstudygroup.com/) |
+| T5 | Khởi tạo Amazon EC2 instance và cấu hình Security Groups, key pairs. | 29/04/2026 | 29/04/2026 | [EC2](https://000004.awsstudygroup.com/) |
+| T6 | Kết nối EC2 instance qua SSH và thực hiện các tác vụ quản lý cơ bản. | 30/04/2026 | 30/04/2026 | [EC2 SSH](https://000004.awsstudygroup.com/) |
 
-VPC và EC2 là nửa còn lại. Tôi làm lab theo hướng dẫn, vẽ default VPC ra giấy, rồi dựng lại từ đầu để xem mình có thật sự biết mỗi mảnh làm gì không (chưa, không hoàn toàn). Bật một EC2 nhỏ, SSH vào, gõ vài lệnh, terminate. Không có gì hào nhoáng, nhưng khá nhiều giả định của tôi về "cloud" được lặng lẽ chỉnh lại trong giờ đồng hồ đó.
+### Kết quả đạt được Tuần 2
 
-Tuần sau: IAM Role cho EC2, Cloud9, và lần đầu host static site trên S3.
+- Tạo được IAM users/groups với quyền phù hợp, áp dụng least privilege đúng cách.
+- Dựng thành công VPC cơ bản với public subnet, route table và Internet Gateway.
+- Khởi tạo EC2 instance và kết nối SSH được bằng key pair.
+- Hiểu cách Security Groups kiểm soát traffic inbound/outbound cho instance.
+
+### Khó khăn & Bài học
+
+- **Khó khăn:**
+  - Cấu hình IAM Policy và route table trong VPC dễ sai và khó debug ở lần đầu.
+- **Giải pháp:**
+  - Làm theo lab từng bước, dùng IAM Policy Simulator để kiểm tra quyền, vẽ sơ đồ VPC trước khi triển khai.
+- **Bài học:**
+  - IAM và VPC là nền tảng của mọi dịch vụ AWS sau này, cần hiểu chắc trước khi đi tiếp.
+
+### Kế hoạch Tuần tới
+
+- Thực hành IAM Roles for EC2 để truy cập dịch vụ AWS an toàn.
+- Tìm hiểu AWS Cloud9 làm môi trường phát triển trên cloud.
+- Triển khai static website bằng Amazon S3.

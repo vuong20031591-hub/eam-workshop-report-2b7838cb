@@ -6,14 +6,39 @@ chapter: false
 pre: " <b> 1.5. </b> "
 ---
 
-## WEEK 5 WORKLOG (18/05/2026 – 20/05/2026)
+### Week 5 Objectives
 
-Short week again. CloudWatch and AWS CLI, two services I am told I will use every day forever.
+- Get familiar with Amazon CloudWatch for metrics, logs, and alarms.
+- Install and configure AWS CLI on a local machine.
+- Automate basic AWS management tasks using AWS CLI.
 
-CloudWatch first. I created a Log Group, shipped some logs from an EC2 instance, set up a metric filter that counted the word `ERROR` in the stream, and wired an alarm on top of it. Then I made the alarm fire on purpose by looping a script that printed errors, watched the notification land in my email, and felt quietly smug for about ten seconds. Building a useful dashboard turned out to be harder than the docs make it look, and I ended up scrapping my first one because it was a wall of graphs nobody would ever read.
+### Tasks Completed During the Week
 
-AWS CLI I liked more than I expected. After a week of clicking through the console, dropping into `aws s3 ls`, `aws ec2 describe-instances`, and piping into `jq` felt like coming home. Set up a named profile with MFA and forced myself to use only the CLI for the second half of the week, on purpose, to build the habit before the console became muscle memory.
+| Day | Task | Start | Completion | Reference Material |
+| --- | --- | --- | --- | --- |
+| Mon | Learn Amazon CloudWatch metrics, logs, dashboards, and monitoring concepts. | 15/05/2026 | 15/05/2026 | [Amazon CloudWatch](https://000008.awsstudygroup.com/) |
+| Tue | Create CloudWatch alarms and configure notification rules. | 18/05/2026 | 18/05/2026 | [CloudWatch Alarms](https://000008.awsstudygroup.com/) |
+| Wed | Install and configure AWS CLI on a local computer. | 19/05/2026 | 19/05/2026 | [AWS CLI](https://000011.awsstudygroup.com/) |
+| Thu | Practice common AWS CLI commands for S3, EC2, and IAM. | 20/05/2026 | 20/05/2026 | [AWS CLI](https://000011.awsstudygroup.com/) |
+| Fri | Automate basic AWS management tasks using AWS CLI. | 21/05/2026 | 21/05/2026 | [AWS CLI](https://000011.awsstudygroup.com/) |
 
-I redid the S3 static hosting lab from Week 3 entirely through the CLI. Grumbled at myself a bit, but that was the exercise that actually made things stick. Started a small personal doc with one-liners I keep re-typing, so I stop re-typing them.
+### Week 5 Achievements
 
-Next week: DynamoDB and ElastiCache.
+- Set up CloudWatch metrics and alarms with notifications for AWS resources.
+- Installed and configured AWS CLI locally with named profiles.
+- Ran hands-on AWS CLI commands to manage S3, EC2, and IAM resources.
+
+### Challenges & Lessons Learned
+
+- **Challenge:**
+  - Choosing the right metrics and thresholds for CloudWatch alarms to avoid noisy or missed alerts.
+- **Solution:**
+  - Start with standard metrics (CPU, disk, network) from the awsstudygroup lab and tune thresholds based on observed baselines.
+- **Lesson:**
+  - Monitoring + CLI automation together make AWS operations much faster and more reliable.
+
+### Plan for Next Week
+
+- Explore Amazon DynamoDB — a fully managed NoSQL database.
+- Learn Amazon ElastiCache for in-memory caching.
+- Combine DynamoDB and ElastiCache in a small demo scenario.

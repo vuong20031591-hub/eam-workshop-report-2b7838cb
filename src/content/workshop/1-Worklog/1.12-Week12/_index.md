@@ -6,16 +6,39 @@ chapter: false
 pre: " <b> 1.12. </b> "
 ---
 
-## WEEK 12 WORKLOG
+### Week 12 Objectives
 
-Last week. Final testing, documentation, and the demo. `UPS-12` on Linear.
+- Perform functional testing and stabilize the application.
+- Optimize backend performance and frontend user experience.
+- Finalize documentation and prepare the demo for the internship review.
 
-I ran the app through a proper end-to-end pass on a fresh browser and a fresh account: sign up, upload, wait for the job, download the result. Wrote down every place I hesitated as a bug, even if the app worked, because "worked, but I paused" is a UX bug I want caught before the demo, not during. Most of them turned out to be small copy fixes and one real bug where a failed job never cleared its Redis key.
+### Tasks Completed During the Week
 
-I chaired a triage on the findings and split them into "must fix before demo" and "nice to have later". The must-fix pile was smaller than I feared, which was a nice surprise for a Friday.
+| Day | Task | Start | Completion | Reference Material |
+| --- | --- | --- | --- | --- |
+| Mon | Perform functional testing for all project modules. | 06/07/2026 | 06/07/2026 | Project Documentation |
+| Tue | Fix identified bugs and improve application stability. | 07/07/2026 | 07/07/2026 | Project Documentation |
+| Wed | Optimize backend performance and frontend user experience. | 08/07/2026 | 08/07/2026 | Project Documentation |
+| Thu | Prepare project documentation, deployment instructions, and user guide. | 09/07/2026 | 09/07/2026 | Project Documentation |
+| Fri | Complete final system review, prepare demonstration materials, and summarize internship achievements. | 10/07/2026 | 10/07/2026 | Project Documentation |
 
-On the documentation side I updated the README so someone new can clone the repo, follow the steps in order, and get a running local stack without asking anyone. Also wrote a short architecture note explaining why the pieces exist, not just what they are, because the "why" is what people forget first.
+### Week 12 Achievements
 
-Demo day itself went fine. Not spotless, but the app did the thing it is supposed to do in front of people who had not seen it before, and the questions afterwards were about product, not about "why did it crash". I take that as a win.
+- Completed functional testing across all project modules.
+- Improved application stability, backend performance, and frontend UX.
+- Finalized documentation and prepared the demo for the internship review.
 
-End of the internship. If I did it again I would start the async plumbing earlier, because that was the change that made the app feel real. Wrote that into the final report as the one recommendation I would actually stand behind.
+### Challenges & Lessons Learned
+
+- **Challenge:**
+  - Balancing bug fixes, performance tuning, and documentation within the final week.
+- **Solution:**
+  - Prioritize the most impactful issues, batch related fixes together, and document as work is completed.
+- **Lesson:**
+  - Consistent testing, optimization, and documentation throughout the project reduces last-minute pressure.
+
+### Plan for Next Steps
+
+- Finalize the internship report and submit for review.
+- Present the demo and gather feedback from mentors.
+- Continue learning AWS advanced services beyond the internship.

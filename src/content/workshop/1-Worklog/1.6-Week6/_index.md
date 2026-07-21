@@ -6,16 +6,39 @@ chapter: false
 pre: " <b> 1.6. </b> "
 ---
 
-## WEEK 6 WORKLOG (25/05/2026 – 31/05/2026)
+### Week 6 Objectives
 
-Last of the pure-learning weeks before the project starts. DynamoDB and ElastiCache.
+- Learn Amazon DynamoDB architecture and core operations.
+- Understand Amazon ElastiCache and deploy a cache cluster.
+- Compare NoSQL and in-memory caching in real scenarios.
 
-DynamoDB was the one that reset a few of my assumptions. Coming from a SQL habit, I had to sit with the idea that access patterns come first and the schema falls out of them, not the other way around. I did the lab, then tried designing a small toy table for a made-up "internship reports" app just to force myself to think in partition key plus sort key. Half of what I wrote on the first pass was wrong. That was the point.
+### Tasks Completed During the Week
 
-ElastiCache with Redis was more comfortable, mostly because I have played with Redis before. I ran the lab, then wrote a tiny script that hit it from an EC2 in the same VPC, cached a deliberately slow computation, and measured the difference. The number is not the important part, the intuition is. Reads that used to take a beat felt instant.
+| Day | Task | Start | Completion | Reference Material |
+| --- | --- | --- | --- | --- |
+| Mon | Study Amazon DynamoDB architecture, tables, items, partitions, and indexes. | 22/05/2026 | 22/05/2026 | [Amazon DynamoDB](https://000060.awsstudygroup.com/) |
+| Tue | Create DynamoDB tables and perform CRUD operations. | 25/05/2026 | 25/05/2026 | [DynamoDB CRUD](https://000060.awsstudygroup.com/) |
+| Wed | Learn Amazon ElastiCache fundamentals and supported engines. | 26/05/2026 | 26/05/2026 | [Amazon ElastiCache](https://000061.awsstudygroup.com/) |
+| Thu | Deploy an ElastiCache cluster and connect it to an application. | 27/05/2026 | 27/05/2026 | [ElastiCache Cluster](https://000061.awsstudygroup.com/) |
+| Fri | Review DynamoDB and ElastiCache, summarize when to use NoSQL vs in-memory cache. | 28/05/2026 | 28/05/2026 | [ElastiCache](https://000061.awsstudygroup.com/) |
 
-I also spent some time at the end of the week looking ahead. The project starts on Monday, and I want to know roughly what I am walking into instead of opening the code cold. Read the FCAJ intro for the AI Face Enhancement project a couple of times, sketched out how upload, processing, and delivery might connect, and made a short list of the things I do not understand yet so I can ask my mentor on day one.
+### Week 6 Achievements
 
-Six weeks in, AWS has stopped being one big scary thing and turned into a set of specific services I can name. Whether I can actually build with them is what next week starts to answer.
+- Created DynamoDB tables and performed CRUD operations successfully.
+- Deployed an ElastiCache cluster and connected it from a sample application.
+- Understood the differences between NoSQL storage (DynamoDB) and in-memory caching (ElastiCache).
 
-Next week: project kickoff. AI Face Enhancement.
+### Challenges & Lessons Learned
+
+- **Challenge:**
+  - Designing DynamoDB partition keys / indexes to avoid hot partitions and poor query performance.
+- **Solution:**
+  - Follow the awsstudygroup lab, model access patterns first, then choose the partition/sort key accordingly.
+- **Lesson:**
+  - NoSQL and cache are powerful when the data model matches the real access patterns of the application.
+
+### Plan for Next Week
+
+- Continue exploring serverless services (Lambda, API Gateway).
+- Start integrating DynamoDB with a simple Lambda-based backend.
+- Combine monitoring (CloudWatch) with the serverless demo.

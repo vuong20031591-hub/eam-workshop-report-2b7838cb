@@ -6,14 +6,41 @@ chapter: false
 pre: " <b> 1.2. </b> "
 ---
 
-## WEEK 2 WORKLOG (27/04/2026 – 29/04/2026)
+### Week 2 Objectives
 
-Short week (only three working days) but a dense one. IAM in the first half, VPC and EC2 in the second.
+- Master AWS IAM: Users, Groups, Policies, and Roles.
+- Apply the principle of least privilege when assigning permissions.
+- Build a basic VPC network with subnets, route tables, and Internet Gateway.
+- Launch and connect to an EC2 instance via SSH.
 
-I spent the first day and a half on IAM. Created Users, Groups, Roles, and Policies by hand, turned on MFA for the root account and then locked the root credentials in a place I would not accidentally touch again. The Least Privilege lab was the one that stuck with me. I wrote a policy, denied myself something on purpose, then read the error message until I understood exactly which line caused it. Sounds slow, but I learned more from that than from any diagram.
+### Tasks Completed During the Week
 
-I nearly committed a long-lived access key to a personal repo while playing around. Caught it, rotated the key, and now I understand why the guides keep hammering that point.
+| Day | Task | Start | Completion | Reference Material |
+| --- | --- | --- | --- | --- |
+| Mon | Study AWS Identity and Access Management (IAM), including Users, Groups, Policies, and Roles. | 24/04/2026 | 24/04/2026 | [IAM](https://000002.awsstudygroup.com/) |
+| Tue | Create IAM users and groups, assign permissions, and apply the principle of least privilege. | 27/04/2026 | 27/04/2026 | [IAM Users & Groups](https://000002.awsstudygroup.com/) |
+| Wed | Build a Virtual Private Cloud (VPC), configure subnets, route tables, and Internet Gateway. | 28/04/2026 | 28/04/2026 | [VPC](https://000003.awsstudygroup.com/) |
+| Thu | Launch an Amazon EC2 instance and configure Security Groups and key pairs. | 29/04/2026 | 29/04/2026 | [EC2](https://000004.awsstudygroup.com/) |
+| Fri | Connect to the EC2 instance using SSH and perform basic instance management tasks. | 30/04/2026 | 30/04/2026 | [EC2 SSH](https://000004.awsstudygroup.com/) |
 
-VPC and EC2 was the other half. I did the guided lab, drew the default VPC on paper, then rebuilt one from scratch to see if I actually knew what each piece was for (I did not, entirely). Launched a small EC2 instance, SSH-ed in, ran a couple of commands, terminated it. Nothing exciting on its own, but a lot of my assumptions about "the cloud" quietly got corrected in that hour.
+### Week 2 Achievements
 
-Next week: IAM Roles for EC2, Cloud9, and my first go at hosting a static site on S3.
+- Successfully created IAM users/groups with the correct permissions and applied least privilege.
+- Built a basic VPC with public subnets, route tables, and Internet Gateway.
+- Launched an EC2 instance and connected via SSH using a key pair.
+- Understood how Security Groups control inbound/outbound traffic to instances.
+
+### Challenges & Lessons Learned
+
+- **Challenge:**
+  - Configuring IAM Policies and VPC route tables is easy to get wrong and hard to debug on the first try.
+- **Solution:**
+  - Follow the labs step by step, check permissions using the IAM Policy Simulator, and diagram the VPC before implementing.
+- **Lesson:**
+  - A solid understanding of IAM and VPC is the foundation for every subsequent AWS service.
+
+### Plan for Next Week
+
+- Practice IAM Roles for EC2 to access AWS services securely.
+- Explore AWS Cloud9 as a cloud-based development environment.
+- Deploy a static website using Amazon S3.

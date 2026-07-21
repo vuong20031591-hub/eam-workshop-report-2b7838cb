@@ -6,16 +6,39 @@ chapter: false
 pre: " <b> 1.9. </b> "
 ---
 
-## WORKLOG TUẦN 9
+### Mục Tiêu Tuần 9
 
-Tuần tích hợp mô hình. Ghép Real-ESRGAN và CodeFormer vào backend để ảnh upload thật sự quay lại nét hơn. `UPS-9` trên Linear.
+- Nghiên cứu và tích hợp mô hình AI Real-ESRGAN và CodeFormer.
+- Xây dựng pipeline inference AI và tối ưu hiệu năng.
+- Kiểm thử kết quả nâng cấp ảnh trên nhiều ảnh test.
 
-Tôi làm phần nghiên cứu. Real-ESRGAN lo upscale tổng thể, CodeFormer mạnh phần khuôn mặt, chạy nối tiếp là pipeline hợp lý cho use case của mình. Setup cả hai ở máy local, chạy trên tập ảnh test nhỏ, và mắt thường kiểm xem có đúng như paper nói không. Ảnh marketing của họ chọn lọc kỹ, nên phải chạy trên ảnh của mình để chắc.
+### Các công việc thực hiện trong tuần
 
-Phần integration tôi pair với bạn phụ trách module inference. Bọc cả hai mô hình sau một hàm `enhance(image)` để phần còn lại của backend không cần biết mô hình nào chạy, và thêm object params cho các knob quan trọng (hệ số upscale, bật/tắt face restore, fidelity weight cho CodeFormer).
+| Thứ | Công việc | Bắt đầu | Hoàn thành | Tài liệu tham khảo |
+| --- | --- | --- | --- | --- |
+| T2 | Nghiên cứu Real-ESRGAN và CodeFormer, chuẩn bị môi trường inference AI. | 15/06/2026 | 15/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN); [CodeFormer](https://github.com/sczhou/CodeFormer) |
+| T3 | Tích hợp Real-ESRGAN vào pipeline xử lý ảnh của backend. | 16/06/2026 | 16/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) |
+| T4 | Tích hợp CodeFormer cho phục hồi khuôn mặt và tối ưu luồng inference. | 17/06/2026 | 17/06/2026 | [CodeFormer](https://github.com/sczhou/CodeFormer) |
+| T5 | Debug quá trình xử lý AI, tối ưu hiệu năng model và cải thiện chất lượng ảnh. | 18/06/2026 | 18/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN); [CodeFormer](https://github.com/sczhou/CodeFormer) |
+| T6 | Kiểm thử kết quả nâng cấp ảnh trên nhiều ảnh test. | 19/06/2026 | 19/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN); [CodeFormer](https://github.com/sczhou/CodeFormer) |
 
-Phần khó chịu của tuần là hiệu năng. Chạy cả hai mô hình trên CPU chậm đau lòng, chậm đến mức một request sẽ timeout với setup hiện tại. Thống nhất giữ CPU trong môi trường dev, chuyển sang GPU ở giai đoạn AWS. Ghi quyết định vào project notes để sau khỏi tranh cãi lại.
+### Kết quả đạt được Tuần 9
 
-Cũng làm một bộ eval nội bộ nhỏ (hai chục ảnh đủ kích thước, có ảnh mặt có ảnh không) kèm script chạy pipeline trên toàn bộ và đổ output ra folder. Không phải benchmark, nhưng bắt được regression.
+- Tích hợp thành công Real-ESRGAN và CodeFormer vào pipeline backend.
+- Cải thiện rõ chất lượng nâng cấp ảnh và phục hồi khuôn mặt.
+- Kiểm chứng chất lượng đầu ra trên nhiều loại ảnh khác nhau.
 
-Tuần sau: dockerize và đưa lên ECS/Fargate cùng S3.
+### Khó khăn & Bài học
+
+- **Khó khăn:**
+  - Cấu hình môi trường AI (Python/PyTorch/CUDA) và hiệu năng inference.
+- **Giải pháp:**
+  - Pin phiên bản dependency, dùng GPU khi có, và benchmark trên ảnh đại diện.
+- **Bài học:**
+  - Môi trường AI ổn định và benchmark nhất quán là yếu tố then chốt cho pipeline inference tin cậy.
+
+### Kế hoạch Tuần tới
+
+- Containerize frontend và backend bằng Docker.
+- Triển khai ứng dụng lên Amazon ECS/Fargate.
+- Xác minh hệ thống end-to-end sau khi deploy.

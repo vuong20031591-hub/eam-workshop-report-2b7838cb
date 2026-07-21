@@ -6,18 +6,39 @@ chapter: false
 pre: " <b> 1.11. </b> "
 ---
 
-## WEEK 11 WORKLOG
+### Week 11 Objectives
 
-Async and realtime week. The synchronous request-response flow works, but a big upscale takes long enough that the frontend was basically staring at a spinner and hoping. Time to fix that. `UPS-11` on Linear.
+- Implement Amazon SQS for asynchronous image processing.
+- Integrate Redis caching and Server-Sent Events (SSE) for real-time progress.
+- Test and optimize the asynchronous workflow.
 
-I split the work into three pieces: SQS for the job queue, Redis for the per-job progress state, and SSE (server-sent events) so the browser gets progress pushed instead of polling.
+### Tasks Completed During the Week
 
-On the backend, `/enhance` no longer runs the models directly. It writes a job onto SQS and returns a job id. A worker process pulls from SQS, runs the pipeline, and updates a Redis key with progress (`queued`, `running:XX%`, `done`, `failed`). A second endpoint streams that key over SSE so the frontend sees the bar move.
+| Day | Task | Start | Completion | Reference Material |
+| --- | --- | --- | --- | --- |
+| Mon | Implement Amazon SQS to process image enhancement requests asynchronously. | 29/06/2026 | 29/06/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/) |
+| Tue | Complete SQS integration and verify message processing workflow. | 30/06/2026 | 30/06/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/) |
+| Wed | Integrate Redis for caching frequently accessed processing results. | 01/07/2026 | 01/07/2026 | [Redis Docs](https://redis.io/docs/) |
+| Thu | Implement Server-Sent Events (SSE) to provide real-time processing progress. | 02/07/2026 | 02/07/2026 | [MDN - Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) |
+| Fri | Test the asynchronous workflow and optimize overall system performance. | 03/07/2026 | 03/07/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/); [Redis Docs](https://redis.io/docs/) |
 
-On the frontend, I replaced the spinner with a real progress bar that reads from the SSE stream, plus a small state label so the user knows whether the job is queued behind others or actively running. Small change, huge difference in how the app feels.
+### Week 11 Achievements
 
-A couple of things bit me. Visibility timeout on SQS was too low at first, so long jobs got redelivered while they were still running. Bumped it and wrote down the reasoning so nobody "optimises" it back down. Redis TTLs also needed thinking through, because leaking a key per job forever adds up.
+- Integrated Amazon SQS to handle image processing requests asynchronously.
+- Added Redis caching to reduce redundant processing and improve response time.
+- Implemented SSE so users can track processing progress in real time.
 
-I also added a dead-letter queue and a simple retry policy of three attempts, because "silent failure into the void" is not a feature.
+### Challenges & Lessons Learned
 
-Next week: final testing, technical documentation, and demo.
+- **Challenge:**
+  - Coordinating SQS, worker, Redis, and SSE stream while keeping state consistent.
+- **Solution:**
+  - Define clear job states, use Redis as the shared state store, and stream progress via SSE.
+- **Lesson:**
+  - Asynchronous architectures scale better but need careful state and error handling.
+
+### Plan for Next Week
+
+- Perform functional testing and fix remaining bugs.
+- Optimize backend performance and frontend UX.
+- Finalize documentation and prepare the demo.

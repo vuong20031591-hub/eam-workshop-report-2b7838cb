@@ -6,16 +6,39 @@ chapter: false
 pre: " <b> 1.10. </b> "
 ---
 
-## WORKLOG TUẦN 10
+### Mục Tiêu Tuần 10
 
-Tuần deploy. Docker cho mọi thứ, ECS/Fargate làm runtime, S3 để chứa ảnh. Đây là lúc app rời khỏi laptop của tôi. `UPS-10` trên Linear.
+- Containerize frontend và backend bằng Docker.
+- Triển khai container lên Amazon ECS/Fargate.
+- Cấu hình network và xác minh hệ thống sau khi deploy.
 
-Tôi viết Dockerfile cho cả hai service. File frontend nhẹ và nhàm (`node` build, `nginx` runtime). File backend là chỗ tốn thời gian thật, vì mô hình kéo theo cả tá dependency Python và thứ liên quan CUDA, tôi không muốn image phình lên tám gigabyte vô nghĩa. Multi-stage build, chỉ giữ layer runtime trong image cuối, ra được size chấp nhận được.
+### Các công việc thực hiện trong tuần
 
-Về phía AWS, setup ECS/Fargate gần như bám nguyên tài liệu FCAJ. Task definition cho từng service, một service phía trước từng task, một target group cho mỗi service sau ALB đã dựng trước. Deploy đầu ra được, task lên rồi vài phút sau chết vì container CPU-only bị OOM lúc chạy inference ảnh lớn. Nâng memory, đi tiếp.
+| Thứ | Công việc | Bắt đầu | Hoàn thành | Tài liệu tham khảo |
+| --- | --- | --- | --- | --- |
+| T2 | Tạo cấu hình Docker cho service frontend. | 22/06/2026 | 22/06/2026 | [Docker Docs](https://docs.docker.com/) |
+| T3 | Containerize FastAPI backend và kiểm tra chạy Docker. | 23/06/2026 | 23/06/2026 | [Docker Docs](https://docs.docker.com/) |
+| T4 | Triển khai container frontend và backend lên Amazon ECS/Fargate. | 24/06/2026 | 24/06/2026 | [Amazon ECS](https://docs.aws.amazon.com/ecs/) |
+| T5 | Tiếp tục triển khai ECS, cấu hình network và service. | 25/06/2026 | 25/06/2026 | [Amazon ECS](https://docs.aws.amazon.com/ecs/) |
+| T6 | Xác minh hệ thống đã deploy, test luồng end-to-end và sửa các lỗi triển khai. | 26/06/2026 | 26/06/2026 | [Amazon ECS](https://docs.aws.amazon.com/ecs/) |
 
-S3 vào cho input và output ảnh. Backend upload lên `upscale-<env>-input`, worker đọc từ đó, ghi sang `upscale-<env>-output`, frontend fetch kết quả theo URL. Bật Block Public Access cả hai bucket, chỉ signed URL đi ra ngoài.
+### Kết quả đạt được Tuần 10
 
-Về team, một quyết định lớn: GPU worker để tuần sau. Tuần này mục tiêu là chứng minh hình dạng deploy chạy được, không phải bóp hiệu năng.
+- Build thành công Docker image cho cả frontend và backend.
+- Triển khai ứng dụng lên Amazon ECS/Fargate.
+- Kiểm chứng toàn bộ luồng end-to-end trên môi trường cloud.
 
-Tuần sau: SQS, Redis, và SSE cho tiến trình realtime.
+### Khó khăn & Bài học
+
+- **Khó khăn:**
+  - Cấu hình network, security group và IAM role cho service ECS/Fargate.
+- **Giải pháp:**
+  - Bám theo reference architecture của AWS và cấp quyền tối thiểu cho từng service.
+- **Bài học:**
+  - Orchestrate container rất mạnh nhưng đòi hỏi cấu hình network và security cẩn thận.
+
+### Kế hoạch Tuần tới
+
+- Triển khai Amazon SQS để xử lý ảnh bất đồng bộ.
+- Tích hợp Redis cho cache và SSE cho tiến độ real-time.
+- Test và tối ưu luồng xử lý bất đồng bộ.

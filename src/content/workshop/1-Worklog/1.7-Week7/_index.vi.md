@@ -6,16 +6,39 @@ chapter: false
 pre: " <b> 1.7. </b> "
 ---
 
-## WORKLOG TUẦN 7
+### Mục Tiêu Tuần 7
 
-Tuần kickoff project. Sáu tuần học ở lại phía sau, giờ phải thật sự dựng ra thứ gì đó. `UPS-7` trên Linear.
+- Phân tích yêu cầu dự án và thiết kế kiến trúc tổng thể.
+- Khởi tạo dự án frontend TanStack và backend FastAPI.
+- Kết nối frontend–backend và xác minh tích hợp ban đầu.
 
-Tôi chạy buổi kickoff thứ Hai. Đặt tên là Upscale AI, chốt câu pitch (upload một tấm ảnh, nhận lại bản nét hơn, khuôn mặt đẹp hơn), và đi qua kiến trúc end-to-end nháp. Chưa phải bản cuối, kiểu "bù nhìn" để cả nhóm xúm vào chê. Frontend React + Vite + TanStack Router, backend FastAPI, worker cho phần nặng tính sau. Ảnh lên S3 khi đến giai đoạn AWS.
+### Các công việc thực hiện trong tuần
 
-Phần còn lại của tuần chia giữa planning và ngồi cạnh scaffolding. Tôi cắt project ra thành module (upload, điều phối job, chạy mô hình, kết quả, auth để sau) và rải xuống sub-task của `UPS-7` để owner rõ. Rồi ngồi với từng cặp lúc họ scaffold phần của mình. Tôi không code nhiều tuần này, nhưng mở repo FE và BE, dựng khung CI, và cắm một route `/healthz` bé xíu ở cả hai bên để có sẵn một build xanh mà bảo vệ.
+| Thứ | Công việc | Bắt đầu | Hoàn thành | Tài liệu tham khảo |
+| --- | --- | --- | --- | --- |
+| T2 | Phân tích yêu cầu dự án, xác định tính năng và xem xét kiến trúc hệ thống tổng thể. | 01/06/2026 | 01/06/2026 | [TanStack Router](https://tanstack.com/router); [FastAPI](https://fastapi.tiangolo.com/) |
+| T3 | Thiết kế kiến trúc hệ thống, định nghĩa cách giao tiếp giữa TanStack frontend, FastAPI backend, AI service và AWS. | 02/06/2026 | 02/06/2026 | [TanStack Router](https://tanstack.com/router); [FastAPI](https://fastapi.tiangolo.com/) |
+| T4 | Khởi tạo dự án TanStack frontend, cấu hình routing, layout và cấu trúc dự án. | 03/06/2026 | 03/06/2026 | [TanStack Router](https://tanstack.com/router) |
+| T5 | Khởi tạo dự án FastAPI backend, cài đặt dependency và tạo cấu trúc REST API cơ bản. | 04/06/2026 | 04/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| T6 | Kết nối frontend và backend, kiểm tra giao tiếp API và xử lý các vấn đề tích hợp ban đầu. | 05/06/2026 | 05/06/2026 | [TanStack Router](https://tanstack.com/router); [FastAPI](https://fastapi.tiangolo.com/) |
 
-Có một điểm gợn xuất hiện sớm: hai bạn muốn over-engineer folder structure. Tôi bảo ship upload chạy được trước, refactor sau, và ghi luôn vào repo.
+### Kết quả đạt được Tuần 7
 
-Cuối tuần: FE load, BE trả lời, hai bên nói chuyện được qua CORS, CI xanh. Nhỏ, nhưng đúng là vạch xuất phát.
+- Xác định được kiến trúc tổng thể của hệ thống nâng cấp ảnh.
+- Khởi tạo thành công cả TanStack frontend và FastAPI backend.
+- Kiểm tra được giao tiếp API cơ bản giữa frontend và backend.
 
-Tuần sau: làm luồng upload thật, đầu này sang đầu kia.
+### Khó khăn & Bài học
+
+- **Khó khăn:**
+  - Thống nhất định dạng dữ liệu giữa TanStack frontend và FastAPI backend ngay từ đầu.
+- **Giải pháp:**
+  - Định nghĩa sớm schema request/response chung và thử nghiệm với một endpoint tối giản end-to-end.
+- **Bài học:**
+  - Đầu tư kỹ vào kiến trúc và interface từ đầu giúp giảm rework về sau.
+
+### Kế hoạch Tuần tới
+
+- Xây dựng giao diện upload ảnh và tích hợp với API backend.
+- Triển khai validation file và luồng upload.
+- Kiểm thử tích hợp ban đầu cho luồng upload.

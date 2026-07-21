@@ -6,16 +6,39 @@ chapter: false
 pre: " <b> 1.4. </b> "
 ---
 
-## WEEK 4 WORKLOG (11/05/2026 – 17/05/2026)
+### Week 4 Objectives
 
-Full week back on the calendar. Managed database week: RDS and Lightsail.
+- Understand Amazon RDS concepts and deploy a managed relational database.
+- Explore Amazon Lightsail and compare it with Amazon EC2.
+- Consolidate best practices for choosing between RDS and Lightsail.
 
-RDS was the first time I really felt what "managed" means. Pick an engine, click through, and you get a Postgres you do not have to babysit. I ran the lab with a small `db.t3.micro`, connected from an EC2 in the same VPC with a security group rule I had to open on purpose, and ran a couple of queries. Then I broke the connection on purpose by removing the SG rule and adding it back, because I wanted to see the exact error message so I would recognise it later. Little tricks like that are starting to stick.
+### Tasks Completed During the Week
 
-I also read up on parameter groups, automated backups, snapshots, and the difference between Multi-AZ and read replicas. I do not need any of that today, but I would rather have the vocabulary in my head before I need it.
+| Day | Task | Start | Completion | Reference Material |
+| --- | --- | --- | --- | --- |
+| Mon | Study Amazon Relational Database Service (RDS), understand database concepts and deployment options. | 08/05/2026 | 08/05/2026 | [Amazon RDS](https://000005.awsstudygroup.com/) |
+| Tue | Create an Amazon RDS instance and configure database connectivity. | 11/05/2026 | 11/05/2026 | [Amazon RDS](https://000005.awsstudygroup.com/) |
+| Wed | Explore Amazon Lightsail services and compare them with Amazon EC2. | 12/05/2026 | 12/05/2026 | [Amazon Lightsail](https://000045.awsstudygroup.com/) |
+| Thu | Deploy a simple application using Amazon Lightsail. | 13/05/2026 | 13/05/2026 | [Amazon Lightsail](https://000045.awsstudygroup.com/) |
+| Fri | Review RDS and Lightsail architecture, summarize key differences and best practices. | 14/05/2026 | 14/05/2026 | [Amazon Lightsail](https://000045.awsstudygroup.com/) |
 
-Lightsail was the fun surprise of the week. It is basically AWS trying to be a friendly VPS, and standing up the sample app took almost no time. Not something I would reach for on a real project, but it is nice to see that end of the spectrum exists.
+### Week 4 Achievements
 
-Between labs I did the FCAJ reading and took slow notes, which sounds boring and probably is, but it is the part that stops all of this becoming a blur.
+- Successfully deployed an Amazon RDS instance and connected to it from a client.
+- Deployed a simple application on Amazon Lightsail with public accessibility.
+- Understood the trade-offs between managed RDS databases and self-managed EC2/Lightsail deployments.
 
-Next week: CloudWatch and AWS CLI.
+### Challenges & Lessons Learned
+
+- **Challenge:**
+  - Configuring RDS Security Groups and network access so that the database is reachable only from the intended source.
+- **Solution:**
+  - Follow the awsstudygroup lab, only open the required port (e.g., 3306) to a specific Security Group or IP.
+- **Lesson:**
+  - Managed services like RDS and Lightsail speed up deployment, but network and access configuration still matters.
+
+### Plan for Next Week
+
+- Learn Amazon CloudWatch for monitoring and alerting.
+- Install and use AWS CLI to manage AWS resources from the terminal.
+- Automate basic operational tasks with AWS CLI.

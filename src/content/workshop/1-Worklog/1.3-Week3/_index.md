@@ -6,14 +6,40 @@ chapter: false
 pre: " <b> 1.3. </b> "
 ---
 
-## WEEK 3 WORKLOG (04/05/2026 – 06/05/2026)
+### Week 3 Objectives
 
-Another short week. IAM Roles for EC2, Cloud9, and my first proper go at S3 static hosting.
+- Use IAM Roles to allow EC2 to access AWS services securely, without hardcoded keys.
+- Get familiar with AWS Cloud9 as a browser-based development environment.
+- Deploy a Static Website on Amazon S3 and verify public accessibility.
 
-The IAM Role for EC2 lab is the one that finally made instance profiles click. Instead of putting an access key on the box, the instance assumes a role and the SDK just picks it up. Obvious in hindsight, but I did the lab twice, once following the steps and once from memory, because that gap is where I find out what I did not actually understand. Second run I got stuck on a trust policy typo for a while. Fair.
+### Tasks Completed During the Week
 
-I opened Cloud9 mostly out of curiosity. Nice IDE, browser-based, useful when my laptop is not cooperating, but I went back to VS Code pretty quickly. Good to know it exists.
+| Day | Task | Start | Completion | Reference Material |
+| --- | --- | --- | --- | --- |
+| Mon | Learn IAM Roles for EC2 and attach an IAM Role to an EC2 instance for secure service access. | 01/05/2026 | 01/05/2026 | [IAM Roles for EC2](https://000048.awsstudygroup.com/) |
+| Tue | Create an AWS Cloud9 environment and explore the cloud-based development workspace. | 04/05/2026 | 04/05/2026 | [AWS Cloud9](https://000049.awsstudygroup.com/) |
+| Wed | Practice coding, running commands, and managing files in AWS Cloud9. | 05/05/2026 | 05/05/2026 | [Cloud9 Usage](https://000049.awsstudygroup.com/) |
+| Thu | Create an Amazon S3 bucket, configure Static Website Hosting, and upload website files. | 06/05/2026 | 06/05/2026 | [S3 Static Website](https://000057.awsstudygroup.com/) |
+| Fri | Test website accessibility, configure bucket permissions, and verify successful deployment. | 07/05/2026 | 07/05/2026 | [S3 Permissions](https://000057.awsstudygroup.com/) |
 
-Most of the time went into the S3 static website lab. Create a bucket, upload an `index.html`, wrestle with the Bucket Policy until public read actually takes effect, turn on Static Website Hosting. First attempt I forgot to disable Block Public Access and spent about twenty minutes staring at 403s wondering what I had missed. That is a mistake I will not make twice, and now I understand why the guardrail exists in the first place.
+### Week 3 Achievements
 
-Next week: RDS and Lightsail.
+- Attached an IAM Role to an EC2 instance, allowing it to access AWS services without embedding credentials.
+- Set up an AWS Cloud9 environment and practiced coding directly in the browser.
+- Successfully deployed a Static Website on S3 with public access.
+- Understood Bucket Policy and Public Access Block for S3 hosting.
+
+### Challenges & Lessons Learned
+
+- **Challenge:**
+  - Configuring an S3 bucket for public static hosting requires disabling Block Public Access and writing a proper Bucket Policy — easy to mis-configure security.
+- **Solution:**
+  - Follow the awsstudygroup lab exactly, only open the permissions strictly required for the static site, and re-check the Bucket Policy after deploying.
+- **Lesson:**
+  - S3 is powerful but sensitive to permissions — always double-check the settings before making a bucket public.
+
+### Plan for Next Week
+
+- Continue with S3 topics: versioning, lifecycle, and encryption.
+- Explore CloudFront to deliver a static website through a CDN.
+- Start integrating AWS services into a small end-to-end demo.
