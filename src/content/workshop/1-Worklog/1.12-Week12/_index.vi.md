@@ -6,16 +6,39 @@ chapter: false
 pre: " <b> 1.12. </b> "
 ---
 
-## WORKLOG TUẦN 12
+### Mục Tiêu Tuần 12
 
-Tuần cuối. Test cuối, tài liệu, và demo. `UPS-12` trên Linear.
+- Kiểm thử chức năng và ổn định ứng dụng.
+- Tối ưu hiệu năng backend và trải nghiệm frontend.
+- Hoàn thiện tài liệu và chuẩn bị demo cho buổi tổng kết thực tập.
 
-Tôi chạy app qua một lượt end-to-end tử tế trên browser sạch và tài khoản sạch: đăng ký, upload, chờ job, tải kết quả. Mỗi chỗ tôi khựng lại đều ghi thành bug, kể cả khi app vẫn chạy, vì "chạy được nhưng tôi phải dừng lại nghĩ" là bug UX tôi muốn bắt trước demo chứ không phải trong lúc demo. Phần lớn là sửa chữ, và một bug thật: job fail không clear key Redis.
+### Các công việc thực hiện trong tuần
 
-Tôi chủ trì buổi triage và chia thành "phải fix trước demo" và "để sau nếu còn thời gian". Đống phải-fix nhỏ hơn tôi lo, một bất ngờ dễ chịu cho một chiều thứ Sáu.
+| Thứ | Công việc | Bắt đầu | Hoàn thành | Tài liệu tham khảo |
+| --- | --- | --- | --- | --- |
+| T2 | Kiểm thử chức năng cho tất cả module của dự án. | 06/07/2026 | 06/07/2026 | Tài liệu dự án |
+| T3 | Sửa các bug phát hiện được và cải thiện độ ổn định. | 07/07/2026 | 07/07/2026 | Tài liệu dự án |
+| T4 | Tối ưu hiệu năng backend và trải nghiệm người dùng frontend. | 08/07/2026 | 08/07/2026 | Tài liệu dự án |
+| T5 | Chuẩn bị tài liệu dự án, hướng dẫn triển khai và user guide. | 09/07/2026 | 09/07/2026 | Tài liệu dự án |
+| T6 | Rà soát hệ thống lần cuối, chuẩn bị tài liệu demo và tổng kết kết quả thực tập. | 10/07/2026 | 10/07/2026 | Tài liệu dự án |
 
-Phần tài liệu, tôi cập nhật README để người mới clone repo, đọc theo thứ tự, và dựng được local stack mà không phải hỏi ai. Cũng viết ghi chú kiến trúc ngắn giải thích vì sao có các mảnh, không chỉ nó là gì, vì "vì sao" là cái người ta quên trước tiên.
+### Kết quả đạt được Tuần 12
 
-Buổi demo diễn ra ổn. Không hoàn hảo, nhưng app làm đúng cái nó cần làm trước những người chưa từng thấy nó, và câu hỏi sau đó là về sản phẩm, không phải "sao nó crash". Tôi tính là thắng.
+- Hoàn thành kiểm thử chức năng trên toàn bộ module của dự án.
+- Cải thiện độ ổn định, hiệu năng backend và trải nghiệm frontend.
+- Hoàn thiện tài liệu và chuẩn bị demo cho buổi tổng kết thực tập.
 
-Đóng kỳ thực tập. Nếu làm lại tôi sẽ đẩy phần async lên sớm hơn, vì đó là thay đổi khiến app cảm giác thật sự có sức sống. Ghi vào báo cáo cuối như khuyến nghị duy nhất tôi sẵn sàng đứng ra bảo vệ.
+### Khó khăn & Bài học
+
+- **Khó khăn:**
+  - Cân đối giữa sửa bug, tối ưu hiệu năng và làm tài liệu trong tuần cuối.
+- **Giải pháp:**
+  - Ưu tiên các vấn đề ảnh hưởng lớn, gom các fix liên quan và ghi tài liệu song song với công việc.
+- **Bài học:**
+  - Kiểm thử, tối ưu và làm tài liệu đều đặn trong suốt dự án giúp giảm áp lực cuối kỳ.
+
+### Kế hoạch tiếp theo
+
+- Hoàn thiện báo cáo thực tập và nộp để đánh giá.
+- Trình bày demo và ghi nhận phản hồi từ mentor.
+- Tiếp tục học các dịch vụ AWS nâng cao sau kỳ thực tập.

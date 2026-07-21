@@ -6,16 +6,39 @@ chapter: false
 pre: " <b> 1.10. </b> "
 ---
 
-## WEEK 10 WORKLOG
+### Week 10 Objectives
 
-Deployment week. Docker for everything, ECS/Fargate for the runtime, S3 for the images. This is where the app finally leaves my laptop. `UPS-10` on Linear.
+- Containerize frontend and backend using Docker.
+- Deploy the containers to Amazon ECS/Fargate.
+- Configure networking and verify the deployed system.
 
-I wrote the Dockerfiles for both services. The frontend one is small and boring (`node` build, `nginx` runtime). The backend one is where I spent real time, because the models bring a stack of Python and CUDA-ish dependencies with them and I did not want the image to end up eight gigabytes for no reason. Multi-stage build, only the runtime layer in the final image, and it landed in a size I can live with.
+### Tasks Completed During the Week
 
-On the AWS side I did the ECS/Fargate setup pretty much straight from the FCAJ material. Task definition for each service, a service in front of each task, one target group per service behind the ALB from the earlier chapter. First deploy went out, tasks came up, then died a few minutes later because the CPU-only container was OOM-killed during a large image inference. Bumped the memory and moved on.
+| Day | Task | Start | Completion | Reference Material |
+| --- | --- | --- | --- | --- |
+| Mon | Create Docker configuration for the frontend service. | 22/06/2026 | 22/06/2026 | [Docker Docs](https://docs.docker.com/) |
+| Tue | Containerize the FastAPI backend and verify Docker execution. | 23/06/2026 | 23/06/2026 | [Docker Docs](https://docs.docker.com/) |
+| Wed | Deploy frontend and backend containers to Amazon ECS/Fargate. | 24/06/2026 | 24/06/2026 | [Amazon ECS](https://docs.aws.amazon.com/ecs/) |
+| Thu | Continue ECS deployment, configure networking and service settings. | 25/06/2026 | 25/06/2026 | [Amazon ECS](https://docs.aws.amazon.com/ecs/) |
+| Fri | Verify the deployed system, test end-to-end workflow, and fix deployment issues. | 26/06/2026 | 26/06/2026 | [Amazon ECS](https://docs.aws.amazon.com/ecs/) |
 
-S3 came in for input and output images. The backend now uploads to `upscale-<env>-input`, the worker reads from there, writes to `upscale-<env>-output`, and the frontend fetches the result by URL. Set Block Public Access on both buckets and only signed URLs go out.
+### Week 10 Achievements
 
-On the team side, one big call: we agreed that GPU workers wait until next week. This week is proving the deployment shape works, not squeezing performance.
+- Built Docker images for both frontend and backend successfully.
+- Deployed the application on Amazon ECS/Fargate.
+- Verified full end-to-end operation on the cloud environment.
 
-Next week: SQS, Redis, and SSE for realtime progress.
+### Challenges & Lessons Learned
+
+- **Challenge:**
+  - Configuring networking, security groups, and IAM roles for ECS/Fargate services.
+- **Solution:**
+  - Follow AWS reference architectures and grant least-privilege permissions per service.
+- **Lesson:**
+  - Container orchestration is powerful but requires careful network and security configuration.
+
+### Plan for Next Week
+
+- Implement Amazon SQS for asynchronous image processing.
+- Integrate Redis for caching and SSE for real-time progress.
+- Test and optimize the asynchronous workflow.

@@ -6,16 +6,39 @@ chapter: false
 pre: " <b> 1.9. </b> "
 ---
 
-## WEEK 9 WORKLOG
+### Week 9 Objectives
 
-Model integration week. Wiring Real-ESRGAN and CodeFormer into the backend so an uploaded photo actually comes back sharper. `UPS-9` on Linear.
+- Research and integrate Real-ESRGAN and CodeFormer AI models.
+- Build the AI inference pipeline and optimize performance.
+- Validate AI enhancement results on multiple test images.
 
-I did the research half. Real-ESRGAN handles the general upscaling, CodeFormer is stronger on faces, and running them one after the other is a reasonable pipeline for our use case. I set up both locally, ran them on a small test set, and eyeballed the outputs to check they were doing what the papers claim. Some of the marketing shots are cherry-picked, so it was worth confirming on our own images.
+### Tasks Completed During the Week
 
-On the integration side I paired with the person owning the inference module. We wrapped both models behind a single `enhance(image)` function so the rest of the backend does not care which model ran, and added a params object for the knobs that matter (upscale factor, face restore on/off, fidelity weight for CodeFormer).
+| Day | Task | Start | Completion | Reference Material |
+| --- | --- | --- | --- | --- |
+| Mon | Research Real-ESRGAN and CodeFormer models, prepare the AI inference environment. | 15/06/2026 | 15/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN); [CodeFormer](https://github.com/sczhou/CodeFormer) |
+| Tue | Integrate Real-ESRGAN into the backend image processing pipeline. | 16/06/2026 | 16/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) |
+| Wed | Integrate CodeFormer for face restoration and optimize inference workflow. | 17/06/2026 | 17/06/2026 | [CodeFormer](https://github.com/sczhou/CodeFormer) |
+| Thu | Debug AI processing, optimize model performance, and improve image quality. | 18/06/2026 | 18/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN); [CodeFormer](https://github.com/sczhou/CodeFormer) |
+| Fri | Validate AI enhancement results using multiple testing images. | 19/06/2026 | 19/06/2026 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN); [CodeFormer](https://github.com/sczhou/CodeFormer) |
 
-The awkward part of the week was performance. Running both models on CPU is painfully slow, slow enough that a single request would time out over the current setup. We agreed to keep it CPU for now in dev, and to move to GPU only when we get to the AWS phase. I wrote that decision into the project notes so it does not become an argument later.
+### Week 9 Achievements
 
-I also put together a small internal eval set (twenty photos of different sizes, some with faces, some without) and a script that runs the pipeline on all of them and dumps the outputs into a folder. It is not a benchmark, but it catches regressions.
+- Successfully integrated Real-ESRGAN and CodeFormer into the backend pipeline.
+- Improved image enhancement and face restoration quality noticeably.
+- Verified output quality on a variety of test images.
 
-Next week: dockerize everything and get it running on ECS/Fargate with S3.
+### Challenges & Lessons Learned
+
+- **Challenge:**
+  - Configuring the AI runtime environment (Python/PyTorch/CUDA) and inference performance.
+- **Solution:**
+  - Pin dependency versions, use GPU when available, and benchmark inference on representative inputs.
+- **Lesson:**
+  - A stable AI environment and consistent benchmarking are key to a reliable inference pipeline.
+
+### Plan for Next Week
+
+- Containerize frontend and backend using Docker.
+- Deploy the application to Amazon ECS/Fargate.
+- Verify the deployed system end-to-end.

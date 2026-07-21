@@ -6,18 +6,39 @@ chapter: false
 pre: " <b> 1.8. </b> "
 ---
 
-## WEEK 8 WORKLOG
+### Week 8 Objectives
 
-Upload flow week. Building the actual "user drops a photo, backend receives it" path front to back. `UPS-8` on Linear.
+- Build the image upload UI and integrate the upload API on the frontend.
+- Develop backend APIs for image upload and storage management.
+- Perform integration testing and fix upload workflow issues.
 
-I spent most of the week on the frontend upload UI. Drag-and-drop area, file picker fallback, preview thumbnail, validation for size and MIME type, and a small progress bar for when the upload is in flight. Nothing fancy visually, but I wanted the interaction to feel right before we bolted anything expensive behind it. I paired for a couple of hours on the backend side to make sure the FastAPI `/upload` endpoint agreed with the frontend on multipart form field names, because that mismatch would waste half a day if we found it later.
+### Tasks Completed During the Week
 
-On the backend the endpoint validates the file, stores it in a local temp folder for now (S3 comes later, in the AWS phase), and returns a job id the frontend can hold on to. I kept the validation server-side even though the client already checks, because trusting the client is how you find out about bugs in production.
+| Day | Task | Start | Completion | Reference Material |
+| --- | --- | --- | --- | --- |
+| Mon | Develop the image upload interface and configure file validation on the frontend. | 08/06/2026 | 08/06/2026 | [TanStack Router](https://tanstack.com/router) |
+| Tue | Implement API integration for image upload and display processing status. | 09/06/2026 | 09/06/2026 | [TanStack Router](https://tanstack.com/router); [FastAPI](https://fastapi.tiangolo.com/) |
+| Wed | Develop backend APIs for image upload and storage management. | 10/06/2026 | 10/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| Thu | Implement image management, error handling, and request validation. | 11/06/2026 | 11/06/2026 | [FastAPI](https://fastapi.tiangolo.com/) |
+| Fri | Perform integration testing and fix upload workflow issues. | 12/06/2026 | 12/06/2026 | [TanStack Router](https://tanstack.com/router); [FastAPI](https://fastapi.tiangolo.com/) |
 
-I also wrote a short "how the upload works" note in the repo so anyone new to the project can trace one request end to end without reading the code cold.
+### Week 8 Achievements
 
-On the team side, one thing I had to push on: someone wanted to skip server-side validation because "the client already does it". Sent the PR back with a comment.
+- Completed the image upload interface with client-side validation.
+- Backend upload and storage management APIs work end-to-end with the frontend.
+- Fixed key issues in the upload workflow through integration testing.
 
-End of the week: a user can pick a photo, see it preview, hit upload, and the backend answers with a job id. No AI yet, but the plumbing is in place.
+### Challenges & Lessons Learned
 
-Next week: integrate Real-ESRGAN and CodeFormer.
+- **Challenge:**
+  - Handling large image uploads and validating file type/size consistently on both sides.
+- **Solution:**
+  - Apply strict validation on the frontend and re-validate on the backend, plus clear error messaging.
+- **Lesson:**
+  - Duplicating validation on both frontend and backend improves security and UX.
+
+### Plan for Next Week
+
+- Integrate Real-ESRGAN and CodeFormer AI models into the backend.
+- Optimize inference pipeline and validate output quality.
+- Test AI enhancement results across multiple image types.

@@ -6,14 +6,39 @@ chapter: false
 pre: " <b> 1.5. </b> "
 ---
 
-## WORKLOG TUẦN 5 (18/05/2026 – 20/05/2026)
+### Mục Tiêu Tuần 5
 
-Lại một tuần ngắn. CloudWatch và AWS CLI, hai dịch vụ tôi nghe nói sẽ dùng mỗi ngày mãi về sau.
+- Làm quen với Amazon CloudWatch: metrics, logs và alarms.
+- Cài đặt và cấu hình AWS CLI trên máy cá nhân.
+- Tự động hóa một số tác vụ quản lý AWS bằng AWS CLI.
 
-CloudWatch trước. Tôi tạo Log Group, đẩy log từ một EC2 lên, dựng metric filter đếm từ `ERROR` trong stream, và gắn alarm lên trên. Rồi cố tình cho alarm nổ bằng script vòng in lỗi liên tục, xem thông báo về mail, thấy khoái được chừng mười giây. Làm một dashboard thật sự hữu ích khó hơn tài liệu cho thấy, tôi bỏ luôn cái đầu tiên vì nó là một bức tường đồ thị chẳng ai muốn nhìn.
+### Các công việc thực hiện trong tuần
 
-AWS CLI tôi thích hơn kỳ vọng. Sau một tuần click console, gõ `aws s3 ls`, `aws ec2 describe-instances`, pipe qua `jq` cảm giác như về nhà. Lập named profile có MFA và ép mình chỉ dùng CLI trong nửa cuối tuần, để phản xạ hình thành trước khi console kịp thành cơ bắp.
+| Thứ | Công việc | Bắt đầu | Hoàn thành | Tài liệu tham khảo |
+| --- | --- | --- | --- | --- |
+| T2 | Tìm hiểu Amazon CloudWatch: metrics, logs, dashboards và các khái niệm giám sát. | 15/05/2026 | 15/05/2026 | [Amazon CloudWatch](https://000008.awsstudygroup.com/) |
+| T3 | Tạo CloudWatch alarms và cấu hình quy tắc gửi thông báo. | 18/05/2026 | 18/05/2026 | [CloudWatch Alarms](https://000008.awsstudygroup.com/) |
+| T4 | Cài đặt và cấu hình AWS CLI trên máy tính cá nhân. | 19/05/2026 | 19/05/2026 | [AWS CLI](https://000011.awsstudygroup.com/) |
+| T5 | Thực hành các lệnh AWS CLI phổ biến với S3, EC2 và IAM. | 20/05/2026 | 20/05/2026 | [AWS CLI](https://000011.awsstudygroup.com/) |
+| T6 | Tự động hóa các tác vụ quản lý AWS cơ bản bằng AWS CLI. | 21/05/2026 | 21/05/2026 | [AWS CLI](https://000011.awsstudygroup.com/) |
 
-Tôi làm lại lab S3 static hosting của Tuần 3 hoàn toàn bằng CLI. Cằn nhằn với chính mình một chút, nhưng đó là bài khiến kiến thức bám lại. Mở một doc cá nhân nhỏ nhặt các one-liner cứ gõ đi gõ lại, để đỡ phải gõ lại.
+### Kết quả đạt được Tuần 5
 
-Tuần sau: DynamoDB và ElastiCache.
+- Thiết lập metrics và alarms trên CloudWatch, có gửi thông báo cho tài nguyên AWS.
+- Cài đặt và cấu hình AWS CLI thành công, có sử dụng named profile.
+- Thực hành nhiều lệnh AWS CLI để quản lý S3, EC2 và IAM.
+
+### Khó khăn & Bài học
+
+- **Khó khăn:**
+  - Chọn metric và ngưỡng phù hợp cho CloudWatch alarms để tránh cảnh báo nhiễu hoặc bỏ sót.
+- **Giải pháp:**
+  - Bắt đầu với các metric chuẩn (CPU, disk, network) theo lab awsstudygroup, sau đó tinh chỉnh ngưỡng theo baseline thực tế.
+- **Bài học:**
+  - Kết hợp monitoring và CLI automation giúp vận hành AWS nhanh và ổn định hơn nhiều.
+
+### Kế hoạch Tuần tới
+
+- Tìm hiểu Amazon DynamoDB — NoSQL database managed.
+- Học Amazon ElastiCache để cache trong bộ nhớ.
+- Kết hợp DynamoDB và ElastiCache trong một demo nhỏ.

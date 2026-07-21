@@ -6,18 +6,39 @@ chapter: false
 pre: " <b> 1.11. </b> "
 ---
 
-## WORKLOG TUẦN 11
+### Mục Tiêu Tuần 11
 
-Tuần async và realtime. Luồng request-response đồng bộ chạy được, nhưng một job upscale lớn kéo dài đủ lâu để frontend về cơ bản chỉ đứng nhìn spinner và cầu nguyện. Đến lúc sửa. `UPS-11` trên Linear.
+- Triển khai Amazon SQS để xử lý ảnh bất đồng bộ.
+- Tích hợp Redis cache và Server-Sent Events (SSE) cho tiến độ real-time.
+- Test và tối ưu luồng xử lý bất đồng bộ.
 
-Tôi chia việc thành ba mảnh: SQS làm queue job, Redis giữ trạng thái tiến độ theo từng job, và SSE (server-sent events) để browser nhận progress được đẩy chứ không phải poll.
+### Các công việc thực hiện trong tuần
 
-Backend: `/enhance` không còn chạy mô hình trực tiếp. Nó ghi một job lên SQS và trả về job id. Một tiến trình worker pull từ SQS, chạy pipeline, cập nhật key Redis với tiến độ (`queued`, `running:XX%`, `done`, `failed`). Một endpoint thứ hai stream key đó qua SSE để frontend thấy thanh chạy.
+| Thứ | Công việc | Bắt đầu | Hoàn thành | Tài liệu tham khảo |
+| --- | --- | --- | --- | --- |
+| T2 | Triển khai Amazon SQS để xử lý yêu cầu nâng cấp ảnh bất đồng bộ. | 29/06/2026 | 29/06/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/) |
+| T3 | Hoàn thiện tích hợp SQS và kiểm tra luồng xử lý message. | 30/06/2026 | 30/06/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/) |
+| T4 | Tích hợp Redis để cache các kết quả xử lý được truy cập thường xuyên. | 01/07/2026 | 01/07/2026 | [Redis Docs](https://redis.io/docs/) |
+| T5 | Triển khai Server-Sent Events (SSE) để cung cấp tiến độ xử lý real-time. | 02/07/2026 | 02/07/2026 | [MDN - Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) |
+| T6 | Test luồng bất đồng bộ và tối ưu hiệu năng tổng thể. | 03/07/2026 | 03/07/2026 | [Amazon SQS](https://docs.aws.amazon.com/sqs/); [Redis Docs](https://redis.io/docs/) |
 
-Frontend: thay spinner bằng progress bar đọc từ SSE, thêm nhãn trạng thái nhỏ để user biết job đang xếp hàng hay đang chạy. Thay đổi nhỏ, cảm giác app khác hẳn.
+### Kết quả đạt được Tuần 11
 
-Vài chỗ bị bẫy. Visibility timeout của SQS lúc đầu để thấp, job dài bị redelivery trong lúc đang chạy. Nâng lên và ghi lý do để đừng ai "tối ưu" hạ lại. TTL của Redis cũng phải nghĩ kỹ, vì rò rỉ một key mỗi job mãi mãi sẽ cộng dồn.
+- Tích hợp Amazon SQS để xử lý yêu cầu bất đồng bộ.
+- Bổ sung cache Redis giúp giảm xử lý trùng lặp và cải thiện thời gian phản hồi.
+- Triển khai SSE để người dùng theo dõi tiến độ xử lý theo thời gian thực.
 
-Cũng thêm dead-letter queue và retry policy đơn giản ba lần, vì "im lặng nuốt lỗi vào hư không" không phải feature.
+### Khó khăn & Bài học
 
-Tuần sau: test cuối, viết tài liệu kỹ thuật, và demo.
+- **Khó khăn:**
+  - Điều phối giữa SQS, worker, Redis và luồng SSE mà vẫn đảm bảo trạng thái nhất quán.
+- **Giải pháp:**
+  - Định nghĩa rõ các trạng thái job, dùng Redis làm nơi lưu state chung và stream tiến độ qua SSE.
+- **Bài học:**
+  - Kiến trúc bất đồng bộ scale tốt hơn nhưng cần xử lý state và lỗi cẩn thận.
+
+### Kế hoạch Tuần tới
+
+- Kiểm thử chức năng và sửa các bug còn lại.
+- Tối ưu hiệu năng backend và trải nghiệm frontend.
+- Hoàn thiện tài liệu và chuẩn bị demo.
